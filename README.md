@@ -26,18 +26,23 @@ Games made with Suika3 are powered by `NovelML 3.0` and `SuikaScript 3.0`.
 
 ## Why SuikaScript?
 
-It's OUR language ;-)
-
+* **Instant Iteration:** No compile cycles, no waiting. The built-in
+    JIT compiler runs your scripts immediately after editing, so you
+    can tweak gameplay and see results in real-time.
 * **True Native Performance:** Run extensions at full speed on iOS,
-  Android, and consoles—even where JIT execution is restricted.
-* **Seamless Platform Review:** Since final builds consist of native
-  code, you'll never face script-related hurdles during App Store or
-  console reviews.
-* **Developer-Friendly:** Inspired by JavaScript, the syntax is
-  intuitive for beginners yet powerful for veterans.
-* **Long-term Stability:** Because we develop both the language and
-  the VM in-house, you're safe from breaking upstream changes. Your
-  scripts stay compatible for the long haul.
+    Android, and consoles. Even on platforms where JIT is restricted,
+    you never have to sacrifice performance.
+* **Smooth Store Approval:** Dramatically lower the risk of
+    rejection. Since final builds consist of native code via AOT,
+    you'll breeze through App Store and console certifications.
+* **Easy to Learn, Powerful to Use:** The JavaScript-inspired syntax
+    is friendly for beginners, yet offers the deep flexibility
+    seasoned developers expect for complex systems.
+* **Long-term Stability:** Because we develop the language in-house,
+    you're shielded from breaking changes in upstream projects. We own
+    and control the full stack, so your scripts stay compatible forever.
+
+Yes, it's OUR language, built just for devs like you ;-)
 
 ---
 
