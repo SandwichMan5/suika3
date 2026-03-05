@@ -267,8 +267,6 @@ static bool Suika_isSysbtnClicked(void *p);
 /* Text */
 static bool Suika_utf8ToUtf32(void *p);
 static bool Suika_countUtf8Chars(void *p);
-static bool Suika_getGlyphWidth(void *p);
-static bool Suika_getGlyphHeight(void *p);
 static bool Suika_getStringWidth(void *p);
 static bool Suika_getStringHeight(void *p);
 static bool Suika_drawGlyph(void *p);
@@ -344,7 +342,6 @@ static bool Suika_getVariableCount(void *p);
 static bool Suika_getVariableName(void *p);
 static bool Suika_checkVariableExists(void *p);
 static bool Suika_isGlobalVariable(void *p);
-static bool Suika_expandStringWithVariable(void *p);
 static bool Suika_unsetLocalVariables(void *p);
 
 /* Save */
@@ -389,25 +386,14 @@ static bool Suika_checkIfSavedInGUI(void *p);
 static bool Suika_checkIfLoadedInGUI(void *p);
 
 /* HAL */
-static bool Suika_resetLapTimer(void *p);
-static bool Suika_getLapTimerMillisec(void *p);
+static bool Suika_getMillisec(void *p);
 static bool Suika_checkFileExists(void *p);
 static bool Suika_read_file_content(void *p);
 static bool Suika_writeSaveData(void *p);
 static bool Suika_readSaveData(void *p);
-static bool Suika_installAPI(void *p);
-static bool Suika_installTag(void *p);
-static bool Suika_getVmInt(void *p);
-static bool Suika_setVmInt(void *p);
-static bool Suika_setVmFloat(void *p);
-static bool Suika_setVmString(void *p);
-static bool Suika_callVmFunction(void *p);
 static bool Suika_playVideo(void *p);
 static bool Suika_stopVideo(void *p);
 static bool Suika_isVideoPlaying(void *p);
-static bool Suika_logInfo(void *p);
-static bool Suika_logWarn(void *p);
-static bool Suika_logError(void *p);
 static bool Suika_speakText(void *p);
 
 /* API function table. */
@@ -542,10 +528,6 @@ static struct api_func api_func[] = {
 	{"applyCharacterVolume",	Suika_applyCharacterVolume,	1, single_param},
 
 	/* Text */
-	{"utf8ToUtf32",			Suika_utf8ToUtf32,		1, single_param},
-	{"countUtf8Chars",		Suika_countUtf8Chars,		1, single_param},
-	{"getGlyphWidth",		Suika_getGlyphWidth,		1, single_param},
-	{"getGlyphHeight",		Suika_getGlyphHeight,		1, single_param},
 	{"getStringWidth",		Suika_getStringWidth,		1, single_param},
 	{"getStringHeight",		Suika_getStringHeight,		1, single_param},
 	{"drawGlyph",			Suika_drawGlyph,		1, single_param},
@@ -603,7 +585,6 @@ static struct api_func api_func[] = {
 	{"getVariableName",		Suika_getVariableName,		1, single_param},
 	{"checkVariableExists",		Suika_checkVariableExists,	1, single_param},
 	{"makeVariableGlobal",		Suika_makeVariableGlobal,	1, single_param},
-	{"expandStringWithVariable",	Suika_expandStringWithVariable, 1, single_param},
 	{"unsetLocalVariables",		Suika_unsetLocalVariables,	0, NULL},
 
 	/* Save */
@@ -646,27 +627,19 @@ static struct api_func api_func[] = {
 	{"checkIfLoadedInGUI",		Suika_checkIfLoadedInGUI,	0, NULL},
 
 	/* HAL */
-	{"resetLapTimer",		Suika_resetLapTimer,		1, single_param},
-	{"getLapTimerMillisec",		Suika_getLapTimerMillisec,	1, single_param},
+	{"getMillisec",			Suika_getMillisec,		0, NULL},
 	{"checkFileExists",		Suika_checkFileExists,		1, single_param},
 	{"readFileContent",		Suika_read_file_content,	1, single_param},
 	{"writeSaveData",		Suika_writeSaveData,		1, single_param},
 	{"readSaveData",		Suika_readSaveData,		1, single_param},
-	{"installAPI",			Suika_installAPI,		1, single_param},
-	{"installTag",			Suika_installTag,		1, single_param},
-	{"getVmInt",			Suika_getVmInt,			1, single_param},
-	{"setVmInt",			Suika_setVmInt,			1, single_param},
-	{"setVmFloat",			Suika_setVmFloat,		1, single_param},
-	{"setVmString",			Suika_setVmString,		1, single_param},
-	{"callVmFunction",		Suika_callVmFunction,		1, single_param},
 	{"playVideo",			Suika_playVideo,		1, single_param},
 	{"stopVideo",			Suika_stopVideo,		0, NULL},
 	{"isVideoPlaying",		Suika_isVideoPlaying,		0, NULL},
-	{"logInfo",			Suika_logInfo,			1, single_param},
-	{"logWarn",			Suika_logWarn,			1, single_param},
-	{"logError",			Suika_logError,			1, single_param},
 	{"speakText",			Suika_speakText,		1, single_param},
 };
+
+/* Time origin. */
+static uint64_t time_origin;
 
 /* Forward declaration. */
 static bool serialize_printer(NoctEnv *env, char *buf, size_t size, NoctValue *value, bool is_inside_obj);
@@ -687,6 +660,9 @@ s3i_install_default_api(void)
 				    api_func[i].params))
 			return false;
 	}
+
+	/* Get the time origin. */
+	s3_reset_lap_timer(&time_origin);
 
 	return true;
 }
@@ -2772,13 +2748,6 @@ Suika_isGlobalVariable(void *p)
 }
 
 static bool
-Suika_expandStringWithVariable(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
 Suika_unsetLocalVariables(void *p)
 {
         s3_log_error(S3_TR("This API is not implemented yet."));
@@ -3037,17 +3006,18 @@ Suika_checkIfLoadedInGUI(void *p)
  */
 
 static bool
-Suika_resetLapTimer(void *p)
+Suika_getMillisec(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
+	NoctEnv *env;
+	NoctValue val;
+	uint64_t lap;
 
-static bool
-Suika_getLapTimerMillisec(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	env = pf_get_vm_env();
+	lap = pf_get_lap_timer_millisec(&time_origin);
+	if (!noct_set_return_make_int(env, &val, (uint32_t)lap))
+		return false;
+
+	return false;
 }
 
 static bool
@@ -3079,55 +3049,6 @@ Suika_readSaveData(void *p)
 }
 
 static bool
-Suika_installAPI(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_installTag(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_getVmInt(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_setVmInt(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_setVmFloat(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_setVmString(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_callVmFunction(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
 Suika_playVideo(void *p)
 {
         s3_log_error(S3_TR("This API is not implemented yet."));
@@ -3143,27 +3064,6 @@ Suika_stopVideo(void *p)
 
 static bool
 Suika_isVideoPlaying(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_logInfo(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_logWarn(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_logError(void *p)
 {
         s3_log_error(S3_TR("This API is not implemented yet."));
         return false;

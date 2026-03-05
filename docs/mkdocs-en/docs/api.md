@@ -219,8 +219,7 @@ Suika3 API Reference
     * [Suika.checkIfLoadedInGui()](#suikacheckifloadedingui)
     * [Suika.checkRightAfterSysGUI()](#suikacheckrightaftersysgui)
 * HAL
-    * [Suika.resetLapTimer()](#suikaresetlaptimer)
-    * [Suika.getLapTimerMillisec()](#suikagetlaptimermillisec)
+    * [Suika.getMillisec()](#suikagetmillisec)
     * [Suika.checkFileExists()](#suikacheckfileexists)
     * [Suika.readFileContent()](#suikareadfilecontent)
     * [Suika.writeSaveData()](#suikawritesavedata)
@@ -1092,8 +1091,8 @@ Load an image from a file.
 
 ### Parameters
 
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
+| Parameter | Type   | Description                   |
+|-----------|--------|-------------------------------|
 | file      | String | Path to the image file.       |
 
 ### Return
@@ -1108,8 +1107,8 @@ Create a new blank image.
 
 ### Parameters
 
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
+| Parameter | Type    | Description                   |
+|-----------|---------|-------------------------------|
 | width     | Integer | Width of the image.           |
 | height    | Integer | Height of the image.          |
 
@@ -1125,8 +1124,8 @@ Get the width of an image.
 
 ### Parameters
 
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
+| Parameter | Type   | Description                   |
+|-----------|--------|-------------------------------|
 | img       | Object | Image object.                 |
 
 ### Return
@@ -1141,8 +1140,8 @@ Get the height of an image.
 
 ### Parameters
 
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
+| Parameter | Type   | Description                   |
+|-----------|--------|-------------------------------|
 | img       | Object | Image object.                 |
 
 ### Return
@@ -1196,17 +1195,17 @@ Draw an image with alpha blending.
 
 ### Parameters
 
-| Parameter  | Type    | Description                                   |
-|------------|---------|-----------------------------------------------|
-| dst        | Object  | Destination image.               |
-| dst_left   | Integer | X coordinate in destination.     |
-| dst_top    | Integer | Y coordinate in destination.     |
-| dst_width  | Integer | Width to draw.                   |
-| dst_height | Integer | Height to draw.                  |
-| src        | Object  | Source image.                    |
-| src_left   | Integer | X coordinate in source.          |
-| src_top    | Integer | Y coordinate in source.          |
-| alpha      | Integer | Alpha value (0-255).             |
+| Parameter | Type    | Description                      |
+|-----------|---------|----------------------------------|
+| dst       | Object  | Destination image.               |
+| dstLeft   | Integer | X coordinate in destination.     |
+| dstTop    | Integer | Y coordinate in destination.     |
+| dstWidth  | Integer | Width to draw.                   |
+| dstHeight | Integer | Height to draw.                  |
+| src       | Object  | Source image.                    |
+| srcLeft   | Integer | X coordinate in source.          |
+| srcTop    | Integer | Y coordinate in source.          |
+| alpha     | Integer | Alpha value (`0`-`255`).         |
 
 ### Return
 
@@ -1220,7 +1219,17 @@ Draw an image with additive blending.
 
 ### Parameters
 
-(Same as Suika.drawImageAlpha)
+| Parameter | Type    | Description                      |
+|-----------|---------|----------------------------------|
+| dst       | Object  | Destination image.               |
+| dstLeft   | Integer | X coordinate in destination.     |
+| dstTop    | Integer | Y coordinate in destination.     |
+| dstWidth  | Integer | Width to draw.                   |
+| dstHeight | Integer | Height to draw.                  |
+| src       | Object  | Source image.                    |
+| srcLeft   | Integer | X coordinate in source.          |
+| srcTop    | Integer | Y coordinate in source.          |
+| alpha     | Integer | Alpha value (`0`-`255`).         |
 
 ---
 
@@ -1230,18 +1239,28 @@ Draw an image with subtractive blending.
 
 ### Parameters
 
-(Same as Suika.drawImageAlpha)
+| Parameter | Type    | Description                      |
+|-----------|---------|----------------------------------|
+| dst       | Object  | Destination image.               |
+| dstLeft   | Integer | X coordinate in destination.     |
+| dstTop    | Integer | Y coordinate in destination.     |
+| dstWidth  | Integer | Width to draw.                   |
+| dstHeight | Integer | Height to draw.                  |
+| src       | Object  | Source image.                    |
+| srcLeft   | Integer | X coordinate in source.          |
+| srcTop    | Integer | Y coordinate in source.          |
+| alpha     | Integer | Alpha value (`0`-`255`).         |
 
 ---
 
-## Suika.makePixel()
+## Suika.makeColor()
 
 Create a pixel value from RGBA components.
 
 ### Parameters
 
-| Parameter | Type    | Description                   |
-|-----------|---------|-------------------------------|
+| Parameter | Type    | Description      |
+|-----------|---------|------------------|
 | r         | Integer | Red (0-255).     |
 | g         | Integer | Green (0-255).   |
 | b         | Integer | Blue (0-255).    |
@@ -1259,21 +1278,20 @@ Fill a rectangular area on an image with a color.
 
 ### Parameters
 
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
-| img       | Object  | Target image.                 |
-| left      | Integer | X coordinate.                 |
-| top       | Integer | Y coordinate.                 |
-| width     | Integer | Width.                        |
-| height    | Integer | Height.                       |
-| color     | Pixel   | Color created by makePixel(). |
+| Parameter | Type    | Description                         |
+|-----------|---------|-------------------------------------|
+| img       | Object  | Target image.                       |
+| left      | Integer | X coordinate.                       |
+| top       | Integer | Y coordinate.                       |
+| width     | Integer | Width.                              |
+| height    | Integer | Height.                             |
+| color     | Integer | Color created by Suika.makeColor(). |
 
 ### Return
 
 No return.
 
 ---
-
 
 ## Suika.reloadStageImages()
 
@@ -1303,7 +1321,23 @@ No return.
 
 ---
 
-## Suika.getLayerX() / Suika.getLayerY()
+## Suika.getLayerX()
+
+Get the current position of a specific layer.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| layer     | Integer | Index of the stage layer.  |
+
+### Return
+
+Integer value of the coordinate.
+
+---
+
+## Suika.getLayerY()
 
 Get the current position of a specific layer.
 
@@ -1337,9 +1371,25 @@ No return.
 
 ---
 
-## Suika.getLayerScaleX() / Suika.getLayerScaleY()
+## Suika.getLayerScaleX()
 
-Get the scaling factor of a specific layer.
+Get the X scaling factor of a specific layer.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| layer     | Integer | Index of the stage layer.  |
+
+### Return
+
+Float value of the scale.
+
+---
+
+## Suika.getLayerScaleY()
+
+Get the Y scaling factor of a specific layer.
 
 ### Parameters
 
@@ -1371,11 +1421,27 @@ No return.
 
 ---
 
-## Suika.getLayerRotate() / Suika.setLayerRotate()
+## Suika.getLayerRotate()
 
-Get or set the rotation angle of a specific layer.
+Get the rotation angle of a specific layer.
 
-### Parameters (Set)
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| layer     | Integer | Index of the stage layer.  |
+
+### Return
+
+Returns float.
+
+---
+
+## Suika.setLayerRotate()
+
+Set the rotation angle of a specific layer.
+
+### Parameters
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1384,13 +1450,29 @@ Get or set the rotation angle of a specific layer.
 
 ### Return
 
-Get returns Float; Set returns No return.
+No return.
 
 ---
 
-## Suika.getLayerDim() / Suika.setLayerDim()
+## Suika.getLayerDim()
 
-Get or set the dimming state of a specific layer.
+Get the dimming state of a specific layer.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| layer     | Integer | Index of the stage layer.  |
+
+### Return
+
+Returns boolean.
+
+---
+
+## Suika.setLayerDim()
+
+Set the dimming state of a specific layer.
 
 ### Parameters (Set)
 
@@ -1401,15 +1483,31 @@ Get or set the dimming state of a specific layer.
 
 ### Return
 
-Get returns Boolean; Set returns No return.
+No return.
 
 ---
 
-## Suika.getLayerAlpha() / Suika.setLayerAlpha()
+## Suika.getLayerAlpha()
 
-Get or set the transparency of a specific layer.
+Get the transparency of a specific layer.
 
-### Parameters (Set)
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| layer     | Integer | Index of the stage layer.  |
+
+### Return
+
+Returns integer.
+
+---
+
+## Suika.setLayerAlpha()
+
+Set the transparency of a specific layer.
+
+### Parameters
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1418,7 +1516,7 @@ Get or set the transparency of a specific layer.
 
 ### Return
 
-Get returns Integer; Set returns No return.
+No return.
 
 ---
 
@@ -1473,20 +1571,36 @@ No return.
 
 ---
 
-## Suika.getLayerText() / Suika.setLayerText()
+## Suika.getLayerText()
 
-Get or set the string displayed on a text layer.
+Get the string displayed on a text layer.
 
-### Parameters (Set)
+### Parameters
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
 | index     | Integer | Index of the text layer.   |
-| msg       | String  | Text message to set.       |
 
 ### Return
 
-Get returns String; Set returns Boolean.
+Returns string.
+
+---
+
+## Suika.setLayerText()
+
+Set the string displayed on a text layer.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| index     | Integer | Index of the text layer.   |
+| text      | String  | Text message to set.       |
+
+### Return
+
+Set returns boolean.
 
 ---
 
@@ -1512,10 +1626,10 @@ Start a transition effect.
 
 | Parameter | Type    | Description                                  |
 |-----------|---------|----------------------------------------------|
-| desc      | Object  | Fade descriptor (s3_fade_desc).              |
-| method    | Integer | Fading method (Normal, Rule, Melt).          |
-| t         | Float   | Duration in seconds.                         |
-| rule_img  | Object  | Rule image object (optional).                |
+| desc      | Array   | Fade descriptor.                             |
+| method    | String  | Fading method.                               |
+| time      | Float   | Duration in seconds.                         |
+| ruleImage | Object  | Rule image object (optional).                |
 
 ### Return
 
@@ -1551,13 +1665,49 @@ No return.
 
 ---
 
-## Suika.setChTalking() / Suika.getTalkingChpos()
+## Suika.setChTalking()
 
-Set the talking character index or get the position of the character currently speaking.
+Set the talking character.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| chpos     | String  | Character position.        |
+
+### Character Position
+
+| Name           | Description              |
+|----------------|--------------------------|
+| `center`       | Center Character         |
+| `back`         | Center Back Character    |
+| `left`         | Left Character           |
+| `left-center`  | Left Center Character    |
+| `right`        | Right Center Character   |
+| `right-center` | Right Center Character   |
 
 ### Return
 
 Set returns No return; Get returns Integer.
+
+---
+
+## Suika.getTalkingChpos()
+
+Get the position of the character currently speaking.
+
+### Return
+
+Returns a string.
+
+| Name           | Description              |
+|----------------|--------------------------|
+| `center`       | Center Character         |
+| `back`         | Center Back Character    |
+| `left`         | Left Character           |
+| `left-center`  | Left Center Character    |
+| `right`        | Right Center Character   |
+| `right-center` | Right Center Character   |
 
 ---
 
@@ -1575,9 +1725,25 @@ No return.
 
 ---
 
-## Suika.showMsgbox() / Suika.showNamebox()
+## Suika.showMsgbox()
 
-Show or hide the message box or name box.
+Show or hide the message box.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| show      | Boolean | Whether to show the box.   |
+
+### Return
+
+No return.
+
+---
+
+## Suika.showNamebox()
+
+Show or hide the name box.
 
 ### Parameters
 
@@ -1597,11 +1763,11 @@ Show or hide a choice box.
 
 ### Parameters
 
-| Parameter  | Type    | Description                |
-|------------|---------|----------------------------|
-| index      | Integer | Choice box index.          |
-| show_idle  | Boolean | Show idle state.           |
-| show_hover | Boolean | Show hover state.          |
+| Parameter  | Type    | Description                 |
+|------------|---------|-----------------------------|
+| index      | Integer | Choice box index. (`0`-`7`) |
+| showIdle   | Boolean | Show idle state.            |
+| showHover  | Boolean | Show hover state.           |
 
 ### Return
 
@@ -1609,9 +1775,51 @@ No return.
 
 ---
 
-## Suika.renderImage() / Suika.renderImage3d()
+## Suika.renderImage()
 
-Perform direct rendering of an image or a 3D transformed image to the stage.
+Perform direct rendering of an image to the screen.
+
+### Parameters
+
+| Parameter | Omissible    | Type    | Description                                |
+|-----------|--------------|---------|--------------------------------------------|
+| dstLeft   | No           | Integer | Destination top-left X position.           |
+| dstTop    | No           | Integer | Destination top-left Y position.           |
+| tex       | No           | Object  | Image.                                     |
+| srcLeft   | No           | Integer | Source top-left X position.                |
+| srcTop    | No           | Integer | Source top-left Y position.                |
+| srcWidth  | No           | Integer | Source width.                              |
+| srcHeight | No           | Integer | Source height.                             |
+| alpha     | No           | Integer | Alpha value. (`0`-`255`)                   |
+
+### Return
+
+No return.
+
+---
+
+## Suika.renderImage3d()
+
+Perform direct rendering of an image to the screen with 3D transformation.
+
+### Parameters
+
+| Parameter | Omissible    | Type    | Description                                |
+|-----------|--------------|---------|--------------------------------------------|
+| x1        | No           | Integer | Destination vertex 1 X position.           |
+| y1        | No           | Integer | Destination vertex 1 Y position.           |
+| x2        | No           | Integer | Destination vertex 2 X position.           |
+| y2        | No           | Integer | Destination vertex 2 Y position.           |
+| x3        | No           | Integer | Destination vertex 3 X position.           |
+| y3        | No           | Integer | Destination vertex 3 Y position.           |
+| x4        | No           | Integer | Destination vertex 4 X position.           |
+| y4        | No           | Integer | Destination vertex 4 Y position.           |
+| tex       | No           | Object  | Image.                                     |
+| srcLeft   | No           | Integer | Source top-left X position.                |
+| srcTop    | No           | Integer | Source top-left Y position.                |
+| srcWidth  | No           | Integer | Source width.                              |
+| srcHeight | No           | Integer | Source height.                             |
+| alpha     | No           | Integer | Alpha value. (`0`-`255`)                   |
 
 ### Return
 
@@ -1625,11 +1833,20 @@ Play a sound file on a specific mixer track.
 
 ### Parameters
 
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
-| track     | Integer | Mixer track index (BGM, VOICE, SE, SYS).   |
-| file      | String  | Path to the sound file.                    |
-| is_looped | Boolean | Whether to loop the playback.              |
+| Parameter | Omissible    | Type    | Description                                |
+|-----------|--------------|---------|--------------------------------------------|
+| track     | No           | String  | Mixer track name.                          |
+| file      | No           | String  | Path to the sound file.                    |
+| isLooped  | Yes(`false`) | Boolean | Whether to loop the playback.              |
+
+### Track Names
+
+| Name   | Description              |
+|--------|--------------------------|
+| bgm    | Background music track.  |
+| se     | Sound effect track.      |
+| voice  | Character voice track.   |
+| sys    | System sound track.      |
 
 ### Return
 
@@ -1637,29 +1854,65 @@ Boolean that represents whether the file was opened successfully.
 
 ---
 
-## Suika.setMixerVolume() / Suika.getMixerVolume()
+## Suika.setMixerVolume()
 
-Set or get the volume for a specific mixer track.
+Set the volume for a specific mixer track.
 
-### Parameters (Set)
+### Parameters
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
-| track     | Integer | Mixer track index.                         |
+| track     | String  | Mixer track name.                          |
 | vol       | Float   | Volume level (0.0 to 1.0).                 |
 | span      | Float   | Fade duration in seconds.                  |
 
+### Track Names
+
+| Name   | Description              |
+|--------|--------------------------|
+| bgm    | Background music track.  |
+| se     | Sound effect track.      |
+| voice  | Character voice track.   |
+| sys    | System sound track.      |
+
 ### Return
 
-Get returns Float; Set returns No return.
+No return.
 
 ---
 
-## Suika.setMasterVolume() / Suika.getMasterVolume()
+## Suika.getMixerVolume()
 
-Set or get the master volume affecting all tracks.
+Get the volume for a specific mixer track.
 
-### Parameters (Set)
+### Parameters
+
+| Parameter | Type    | Description                                |
+|-----------|---------|--------------------------------------------|
+| track     | String  | Mixer track name.                          |
+| vol       | Float   | Volume level (0.0 to 1.0).                 |
+| span      | Float   | Fade duration in seconds.                  |
+
+### Track Names
+
+| Name   | Description              |
+|--------|--------------------------|
+| bgm    | Background music track.  |
+| se     | Sound effect track.      |
+| voice  | Character voice track.   |
+| sys    | System sound track.      |
+
+### Return
+
+Returns float.
+
+---
+
+## Suika.setMasterVolume()
+
+Set the master volume affecting all tracks.
+
+### Parameters
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -1671,37 +1924,101 @@ Get returns Float; Set returns No return.
 
 ---
 
-## Suika.setMixerGlobalVolume() / Suika.getMixerGlobalVolume()
+## Suika.getMasterVolume()
 
-Set or get the global volume for a track (often used for config settings).
+Get the master volume affecting all tracks.
 
-### Parameters (Set)
+### Parameters
 
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
-| track     | Integer | Mixer track index.                         |
-| vol       | Float   | Global volume level.                       |
+No parameters.
 
 ### Return
 
-Get returns Float; Set returns No return.
+Returns float.
 
 ---
 
-## Suika.setCharacterVolume() / Suika.getCharacterVolume()
+## Suika.setMixerGlobalVolume()
 
-Set or get the volume for a specific character's voice.
+Set the global volume for a track (often used for config settings).
 
-### Parameters (Set)
+### Parameters
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
-| ch_index  | Integer | Character name index.                      |
+| track     | String  | Mixer track name.                          |
+| vol       | Float   | Global volume level.                       |
+
+### Track Names
+
+| Name   | Description              |
+|--------|--------------------------|
+| bgm    | Background music track.  |
+| se     | Sound effect track.      |
+| voice  | Character voice track.   |
+| sys    | System sound track.      |
+
+### Return
+
+No return.
+
+---
+
+## Suika.getMixerGlobalVolume()
+
+Get the global volume for a track (often used for config settings).
+
+### Parameters
+
+| Parameter | Type    | Description                                |
+|-----------|---------|--------------------------------------------|
+| track     | String  | Mixer track name.                          |
+
+### Track Names
+
+| Name   | Description              |
+|--------|--------------------------|
+| bgm    | Background music track.  |
+| se     | Sound effect track.      |
+| voice  | Character voice track.   |
+| sys    | System sound track.      |
+
+### Return
+
+Returns float.
+
+---
+
+## Suika.setCharacterVolume()
+
+Set the volume for a specific character's voice.
+
+### Parameters
+
+| Parameter | Type    | Description                                |
+|-----------|---------|--------------------------------------------|
+| index     | Integer | Character name index.                      |
 | vol       | Float   | Volume level.                              |
 
 ### Return
 
-Get returns Float; Set returns No return.
+No return.
+
+---
+
+## Suika.getCharacterVolume()
+
+Get the volume for a specific character's voice.
+
+### Parameters
+
+| Parameter | Type    | Description                                |
+|-----------|---------|--------------------------------------------|
+| ch_index  | Integer | Character name index.                      |
+
+### Return
+
+Get returns float.
 
 ---
 
@@ -1753,71 +2070,39 @@ No return.
 
 ---
 
-## Suika.utf8ToUtf32()
+## Suika.getStringWidth()
 
-Convert the top character of a UTF-8 string to UTF-32.
+Get the total width of a UTF-8 string.
 
 ### Parameters
 
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
-| mbs       | String | Multi-byte string (UTF-8).                  |
+| Parameter | Type    | Description            |
+|-----------|---------|------------------------|
+| fontType  | Integer | Font selection index.  |
+| fontSize  | Integer | Size of the font.      |
+| text      | String  | Text.                  |
 
 ### Return
 
-An object containing `wc` (Integer, UTF-32 code point) and the number of bytes consumed.
+Integer value of the width in pixels.
 
 ---
 
-## Suika.countUtf8Chars()
+## Suika.getStringHeight()
 
-Count the number of characters in a UTF-8 string.
-
-### Parameters
-
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
-| mbs       | String | Multi-byte string (UTF-8).                  |
-
-### Return
-
-Integer that represents the character count.
-
----
-
-## Suika.getGlyphWidth() / Suika.getGlyphHeight()
-
-Get the width or height of a specific glyph.
+Get the total height of a UTF-8 string.
 
 ### Parameters
 
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
-| font_type | Integer | Font selection index.                      |
-| font_size | Integer | Size of the font.                          |
-| codepoint | Integer | UTF-32 code point.                         |
+| Parameter | Type    | Description            |
+|-----------|---------|------------------------|
+| fontType  | Integer | Font selection index.  |
+| fontSize  | Integer | Size of the font.      |
+| text      | String  | Text.                  |
 
 ### Return
 
-Integer value of the dimension.
-
----
-
-## Suika.getStringWidth() / Suika.getStringHeight()
-
-Get the total width or height of a UTF-8 string.
-
-### Parameters
-
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
-| font_type | Integer | Font selection index.                      |
-| font_size | Integer | Size of the font.                          |
-| mbs       | String  | Multi-byte string.                         |
-
-### Return
-
-Integer value of the dimension.
+Integer value of the height in pixels.
 
 ---
 
@@ -1847,7 +2132,7 @@ Boolean that represents success.
 
 ---
 
-## Suika.constructDrawMsgContext()
+## Suika.constructDrawMessageContext()
 
 Initialize a complex message drawing context for high-level text rendering.
 
@@ -1868,7 +2153,7 @@ A message drawing context object.
 
 ---
 
-## Suika.drawMsgCommon()
+## Suika.drawMessage()
 
 Draw characters in a message up to a specified maximum count using a context.
 
@@ -1885,7 +2170,7 @@ Integer representing the number of characters actually drawn.
 
 ---
 
-## Suika.getPenPositionCommon()
+## Suika.getPenPosition()
 
 Get the current pen position from a drawing context.
 
@@ -1917,6 +2202,22 @@ Boolean value.
 
 ---
 
+## Suika.moveToTagFile()
+
+Load a new tag file and move the execution point to its beginning.
+
+### Parameters
+
+| Parameter | Type   | Description                                |
+|-----------|--------|--------------------------------------------|
+| file      | String | Path to the .novel or script file. |
+
+### Return
+
+Boolean that represents success or failure.
+
+---
+
 ## Suika.getTagCount()
 
 Get the total number of tags in the current script file.
@@ -1931,27 +2232,11 @@ Integer representing the tag count.
 
 ---
 
-## Suika.moveToTagFile()
+## Suika.moveToTagIndex()
 
-Load a new script file and move the execution point to its beginning.
+Move the execution pointer to a specific tag index.
 
 ### Parameters
-
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
-| file      | String | Path to the .novel or script file. |
-
-### Return
-
-Boolean that represents success or failure.
-
----
-
-## Suika.moveToTagIndex() / Suika.moveToNextTag()
-
-Move the execution pointer to a specific tag index or the very next tag.
-
-### Parameters (for moveToTagIndex)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1963,25 +2248,9 @@ Boolean value.
 
 ---
 
-## Suika.moveToLabelTag() / Suika.moveToMacroTag()
+## Suika.moveToNextTag()
 
-Jump to a specific label or call a macro by name.
-
-### Parameters
-
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
-| label/name| String | Target label or macro name.      |
-
-### Return
-
-Boolean value.
-
----
-
-## Suika.getTagFileName() / Suika.getTagName()
-
-Get the current script file name or the name of the current tag (command).
+Move the execution pointer to the very next tag.
 
 ### Parameters
 
@@ -1989,19 +2258,77 @@ No parameters.
 
 ### Return
 
-String representing the file or tag name.
+Boolean value.
 
 ---
 
-## Suika.getTagPropertyCount() / Suika.getTagPropertyName() / Suika.getTagPropertyValue()
+## Suika.moveToLabelTag()
 
-Iterate through and retrieve the properties (arguments) of the current tag.
+Jump to a specific label.
 
-### Parameters (for PropertyName/Value)
+### Parameters
 
-| Parameter | Type    | Description                |
-|-----------|---------|----------------------------|
-| index     | Integer | Property index.   |
+| Parameter | Type   | Description             |
+|-----------|--------|-------------------------|
+| name      | String | Target label name.      |
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.moveToMacroTag()
+
+Jump to a specific macro by name.
+
+### Parameters
+
+| Parameter | Type   | Description             |
+|-----------|--------|-------------------------|
+| name      | String | Target macro name.      |
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.getTagFileName()
+
+Get the current script file name current tag.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+String representing the file name.
+
+---
+
+## Suika.getTagName()
+
+Get the name of the current tag.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+String representing the tag name.
+
+---
+
+## Suika.getTagPropertyCount()
+
+Get the number of the properties of the current tag.
+
+### Parameters
+
+No parameters.
 
 ### Return
 
@@ -2009,17 +2336,109 @@ String representing the name or value.
 
 ---
 
-## Suika.getTagArgBool() / Suika.getTagArgInt() / Suika.getTagArgFloat() / Suika.getTagArgString()
+## Suika.getTagPropertyName()
 
-Get a specific argument of the current tag, with support for default values and optionality.
+Iterate through and retrieve the properties (arguments) of the current
+tag.
 
 ### Parameters
 
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
-| name      | String  | Name of the argument.            |
-| omissible | Boolean | Whether the argument is optional.|
-| def_val   | Mixed   | Default value if missing.        |
+| Parameter | Type    | Description       |
+|-----------|---------|-------------------|
+| index     | Integer | Property index.   |
+
+### Return
+
+String representing the name.
+
+---
+
+## Suika.getTagPropertyValue()
+
+Iterate through and retrieve the properties (arguments) of the current
+tag.
+
+### Parameters (for PropertyName/Value)
+
+| Parameter | Type    | Description       |
+|-----------|---------|-------------------|
+| index     | Integer | Property index.   |
+
+### Return
+
+String representing the value.
+
+---
+
+## Suika.getTagArgBool()
+
+Get a specific argument of the current tag, with support for default
+values and optionality.
+
+### Parameters
+
+| Parameter | Type    | Description                       |
+|-----------|---------|-----------------------------------|
+| name      | String  | Name of the argument.             |
+| omissible | Boolean | Whether the argument is optional. |
+| defVal    | Boolean | Default value if missing.         |
+
+### Return
+
+The value of the argument in the requested type.
+
+---
+
+## Suika.getTagArgInt()
+
+Get a specific argument of the current tag, with support for default
+values and optionality.
+
+### Parameters
+
+| Parameter | Type    | Description                       |
+|-----------|---------|-----------------------------------|
+| name      | String  | Name of the argument.             |
+| omissible | Boolean | Whether the argument is optional. |
+| defVal    | Integer | Default value if missing.         |
+
+### Return
+
+The value of the argument in the requested type.
+
+---
+
+## Suika.getTagArgFloat()
+
+Get a specific argument of the current tag, with support for default
+values and optionality.
+
+### Parameters
+
+| Parameter | Type    | Description                       |
+|-----------|---------|-----------------------------------|
+| name      | String  | Name of the argument.             |
+| omissible | Boolean | Whether the argument is optional. |
+| defVal    | Float   | Default value if missing.         |
+
+### Return
+
+The value of the argument in the requested type.
+
+---
+
+## Suika.getTagArgString()
+
+Get a specific argument of the current tag, with support for default
+values and optionality.
+
+### Parameters
+
+| Parameter | Type    | Description                       |
+|-----------|---------|-----------------------------------|
+| name      | String  | Name of the argument.             |
+| omissible | Boolean | Whether the argument is optional. |
+| defVal    | String  | Default value if missing.         |
 
 ### Return
 
@@ -2029,7 +2448,10 @@ The value of the argument in the requested type.
 
 ## Suika.evaluateTag()
 
-Evaluate the property values of the current tag (process variables and expressions).
+Evaluate the property values of the current tag to expand inline
+variables. (`${varname}` form)
+
+Calling this API updates the cache for the property values.
 
 ### Parameters
 
@@ -2041,10 +2463,28 @@ Boolean value.
 
 ---
 
-## Suika.pushTagStackIf() / Suika.popTagStackIf()
+## Suika.pushTagStackIf()
+
+Manage the internal stack for `[if]` conditional blocks.
+
+This API marks the `if` block position for nested block processing.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.popTagStackIf()
 
 Manage the internal stack for `if` conditional blocks.
 
+This API marks the end of `if` block for nested block processing.
+
 ### Parameters
 
 No parameters.
@@ -2055,9 +2495,59 @@ Boolean value.
 
 ---
 
-## Suika.pushTagStackWhile() / Suika.pushTagStackFor()
+## Suika.pushTagStackWhile()
 
-Manage the internal stack for loops (`while` or `for`).
+Manage the internal stack for loops (`while`).
+
+This API marks the `while` block for nested block processing.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.popTagStackWhile()
+
+Manage the internal stack for loops (`while`).
+
+This API marks the end of `while` block for nested block processing.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.pushTagStackFor()
+
+Manage the internal stack for loops (`for`).
+
+This API marks the `for` block for nested block processing.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.popTagStackFor()
+
+Manage the internal stack for loops (`for`).
+
+This API marks the end of `for` block for nested block processing.
 
 ### Parameters
 
@@ -2077,7 +2567,7 @@ Load an animation definition from a file and register it.
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
-| fname     | String  | Path to the anime file.                    |
+| file      | String  | Path to the anime file.                    |
 | reg_name  | String  | Registration name for the anime.           |
 
 ### Return
@@ -2089,6 +2579,7 @@ An object containing success status and whether the anime uses specific layers.
 ## Suika.newAnimeSequence()
 
 Begin describing a new animation sequence for a specific layer.
+This API is used for manually generated animations.
 
 ### Parameters
 
@@ -2102,16 +2593,35 @@ Boolean that represents success.
 
 ---
 
-## Suika.addAnimeSequencePropertyF() / Suika.addAnimeSequencePropertyI()
+## Suika.addAnimeSequencePropertyF()
 
-Add a float or integer property (e.g., position, alpha) to the current anime sequence.
+Add a float property (e.g., position, alpha) to the current anime sequence.
+This API is used for manually generated animations.
 
 ### Parameters
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
 | key       | String  | Property key (e.g., "x", "y", "a").        |
-| val       | Mixed   | Target value (Float or Integer).           |
+| val       | Float   | Target value.                              |
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.addAnimeSequencePropertyI()
+
+Add an integer property (e.g., position, alpha) to the current anime sequence.
+This API is used for manually generated animations.
+
+### Parameters
+
+| Parameter | Type    | Description                                |
+|-----------|---------|--------------------------------------------|
+| key       | String  | Property key (e.g., "x", "y", "a").        |
+| val       | Integer | Target value.                              |
 
 ### Return
 
@@ -2135,11 +2645,25 @@ Boolean value.
 
 ---
 
-## Suika.isAnimeRunning() / Suika.isAnimeFinishedForLayer()
+## Suika.isAnimeRunning()
 
-Check the overall animation status or if a specific layer's animation has ended.
+Check the overall animation status.
 
-### Parameters (for FinishedForLayer)
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.isAnimeFinishedForLayer()
+
+Check if a specific layer's animation has ended.
+
+### Parameters
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2165,16 +2689,27 @@ No return.
 
 ---
 
-## Suika.loadEyeImageIfExists() / Suika.reloadEyeAnime()
+## Suika.loadEyeImageIfExists()
 
-Manage eye-blinking (eye-patch) images and animations for a character position.
+Manage eye-blinking (eye-patch) image and animation for a character position.
 
 ### Parameters
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
-| chpos     | Integer | Character position (Left, Center, etc.).   |
-| fname     | String  | Path to the eye image file.                |
+| chpos     | String  | Character position (Left, Center, etc.).   |
+| file      | String  | Path to the eye image file.                |
+
+### Character Position
+
+| Name         | Description              |
+|--------------|--------------------------|
+| center       | Center Character         |
+| back         | Center Back Character    |
+| left         | Left Character           |
+| left-center  | Left Center Character    |
+| right        | Right Center Character   |
+| right-center | Right Center Character   |
 
 ### Return
 
@@ -2182,11 +2717,38 @@ Boolean value.
 
 ---
 
-## Suika.runLipAnime() / Suika.stopLipAnime()
+## Suika.reloadEyeAnime()
 
-Start or stop lip-sync animation based on the message content for a character.
+Restart the eye-blinking (eye-patch) animation for a character position.
 
-### Parameters (for Run)
+### Parameters
+
+| Parameter | Type    | Description                                |
+|-----------|---------|--------------------------------------------|
+| chpos     | String  | Character position (Left, Center, etc.).   |
+
+### Character Position
+
+| Name         | Description              |
+|--------------|--------------------------|
+| center       | Center Character         |
+| back         | Center Back Character    |
+| left         | Left Character           |
+| left-center  | Left Center Character    |
+| right        | Right Center Character   |
+| right-center | Right Center Character   |
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.runLipAnime()
+
+Start lip-sync animation based on the message content for a character.
+
+### Parameters
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2199,11 +2761,27 @@ No return.
 
 ---
 
-## Suika.clearLayerAnimeSequence() / Suika.clearAllAnimeSequence()
+## Suika.stopLipAnime()
 
-Clear animation sequences for a specific layer or all layers.
+Stop lip-sync animation.
 
-### Parameters (for Layer)
+### Parameters
+
+| Parameter | Type    | Description                                |
+|-----------|---------|--------------------------------------------|
+| chpos     | Integer | Character position.                        |
+
+### Return
+
+No return.
+
+---
+
+## Suika.clearLayerAnimeSequence()
+
+Clear animation sequences for a specific layer.
+
+### Parameters
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2215,16 +2793,30 @@ No return.
 
 ---
 
-## Suika.setVariableInt() / Suika.setVariableFloat() / Suika.setVariableString()
+## Suika.clearAllAnimeSequence()
+
+Clear animation sequences for all layers.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.setVariableInt()
 
 Set a value to a local or global variable.
 
 ### Parameters
 
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
-| name      | String  | Name of the variable.                      |
-| val       | Mixed   | Value to set (Integer, Float, or String).  |
+| Parameter | Type    | Description            |
+|-----------|---------|------------------------|
+| name      | String  | Name of the variable.  |
+| val       | Integer | Value to set           |
 
 ### Return
 
@@ -2232,7 +2824,41 @@ Boolean that represents success or failure.
 
 ---
 
-## Suika.getVariableInt() / Suika.getVariableFloat() / Suika.getVariableString()
+## Suika.setVariableFloat()
+
+Set a value to a local or global variable.
+
+### Parameters
+
+| Parameter | Type    | Description             |
+|-----------|---------|-------------------------|
+| name      | String  | Name of the variable.   |
+| val       | Float   | Value to set            |
+
+### Return
+
+Boolean that represents success or failure.
+
+---
+
+## Suika.setVariableString()
+
+Set a value to a local or global variable.
+
+### Parameters
+
+| Parameter | Type    | Description             |
+|-----------|---------|-------------------------|
+| name      | String  | Name of the variable.   |
+| val       | Integer | Value to set            |
+
+### Return
+
+Boolean that represents success or failure.
+
+---
+
+## Suika.getVariableInt()
 
 Get the current value of a variable.
 
@@ -2244,15 +2870,47 @@ Get the current value of a variable.
 
 ### Return
 
-The value of the variable in the requested type.
+The value of the variable in integer.
 
 ---
 
-## Suika.unsetVariable() / Suika.unsetLocalVariables()
+## Suika.getVariableFloat()
 
-Unset (delete) a specific variable or clear all local variables.
+Get the current value of a variable.
 
-### Parameters (for unsetVariable)
+### Parameters
+
+| Parameter | Type   | Description                                |
+|-----------|--------|--------------------------------------------|
+| name      | String | Name of the variable.                      |
+
+### Return
+
+The value of the variable in float.
+
+---
+
+## Suika.getVariableString()
+
+Get the current value of a variable.
+
+### Parameters
+
+| Parameter | Type   | Description                                |
+|-----------|--------|--------------------------------------------|
+| name      | String | Name of the variable.                      |
+
+### Return
+
+The value of the variable in string
+
+---
+
+## Suika.unsetVariable()
+
+Unset (delete) a specific variable.
+
+### Parameters
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -2260,13 +2918,27 @@ Unset (delete) a specific variable or clear all local variables.
 
 ### Return
 
-Boolean value for single unset; No return for clearing all.
+No return.
 
 ---
 
-## Suika.makeVariableGlobal() / Suika.isGlobalVariable()
+## Suika.unsetLocalVariables()
 
-Set a variable to be global (persistent across saves) or check its global status.
+Unset (delete) all local variables.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.makeVariableGlobal()
+
+Set a variable to be global (persistent across saves).
 
 ### Parameters
 
@@ -2281,7 +2953,39 @@ Boolean value.
 
 ---
 
-## Suika.getVariableCount() / Suika.getVariableName()
+## Suika.isGlobalVariable()
+
+Check the variable's global status.
+
+### Parameters
+
+| Parameter | Type    | Description                                |
+|-----------|---------|--------------------------------------------|
+| name      | String  | Name of the variable.                      |
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.getVariableCount()
+
+Get the number of variables.
+
+### Parameters (for getVariableName)
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| index     | Integer | Index of the variable.     |
+
+### Return
+
+Integer for count.
+
+---
+
+## Suika.getVariableName()
 
 Iterate through the registered variables.
 
@@ -2293,7 +2997,7 @@ Iterate through the registered variables.
 
 ### Return
 
-Integer for count; String for name.
+String for name.
 
 ---
 
@@ -2313,25 +3017,10 @@ Boolean value.
 
 ---
 
-## Suika.expandStringWithVariable()
+## Suika.executeSaveGlobal()
 
-Expand a string that contains variable references (e.g., "Hello, ${name}!").
-
-### Parameters
-
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
-| msg       | String | String containing variable markers.        |
-
-### Return
-
-String with all variable references replaced by their values.
-
----
-
-## Suika.executeSaveGlobal() / Suika.executeLoadGlobal()
-
-Execute a global save or load. Global data typically includes persistent settings and seen flags.
+Execute a global save.
+Global data typically includes persistent settings.
 
 ### Parameters
 
@@ -2343,9 +3032,40 @@ Boolean that represents success or failure.
 
 ---
 
-## Suika.executeSaveLocal() / Suika.executeLoadLocal()
+## Suika.executeLoadGlobal()
 
-Save or load game progress to/from a specific slot.
+Execute a global load.
+Global data typically includes persistent settings.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean that represents success or failure.
+
+---
+
+## Suika.executeSaveLocal()
+
+Save the game progress to a specific slot.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| index     | Integer | Index of the save slot.    |
+
+### Return
+
+Boolean that represents success or failure.
+
+---
+
+## Suika.executeLoadLocal()
+
+Load game progress from a specific slot.
 
 ### Parameters
 
@@ -2375,15 +3095,29 @@ Boolean value.
 
 ---
 
-## Suika.deleteLocalSave() / Suika.deleteGlobalSave()
+## Suika.deleteLocalSave()
 
-Delete a local save slot or the entire global save data.
+Delete a local save slot.
 
-### Parameters (for deleteLocalSave)
+### Parameters
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
 | index     | Integer | Index of the save slot.    |
+
+### Return
+
+No return.
+
+---
+
+## Suika.deleteGlobalSave()
+
+Delete the entire global save data.
+
+### Parameters
+
+No parameters.
 
 ### Return
 
@@ -2417,7 +3151,7 @@ Get the timestamp (Unix time) when the save data was created.
 
 ### Return
 
-64-bit unsigned integer (timestamp).
+Integer (timestamp).
 
 ---
 
@@ -2435,9 +3169,9 @@ Integer representing the slot index.
 
 ---
 
-## Suika.getSaveChapterName() / Suika.getSaveLastMessage()
+## Suika.getSaveChapterName()
 
-Retrieve the chapter title or the last displayed message stored in a save slot.
+Retrieve the chapter title stored in a save slot.
 
 ### Parameters
 
@@ -2447,7 +3181,23 @@ Retrieve the chapter title or the last displayed message stored in a save slot.
 
 ### Return
 
-String representing the chapter name or message.
+String representing the chapter name.
+
+---
+
+## Suika.getSaveLastMessage()
+
+Retrieve the last displayed message stored in a save slot.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| index     | Integer | Index of the save slot.    |
+
+### Return
+
+String representing the message.
 
 ---
 
@@ -2487,12 +3237,15 @@ Add a new entry to the history.
 
 ### Parameters
 
-| Parameter | Type    | Description                                |
-|-----------|---------|--------------------------------------------|
-| name      | String  | Character name.                            |
-| msg       | String  | Message text.                              |
-| voice     | String  | Path to the voice file.                    |
-| colors... | Pixel   | Body and name colors/outlines.             |
+| Parameter        | Type    | Description                                |
+|------------------|---------|--------------------------------------------|
+| name             | String  | Character name.                            |
+| msg              | String  | Message text.                              |
+| voice            | String  | Path to the voice file.                    |
+| bodyColor        | Integer | Body color.                                |
+| bodyOutlineColor | Integer | Body outline color.                        |
+| nameColor        | Integer | Name color.                                |
+| nameOutlineColor | Integer | Name outline color.                        |
 
 ### Return
 
@@ -2514,9 +3267,9 @@ Integer representing the history count.
 
 ---
 
-## Suika.getHistoryName() / Suika.getHistoryMessage() / Suika.getHistoryVoice()
+## Suika.getHistoryName()
 
-Retrieve the name, message, or voice path at a specific history index.
+Retrieve the name at a specific history index.
 
 ### Parameters
 
@@ -2530,9 +3283,41 @@ String value.
 
 ---
 
-## Suika.loadSeen() / Suika.saveSeen()
+## Suika.getHistoryMessage()
 
-Load or save the seen (read) flags for the current script file.
+Retrieve the message at a specific history index.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| index     | Integer | Index in the history.      |
+
+### Return
+
+String value.
+
+---
+
+## Suika.getHistoryVoice()
+
+Retrieve the voice path at a specific history index.
+
+### Parameters
+
+| Parameter | Type    | Description                |
+|-----------|---------|----------------------------|
+| index     | Integer | Index in the history.      |
+
+### Return
+
+String value.
+
+---
+
+## Suika.loadSeen()
+
+Load the seen (read) flags for the current script file.
 
 ### Parameters
 
@@ -2544,11 +3329,43 @@ Boolean that represents success.
 
 ---
 
-## Suika.getSeenFlags() / Suika.setSeenFlags()
+## Suika.saveSeen()
 
-Get or set the seen status for the current tag.
+Save the seen (read) flags for the current script file.
 
-### Parameters (for setSeenFlags)
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean that represents success.
+
+---
+
+## Suika.getSeenFlags()
+
+Get the seen status for the current tag.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Get returns Integer.
+
+For a `[text]` tag, `0` means unread and `1` means read.
+
+For a `[choose]` tag, each bit indicates the option is selected before.
+
+---
+
+## Suika.setSeenFlags()
+
+Set the seen status for the current tag.
+
+### Parameters
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2556,11 +3373,11 @@ Get or set the seen status for the current tag.
 
 ### Return
 
-Get returns Integer; Set returns No return.
+No return.
 
 ---
 
-## Suika.loadGuiFile()
+## Suika.loadGUIFile()
 
 Load a GUI definition file and prepare it for execution.
 
@@ -2571,15 +3388,20 @@ Load a GUI definition file and prepare it for execution.
 | file      | String  | Path to the .gui file.                     |
 | sys       | Boolean | Whether it's a system GUI (Save/Load/etc). |
 
+### What is System GUI
+
+System GUI is typically called when `[text]` or `[choose]` is running,
+and the control will return to the interrupted tag.
+
 ### Return
 
 Boolean that represents success or failure.
 
 ---
 
-## Suika.startGui() / Suika.stopGui()
+## Suika.startGUI()
 
-Start the loaded GUI or stop the currently running GUI.
+Start the loaded GUI.
 
 ### Parameters
 
@@ -2591,9 +3413,23 @@ No return.
 
 ---
 
-## Suika.isGuiRunning() / Suika.isGuiFinished()
+## Suika.stopGUI()
 
-Check if a GUI is currently active or if it has completed its operation.
+Stop the currently running GUI.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.isGUIRunning()
+
+Check if a GUI is currently active.
 
 ### Parameters
 
@@ -2605,7 +3441,21 @@ Boolean value.
 
 ---
 
-## Suika.getGuiResultLabel()
+## Suika.isGUIFinished()
+
+Check if a GUI has completed its operation.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.getGUIResultLabel()
 
 Get the label of the button that was selected to finish the GUI.
 
@@ -2619,7 +3469,7 @@ String representing the result label.
 
 ---
 
-## Suika.isGuiResultTitle()
+## Suika.isGUIResultTitle()
 
 Check if the GUI was closed with a "back to title" action.
 
@@ -2633,9 +3483,9 @@ Boolean value.
 
 ---
 
-## Suika.checkIfSavedInGui() / Suika.checkIfLoadedInGui()
+## Suika.checkIfSavedInGUI()
 
-Check if a save or load operation was performed while the GUI was active.
+Check if a save operation was performed while the GUI was active.
 
 ### Parameters
 
@@ -2647,7 +3497,21 @@ Boolean value.
 
 ---
 
-## Suika.checkRightAfterSysGui()
+## Suika.checkIfLoadedInGUI()
+
+Check if a load operation was performed while the GUI was active.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Boolean value.
+
+---
+
+## Suika.checkRightAfterSysGUI()
 
 Check if the current frame is immediately following a return from a system GUI.
 
@@ -2661,48 +3525,62 @@ Boolean value.
 
 ---
 
-## Suika.resetLapTimer() / Suika.getLapTimerMillisec()
+## Suika.getMillisec()
 
-Reset a lap timer or get the elapsed time in milliseconds.
+Get a lap time since the time origin in milliseconds.
 
-### Parameters (for getLapTimerMillisec)
+### Parameters
 
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
-| origin    | Object | Pointer or reference to the timer origin.  |
+No parameters.
 
 ### Return
 
-Get returns 64-bit Integer (milliseconds); Reset returns No return.
+Integer in milliseconds.
 
 ---
 
-## Suika.checkFileExists() / Suika.readFileContent()
+## Suika.checkFileExists()
 
-Check if a file exists or read its entire content into a buffer.
+Check if a file exists.
+
+### Parameters
+
+| Parameter | Type   | Description                                |
+|-----------|--------|--------------------------------------------|
+| file      | String | Path to the file.                          |
+
+### Return
+
+Returns boolean.
+
+---
+
+## Suika.readFileContent()
+
+Read an entire file content.
 
 ### Parameters (for readFileContent)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
-| fname     | String | Path to the file.                          |
+| file      | String | Path to the file.                          |
 
 ### Return
 
-Check returns Boolean; Read returns an object with `buf` (String/Data) and `len`.
+Returns a string.
 
 ---
 
-## Suika.writeSaveData() / Suika.readSaveData()
+## Suika.writeSaveData()
 
-Directly write or read raw save data associated with a key.
+Directly write raw save data associated with a key.
 
 ### Parameters
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
 | key       | String | Unique key for the data.                   |
-| data      | Object | Buffer or data to write/read.              |
+| data      | String | Data to write/read.                        |
 
 ### Return
 
@@ -2710,34 +3588,23 @@ Boolean that represents success or failure.
 
 ---
 
-## Suika.installApi() / Suika.installTag()
+## Suika.readSaveData()
 
-Register a new custom API function or a new script tag (command) handler.
+Directly read raw save data associated with a key.
 
 ### Parameters
 
-| Parameter | Type     | Description                                |
-|-----------|----------|--------------------------------------------|
-| name      | String   | Name of the API or tag.                    |
-| func      | Function | Callback function in the script language.  |
+| Parameter | Type   | Description                                |
+|-----------|--------|--------------------------------------------|
+| key       | String | Unique key for the data.                   |
 
 ### Return
 
-Boolean value.
+Boolean that represents success or failure.
 
 ---
 
-## Suika.getVmInt() / Suika.setVmInt() / Suika.callVmFunction()
-
-Interact directly with the Suika VM's internal variables and functions.
-
-### Return
-
-Boolean value indicating success of the VM operation.
-
----
-
-## Suika.playVideo() / Suika.stopVideo() / Suika.isVideoPlaying()
+## Suika.playVideo()
 
 Control video playback.
 
@@ -2754,25 +3621,47 @@ Play returns Boolean; IsPlaying returns Boolean.
 
 ---
 
-## Suika.isFullScreenSupported() / Suika.enterFullScreenMode()
+## Suika.stopVideo()
 
-Check for and control full-screen mode display.
+Stop the video playback.
+
+### Parameters (for playVideo)
+
+No parameters.
 
 ### Return
 
-Boolean for support/status; No return for enter/leave.
+No return.
 
 ---
 
-## Suika.logInfo() / Suika.logWarn() / Suika.logError()
+## Suika.isVideoPlaying()
 
-Output messages to the system log or debug console.
+Check if a video is playing back.
 
-### Parameters
+### Parameters (for playVideo)
 
-| Parameter | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
-| msg       | String | The message to log.                        |
+No parameters.
+
+### Return
+
+Returns boolean.
+
+---
+
+## Suika.isFullScreenSupported()
+
+Check for full-screen mode ability.
+
+### Return
+
+Boolean.
+
+---
+
+## Suika.enterFullScreenMode()
+
+Enter the full-screen mode.
 
 ### Return
 
