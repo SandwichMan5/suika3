@@ -4102,6 +4102,318 @@ Suika_renderImage3d(void *p)
  * Sound
  */
 
+static bool
+Suika_setMixer_input_file(void *p)
+{
+	int track,
+	char *file,
+	bool is_looped;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+		if (!pf_get_call_arg_string("file", &file))
+			break;
+		if (!pf_get_call_arg_int("isLooped", &is_looped))
+			break;
+
+		if (!s3_set_mixer_input_file(track, file, is_looped ? true : false))
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (file != NULL)
+		free(file);
+
+	return ret;
+}
+
+static bool
+Suika_setMixerVolume(void *p)
+{
+	int track;
+	float volume;
+	float span;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+		if (!pf_get_call_arg_float("volume", &volume))
+			break;
+		if (!pf_get_call_arg_int("span", &span))
+			break;
+
+		s3_set_mixer_volume(track, volume, span);
+	
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_getMixerVolume(void *p)
+{
+	int track;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+
+		val = s3_get_mixer_volume(track);
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_setMasterVolume(void *p)
+{
+	float volume;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_float("volume", &volume))
+			break;
+
+		s3_set_master_volume(volume);
+	
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_getMasterVolume(void *p)
+{
+	float val;
+	bool ret;
+
+	ret = false;
+	do {
+		val = s3_get_master_volume();
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_setMixerGlobalVolume(void *p)
+{
+	int track;
+	float volume;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+		if (!pf_get_call_arg_float("volume", &volume))
+			break;
+
+		s3_set_mixer_global_volume(track, volume);
+	
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_getMixerGlobalVolume(void *p)
+{
+	int track;
+	float val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+
+		val = s3_get_mixer_global_volume(track);
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_setCharacterVolume(void *p)
+{
+	int index;
+	float vol;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		if (!pf_get_call_arg_float("volume", &vol))
+			break;
+
+		s3_set_character_volume(index, vol);
+	
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_getCharacterVolume(void *p)
+{
+	int index;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		float val = s3_get_character_volume(index);
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_isMixerSoundFinished(void *p)
+{
+	int track;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+
+		val = s3_is_mixer_sound_finished(track);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_getTrackFileName(void *p)
+{
+	int track;
+	const char *file;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+
+		file = s3_get_track_file_name(track);
+		if (file == NULL)
+			file = "";
+
+		/* Set the return value. */
+		if (!pf_set_return_string(file))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
+Suika_applyCharacterVolume(void *p)
+{
+	int index;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		s3_apply_character_volume(index);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
 /*
  * System Button Subsystem
  */
@@ -4109,36 +4421,79 @@ Suika_renderImage3d(void *p)
 static bool
 Suika_showSysbtn(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int show;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("show", &show))
+			break;
+
+		s3_show_sysbtn(show ? true : false);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_isSysbtnVisible(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_is_sysbtn_visible();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_updateSysbtnState(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	s3_update_sysbtn_state();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_isSysbtnPointed(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_is_sysbtn_pointed();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_isSysbtnClicked(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_is_sysbtn_clicked();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+
+	return true;
 }
 
 /*
@@ -4146,101 +4501,480 @@ Suika_isSysbtnClicked(void *p)
  */
 
 static bool
-Suika_utf8ToUtf32(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_countUtf8Chars(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_getGlyphWidth(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
-Suika_getGlyphHeight(void *p)
-{
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
-}
-
-static bool
 Suika_getStringWidth(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int fontType;
+	int fontSize;
+	char *text;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("fontType", &fontType))
+			break;
+		if (!pf_get_call_arg_int("fontSize", &fontSize))
+			break;
+		if (!pf_get_call_arg_string("text", &text))
+			break;
+
+		val = s3_get_string_width(fontType, fontSize, text);
+
+			/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (text != NULL)
+		free(text);
+
+	return ret;
 }
 
 static bool
 Suika_getStringHeight(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int fontType;
+	int fontSize;
+	char *text;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("fontType", &fontType))
+			break;
+		if (!pf_get_call_arg_int("fontSize", &fontSize))
+			break;
+		if (!pf_get_call_arg_string("text", &text))
+			break;
+
+		val = s3_get_string_height(fontType, fontSize, text);
+
+			/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (text != NULL)
+		free(text);
+
+	return ret;
 }
 
 static bool
 Suika_drawGlyph(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int image;
+	int fontType;
+	int fontSize;
+	int baseFontSize;
+	int outlineSize;
+	int x;
+	int y;
+	int color;
+	int outlineColor;
+	char *glyph;
+	int dim;
+	int ret_w, ret_h;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("image", &image))
+			break;
+		if (!pf_get_call_arg_int("fontType", &fontType))
+			break;
+		if (!pf_get_call_arg_int("fontSize", &fontSize))
+			break;
+		if (!pf_get_call_arg_int("baseFontSize", &baseFontSize))
+			break;
+		if (!pf_get_call_arg_int("outlineSize", &outlineSize))
+			break;
+		if (!pf_get_call_arg_int("x", &x))
+			break;
+		if (!pf_get_call_arg_int("y", &y))
+			break;
+		if (!pf_get_call_arg_int("color", &color))
+			break;
+		if (!pf_get_call_arg_int("outlineColor", &outlineColor))
+			break;
+		if (!pf_get_call_arg_string("glyph", &glyph))
+			break;
+		if (!pf_get_call_arg_int("dim", &dim))
+			break;
+
+		s3_draw_glyph(
+			s3_int_to_image(image),
+			fontType,
+			fontSize,
+			baseFontSize,
+			outlineSize,
+			x,
+			y,
+			color,
+			outlineColor,
+			glyph,
+			&ret_w,
+			&ret_h,
+			dim ? true : false);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (glyph != NULL)
+		free(glyph);
+
+	return ret;
 }
 
 static bool
-Suika_constructDrawMsgContext(void *p)
+Suika_constructDrawMessageContext(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int image;
+	char *text;
+	int fontType;
+	int fontSize;
+	int baseFontSize;
+	int rubySize;
+	int outlineSize;
+	int penX;
+	int penY;
+	int areaWidth;
+	int areaHeight;
+	int leftMargin;
+	int rightMargin;
+	int topMargin;
+	int bottomMargin;
+	int lineMargin;
+	int charMargin;
+	int color;
+	int outlineColor;
+	int bgColor;
+	int fillBg;
+	int dim;
+	int ignoreLF;
+	int ignoreFont;
+	int ignoreOutline;
+	int ignoreColor;
+	int ignoreSize;
+	int ignorePosition;
+	int ignoreRuby;
+	int ignoreWait;
+	int inlineWaitHook;
+	int tategaki;
+	int ctx;
+	bool ret;
+
+	text = NULL;
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("image", &image))
+			break;
+		if (!pf_get_call_arg_string("text", &text))
+			break;
+		if (!pf_get_call_arg_int("fontType", &fontType))
+			break;
+		if (!pf_get_call_arg_int("fontSize", &fontSize))
+			break;
+		if (!pf_get_call_arg_int("baseFontSize", &baseFontSize))
+			break;
+		if (!pf_get_call_arg_int("rubySize", &rubySize))
+			break;
+		if (!pf_get_call_arg_int("outlineSize", &outlineSize))
+			break;
+		if (!pf_get_call_arg_int("penX", &penX))
+			break;
+		if (!pf_get_call_arg_int("penY", &penY))
+			break;
+		if (!pf_get_call_arg_int("areaWidth", &areaWidth))
+			break;
+		if (!pf_get_call_arg_int("areaHeight", &areaHeight))
+			break;
+		if (!pf_get_call_arg_int("leftMargin", &leftMargin))
+			break;
+		if (!pf_get_call_arg_int("rightMargin", &rightMargin))
+			break;
+		if (!pf_get_call_arg_int("topMargin", &topMargin))
+			break;
+		if (!pf_get_call_arg_int("bottomMargin", &bottomMargin))
+			break;
+		if (!pf_get_call_arg_int("lineMargin", &lineMargin))
+			break;
+		if (!pf_get_call_arg_int("charMargin", &charMargin))
+			break;
+		if (!pf_get_call_arg_int("color", &color))
+			break;
+		if (!pf_get_call_arg_int("outlineColor", &outlineColor))
+			break;
+		if (!pf_get_call_arg_int("bgColor", &bgColor))
+			break;
+		if (!pf_get_call_arg_int("fillBg", &fillBg))
+			break;
+		if (!pf_get_call_arg_int("dim", &dim))
+			break;
+		if (!pf_get_call_arg_int("ignoreLF", &ignoreLF))
+			break;
+		if (!pf_get_call_arg_int("ignoreFont", &ignoreFont))
+			break;
+		if (!pf_get_call_arg_int("ignoreOutline", &ignoreOutline))
+			break;
+		if (!pf_get_call_arg_int("ignoreColor", &ignoreColor))
+			break;
+		if (!pf_get_call_arg_int("ignoreSize", &ignoreSize))
+			break;
+		if (!pf_get_call_arg_int("ignorePosition", &ignorePosition))
+			break;
+		if (!pf_get_call_arg_int("ignoreRuby", &ignoreRuby))
+			break;
+		if (!pf_get_call_arg_int("ignoreWait", &ignoreWait))
+			break;
+		if (!pf_get_call_arg_int("inlineWaitHook", &inlineWaitHook))
+			break;
+		if (!pf_get_call_arg_int("tategaki", &tategaki))
+			break;
+
+		ctx = allocate_draw_msg_context();
+		if (ctx == NULL)
+			break;
+		
+		s3_construct_draw_message_context(
+			int_to_draw_msg_ctx(ctx),
+			text,
+			fontType,
+			fontSize,
+			baseFontSize,
+			rubySize,
+			outlineSize,
+			penX,
+			penY,
+			areaWidth,
+			areaHeight,
+			leftMargin,
+			rightMargin,
+			topMargin,
+			bottomMargin,
+			lineMargin,
+			charMargin,
+			color,
+			outlineColor,
+			bgColor,
+			fillBg ? true : false,
+			dim ? true : false,
+			ignoreLF ? true : false,
+			ignoreFont ? true : false,
+			ignoreOutline ? true : false,
+			ignoreColor ? true : false,
+			ignoreSize ? true : false,
+			ignorePosition ? true : false,
+			ignoreRuby ? true : false,
+			ignoreWait ? true : false,
+			inlineWaitHook,
+			tategaki ? true : false);
+
+			/* Set the return value. */
+			if (!pf_set_return_int(1))
+				break;
+	
+			ret = true;
+	} while (0);
+
+	if (text != NULL)
+		free(text;)
+
+	return ret;
 }
 
 static bool
-Suika_countCharsCommon(void *p)
+Suika_countChars(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int context;
+	struct s3_draw_msg_context *ctx;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("context", context))
+			break;
+
+		ctx = int_to_context(context);
+		if (ctx == NULL)
+			break;
+
+		val = s3_count_chars_common(ctx);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+	
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
-Suika_drawMsgCommon(void *p)
+Suika_drawMessage(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int context;
+	int max_chars;
+	struct s3_draw_msg_context *ctx;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("context", context))
+			break;
+		if (!pf_get_call_arg_int("maxChars", max_chars))
+			break;
+
+		ctx = int_to_context(context);
+		if (ctx == NULL)
+			break;
+
+		val = s3_draw_msg_common(ctx, max_chars)
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+	
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
-Suika_getPenPositionCommon(void *p)
+Suika_getPenPosition(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("context", context))
+			break;
+
+		ctx = int_to_context(context);
+		if (ctx == NULL)
+			break;
+
+		int penX, penY;
+		s3_get_pen_position(ctx, &penX, &penY);
+
+		/* Set the return value. */
+		if (!noct_make_empty_dict(env, &dic))
+			break;
+		if (!noct_dict_set_int(env, dic, "x", penX))
+			break;
+		if (!noct_dict_set_int(env, dic, "y", penY))
+			break;
+		if (!noct_set_return(env, dic))
+			break;
+
+			ret = true;
+	} while (0);
+
+	return ret;	
 }
 
 static bool
 Suika_setIgnoreInlineWait(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("context", context))
+			break;
+
+		ctx = int_to_context(context);
+		if (ctx == NULL)
+			break;
+
+		s3_get_ignore_inline_wait(ctx);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;	
 }
 
 static bool
 Suika_isQuotedSerif(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *text;
+	int val
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("text", &text))
+			break;
+
+		val = s3_is_quoted_serif(text);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (text != NULL)
+		free(text);
+
+	return ret;
 }
 
 static bool
 Suika_isEscapeSequenceChar(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *text;
+	int val
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("text", &text))
+			break;
+
+		val = s3_is_escape_sequence_char(text);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (text != NULL)
+		free(text);
+
+	return ret;
 }
 
 /*
@@ -4250,85 +4984,313 @@ Suika_isEscapeSequenceChar(void *p)
 static bool
 Suika_setMixerInputFile(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int track;
+	char *file;
+	bool is_looped;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+		if (!pf_get_call_arg_string("file", &file))
+			break;
+		if (!pf_get_call_arg_int("isLooped", &is_looped))
+			break;
+
+		if (!s3_set_mixer_input_file(track, file, is_looped ? true : false))
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (file != NULL)
+		free(file);
+
+	return ret;
 }
 
 static bool
 Suika_setMixerVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int track;
+	float volume;
+	float span;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+		if (!pf_get_call_arg_float("volume", &volume))
+			break;
+		if (!pf_get_call_arg_int("span", &span))
+			break;
+
+		s3_set_mixer_volume(track, volume, span);
+	
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getMixerVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int track;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+
+		val = s3_get_mixer_volume(track);
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_setMasterVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	float volume;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_float("volume", &volume))
+			break;
+
+		s3_set_master_volume(volume);
+	
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getMasterVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	float val;
+	bool ret;
+
+	ret = false;
+	do {
+		val = s3_get_master_volume();
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_setMixerGlobalVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int track;
+	float volume;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+		if (!pf_get_call_arg_float("volume", &volume))
+			break;
+
+		s3_set_mixer_global_volume(track, volume);
+	
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getMixerGlobalVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int track;
+	float val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+
+		val = s3_get_mixer_global_volume(track);
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_setCharacterVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	float vol;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		if (!pf_get_call_arg_float("volume", &vol))
+			break;
+
+		s3_set_character_volume(index, vol);
+	
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getCharacterVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		float val = s3_get_character_volume(index);
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_isMixerSoundFinished(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int track;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+
+		val = s3_is_mixer_sound_finished(track);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getTrackFileName(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int track;
+	const char *file;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("track", &track))
+			break;
+
+		file = s3_get_track_file_name(track);
+		if (file == NULL)
+			file = "";
+
+		/* Set the return value. */
+		if (!pf_set_return_string(file))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_applyCharacterVolume(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		s3_apply_character_volume(index);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 /*
@@ -4338,199 +5300,515 @@ Suika_applyCharacterVolume(void *p)
 static bool
 Suika_getTagCount(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_get_tag_count();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_moveToTagFile(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *file;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("file", &file))
+			break;
+
+		if (!s3_move_to_tag_file(file))
+			break;
+
+			/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+			ret = true;
+	} while (0);
+
+	if (file != NULL)
+		free(file);
+
+		return ret;
 }
 
 static bool
 Suika_moveToTagIndex(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		if (!s3_move_to_tag_index(index))
+			break;
+
+			/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+			ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_moveToNextTag(
 	void *p)
 {
-	if (!s3_move_to_next_tag())
-		return false;
-	return true;
+	bool ret;
+
+	ret = false;
+	do {
+		if (!s3_move_to_next_tag())
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_moveToLabelTag(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *label;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("label", &label))
+			break;
+
+		if (!s3_move_to_label_tag(label))
+			break;
+
+			/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+			ret = true;
+	} while (0);
+
+	if (label != NULL)
+		free(label);
+
+	return ret;
 }
 
 static bool
 Suika_moveToMacroTag(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *macro;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("macro", &macro))
+			break;
+
+		if (!s3_move_to_macro_tag(macro))
+			break;
+
+			/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+			ret = true;
+	} while (0);
+
+	if (macro != NULL)
+		free(macro);
+
+	return ret;
 }
 
 static bool
 Suika_moveToElseTag(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_move_to_else_tag())
+		return false;
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+		return true;
 }
 
 static bool
 Suika_moveToEndifTag(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_move_to_endif_tag())
+		return false;
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_moveToEndmacroTag(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_move_to_endmacro_tag())
+		return false;
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getTagFile(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	const char *file;
+
+	file = s3_get_tag_file();
+	if (file == NULL)
+		file = "";
+
+	/* Set the return value. */
+	if (!pf_set_return_string(file))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getTagIndex(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_get_tag_index();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getTagLine(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_get_tag_line();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getTagName(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	const char *name;
+
+	name = s3_get_tag_name();
+	if (name == NULL)
+		name = "";
+
+	/* Set the return value. */
+	if (!pf_set_return_string(name))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getTagPropertyCount(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_get_tag_property_count();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getTagPropertyName(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	const char *name;
+
+	name = s3_get_tag_property_name();
+	if (name == NULL)
+		name = "";
+
+	/* Set the return value. */
+	if (!pf_set_return_string(name))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getTagPropertyValue(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	const char *value;
+
+	value = s3_get_tag_property_value();
+	if (value == NULL)
+		value = "";
+
+	/* Set the return value. */
+	if (!pf_set_return_string(value))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_checkTagArg(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_check_tag_arg(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+				break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;	
 }
 
 static bool
 Suika_getTagArgBool(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_get_tag_arg_bool(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+				break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_getTagArgInt(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_get_tag_arg_int(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+				break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_getTagArgFloat(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	float val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_get_tag_arg_float(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+				break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_getTagArgString(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	const char *val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_get_tag_arg_string(name);
+		if (val == NULL)
+			val = "";
+
+		/* Set the return value. */
+		if (!pf_set_return_string(val))
+				break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_evaluateTag(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	s3_evaluate_tag();
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+		return true;
 }
 
 static bool
 Suika_pushTagStackIf(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_push_tag_stack_if())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_popTagStackIf(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_pop_tag_stack_if())
+		return false;
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_pushTagStackWhile(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_push_tag_stack_while())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_popTagStackWhile(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_pop_tag_stack_while())
+		return false;
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_pushTagStackFor(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_push_tag_stack_for())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_popTagStackFor(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_pop_tag_stack_for())
+		return false;
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 /*
@@ -4540,57 +5818,196 @@ Suika_popTagStackFor(void *p)
 static bool
 Suika_loadAnimeFromFile(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *file;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("file", &file))
+			break;
+
+			if (!s3_load_anime_from_file(file))
+			break;
+
+			/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+			ret = true;
+	} while (0);
+
+	if (file != NULL)
+		free(file);
+	return ret;
 }
 
 static bool
 Suika_clearLayerAnimeSequence(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int layer;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("layer", &layer))
+			break;
+
+		s3_clear_layer_anime_sequence(layer);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_clearAllAnimeSequence(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	s3_clear_all_anime_sequence();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_newAnimeSequence(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int layer;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("layer", &layer))
+			break;
+
+		s3_new_anime_sequence(layer);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_addAnimeSequencePropertyF(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	float value;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		if (!pf_get_call_arg_float("value", &value))
+			break;
+
+		s3_add_anime_sequence_property_f(name, value);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+			ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_addAnimeSequencePropertyI(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int value;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		if (!pf_get_call_arg_int("value", &value))
+			break;
+
+		s3_add_anime_sequence_property_i(name, value);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+			ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_startLayerAnime(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int layer;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("layer", &layer))
+			break;
+
+		s3_start_layer_anime(layer);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_isAnimeRunning(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("val", &val))
+			break;
+
+		val = s3_is_anime_running(val);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
@@ -4603,71 +6020,211 @@ Suika_isAnimeRunningWithLayerMask(void *p)
 static bool
 Suika_isAnimeFinishedForLayer(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int layer;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("layer", &layer))
+			break;
+
+			val = s3_is_anime_finished_for_layer(layer);
+
+			/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+			ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_updateAnimeFrame(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	s3_update_anime_frame();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_unregisterAnime(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		if (!s3_unregister_anime(name))
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_getRegAnimeName(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	const char *name;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		name = s3_get_reg_anime_name(index);
+		if (name == NULL)
+			name = "";
+		/* Set the return value. */
+		if (!pf_set_return_string(name))
+			break;
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getRegAnimeFileName(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	const char *file;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		file = s3_get_reg_anime_file_name(index);
+		if (file == NULL)
+			file = "";
+		/* Set the return value. */
+		if (!pf_set_return_string(file))
+			break;
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_loadEyeImageIfExists(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int chpos;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("chpos", &chpos))
+			break;
+		if (!s3_load_eye_image_if_exists(chpos))
+			break;
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_reloadEyeAnime(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int chpos;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("chpos", &chpos))
+			break;
+		if (!s3_reload_eye_anime(chpos))
+			break;
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_loadLipImageIfExists(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int chpos;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("chpos", &chpos))
+			break;
+		if (!s3_load_lip_image_if_exists(chpos))
+			break;
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_runLipAnime(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int chpos;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("chpos", &chpos))
+			break;
+		if (!s3_run_lip_anime(chpos))
+			break;
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_stopLipAnime(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int chpos;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("chpos", &chpos))
+			break;
+		if (!s3_stop_lip_anime(chpos))
+			break;
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 /*
@@ -4677,92 +6234,312 @@ Suika_stopLipAnime(void *p)
 static bool
 Suika_setVariableInt(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int value;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		if (!pf_get_call_arg_int("value", &value))
+			break;
+		s3_set_variable_int(name, value);
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	if (name != NULL)
+		free(name);
+	return ret;
 }
 
 static bool
 Suika_setVariableFloat(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	float value;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		if (!pf_get_call_arg_float("value", &value))
+			break;
+		s3_set_variable_float(name, value);
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	if (name != NULL)
+		free(name);
+	return ret;
 }
 
 static bool
 Suika_setVariableString(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	char *value;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		if (!pf_get_call_arg_string("value", &value))
+			break;
+		s3_set_variable_string(name, value);
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	if (name != NULL)
+		free(name);
+	if (value != NULL)
+		free(value);
+	return ret;
 }
 
 static bool
 Suika_unsetVariable(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		s3_unset_variable(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_makeVariableGlobal(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int is_global;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		if (!pf_get_call_arg_int("isGlobal", &is_global))
+			break;
+
+		s3_make_variable_global(name, is_global);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_getVariableInt(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		val = s3_get_variable_int(name);
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+		ret = true;
+	} while (0);
+	if (name != NULL)
+		free(name);
+	return ret;
 }
 
 static bool
 Suika_getVariableFloat(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	float val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		val = s3_get_variable_float(name);
+		/* Set the return value. */
+		if (!pf_set_return_float(val))
+			break;
+		ret = true;
+	} while (0);
+	if (name != NULL)
+		free(name);
+	return ret;
 }
 
 static bool
 Suika_getVariableString(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	char *val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		val = s3_get_variable_string(name);
+		/* Set the return value. */
+		if (!pf_set_return_string(val))
+			break;
+		ret = true;
+	} while (0);
+	if (name != NULL)
+		free(name);
+	if (val != NULL)
+		free(val);
+	return ret;
 }
 
 static bool
 Suika_getVariableCount(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_get_variable_count();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getVariableName(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	const char *name;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		name = s3_get_variable_name(index);
+		if (name == NULL)
+			name = "";
+		/* Set the return value. */
+		if (!pf_set_return_string(name))
+			break;
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_checkVariableExists(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_check_variable_exists(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_isGlobalVariable(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_is_global_variable(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_unsetLocalVariables(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	s3_unset_local_variables();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 /*
@@ -4772,85 +6549,216 @@ Suika_unsetLocalVariables(void *p)
 static bool
 Suika_executeSaveGlobal(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_execute_save_global())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_executeLoadGlobal(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_execute_load_global())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_executeSaveLocal(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		if (!s3_execute_save_local(index))
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
 }
 
 static bool
 Suika_executeLoadLocal(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		if (!s3_execute_load_local(index))
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_checkSaveExists(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	int val;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		val = s3_check_save_exists(index);
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_deleteLocalSave(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		if (!s3_delete_local_save(index))
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
 }
 
 static bool
 Suika_deleteGlobalSave(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_delete_global_save())
+		return false;
+
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_checkRightAfterLoad(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_check_right_after_load();
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+	return true;
 }
 
 static bool
 Suika_getSaveTimestamp(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	uint64_t timestamp;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		timestamp = s3_get_save_timestamp(index);
+		/* Set the return value. */
+		if (!pf_set_return_int((int)timestamp))
+			break;
+		ret = true;	
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_getLatestSaveIndex(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_get_latest_save_index();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getSaveChapterName(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	const char *name;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		name = s3_get_save_chapter_name(index);
+		if (name == NULL)
+			name = "";
+		/* Set the return value. */
+		if (!pf_set_return_string(name))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_getSaveLastMessage(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	const char *message;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		message = s3_get_save_last_message(index);
+		if (message == NULL)
+			message = "";
+		/* Set the return value. */
+		if (!pf_set_return_string(message))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
@@ -4867,43 +6775,130 @@ Suika_getSaveThumbnail(void *p)
 static bool
 Suika_clearHistory(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_clear_history())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_addHistory(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	char *message;
+	char *voice;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+		if (!pf_get_call_arg_string("message", &message))
+			break;
+		if (!pf_get_call_arg_string("voice", &voice))
+			break;
+
+		s3_add_history(name, message, voice);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+	if (message != NULL)
+		free(message);
+	if (voice != NULL)
+		free(voice);
+
+	return ret;
 }
 
 static bool
 Suika_getHistoryCount(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+	bool ret;
+
+	val = s3_get_history_count();
+
+	/* Set the return value. */
+	if (!pf_set_return_int(val))
+		return false;
+
+	return true;
 }
 
 static bool
 Suika_getHistoryName(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	const char *name;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		name = s3_get_history_name(index);
+		if (name == NULL)
+			name = "";
+		/* Set the return value. */
+		if (!pf_set_return_string(name))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_getHistoryMessage(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	const char *message;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		message = s3_get_history_message(index);
+		if (message == NULL)
+			message = "";
+		/* Set the return value. */
+		if (!pf_set_return_string(message))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 static bool
 Suika_getHistoryVoice(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	const char *voice;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+		voice = s3_get_history_voice(index);
+		if (voice == NULL)
+			voice = "";
+		/* Set the return value. */
+		if (!pf_set_return_string(voice))
+			break;
+		ret = true;
+	} while (0);
+	return ret;
 }
 
 /*
@@ -4913,29 +6908,58 @@ Suika_getHistoryVoice(void *p)
 static bool
 Suika_loadSeen(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_load_seen())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_saveSeen(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_save_seen())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_getSeenFlags(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int flags;
+	flags = s3_get_seen_flags();
+	/* Set the return value. */
+	if (!pf_set_return_int(flags))
+		return false;
+	return true;
 }
 
 static bool
 Suika_setSeenFlags(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int flags;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("flags", &flags))
+			break;
+
+		s3_set_seen_flags(flags);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 /*
@@ -4945,71 +6969,149 @@ Suika_setSeenFlags(void *p)
 static bool
 Suika_checkRightAfterSysGUI(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_check_right_after_sys_gui();
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+	return true;
+
 }
 
 static bool
 Suika_loadGUIFile(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *file;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("file", &file))
+			break;
+
+		if (!s3_load_gui_file(file))
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (file != NULL)
+		free(file);
+
+	return ret;
 }
 
 static bool
 Suika_startGUI(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_start_gui())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_stopGUI(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_stop_gui())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_isGUIRunning(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_is_gui_running();
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+	return true;
 }
 
 static bool
 Suika_isGUIFinished(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+
+	val = s3_is_gui_finished();
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+	return true;
 }
 
 static bool
 Suika_getGUIResultLabel(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *label;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("label", &label))
+			break;
+
+		if (!s3_get_gui_result_label(label))
+			break;
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (label != NULL)
+		free(label);
+
+	return ret;
 }
 
 static bool
 Suika_isGUIResultTitle(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+	val = s3_is_gui_result_title();
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+	return true;
 }
 
 static bool
 Suika_checkIfSavedInGUI(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+	val = s3_check_if_saved_in_gui();
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+	return true;
 }
 
 static bool
 Suika_checkIfLoadedInGUI(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+	val = s3_check_if_loaded_in_gui();
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+	return true;
 }
 
 /*
@@ -5034,8 +7136,29 @@ Suika_getMillisec(void *p)
 static bool
 Suika_checkFileExists(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *file;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("file", &file))
+			break;
+
+		val = s3_check_file_exists(file);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (file != NULL)
+		free(file);
+
+	return ret;
 }
 
 static bool
@@ -5062,27 +7185,54 @@ Suika_readSaveData(void *p)
 static bool
 Suika_playVideo(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_play_video())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_stopVideo(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	if (!s3_stop_video())
+		return false;
+	/* Set the return value. */
+	if (!pf_set_return_int(1))
+		return false;
+	return true;
 }
 
 static bool
 Suika_isVideoPlaying(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int val;
+	val = s3_is_video_playing();
+	/* Set the return value. */
+	if (!pf_set_return_int(val ? 1 : 0))
+		return false;
+	return true;
 }
 
 static bool
 Suika_speakText(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *text;
+	bool ret;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("text", &text))
+			break;
+		if (!s3_speak_text(text))
+			break;
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+		ret = true;
+	} while (0);
+	if (text != NULL)
+		free(text);
+	return ret;
 }
