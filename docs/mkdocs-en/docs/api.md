@@ -2691,18 +2691,77 @@ Initialize a complex message drawing context for high-level text rendering.
 
 ### Parameters
 
-This function takes a large configuration object including:
-- **dst**: Destination image.
-- **msg**: The message string.
-- **font/font_size**: Font settings.
-- **margins**: Left, right, top, bottom, line, and char margins.
-- **colors**: Text, outline, and background colors.
-- **flags**: Booleans to ignore font, outline, color, size, ruby, etc.
-- **use_tategaki**: Boolean for vertical text mode.
+| Parameter      | Type     | Description            |
+|----------------|----------|------------------------|
+| image          | Integer  | Destination image.     |
+| text           | String   | Message to draw.       |
+| fontType       | Integer  | Font selection.        |
+| fontSize       | Integer  | Font size.             |
+| baseFontSize   | Integer  | Base font size.        |
+| rubySize       | Integer  | Ruby size.             |
+| outlineSize    | Integer  | Outline width.         |
+| penX           | Integer  | Pen X position.        |
+| penY           | Integer  | Pen Y position.        |
+| areaWidth      | Integer  | Draw area width.       |
+| areaHeight     | Integer  | Draw area height.      |
+| leftMargin     | Integer  | Left margin.           |
+| rightMargin    | Integer  | Right margin.          |
+| topMargin      | Integer  | Top margin.            |
+| bottomMargin   | Integer  | Bottom margin.         |
+| lineMargin     | Integer  | Line margin.           |
+| charMargin     | Integer  | Character margin.      |
+| color          | Integer  | Color.                 |
+| outlineColor   | Integer  | Outline color.         |
+| bgColor        | Integer  | Background color.      |
+| fillBg         | Boolean  | Fill background?       |
+| dim            | Boolean  | Dim?                   |
+| ignoreLF       | Boolean  | Ignore LF?             |
+| ignoreFont     | Boolean  | Ignore font change?    |
+| ignoreOutline  | Boolean  | Ignore outline change? |
+| ignoreColor    | Boolean  | Ignore color change?   |
+| ignoreSize     | Boolean  | Ignore size change?    |
+| ignorePosition | Boolean  | Ignore cursor change?  |
+| ignoreRuby     | Boolean  | Ignore ruby?           |
+| ignoreWait     | Boolean  | Ignore inline wait?    |
+| inlineWaitHook | Function | Inline wait hook.      |
+| tategaki       | Boolean  | Use tategaki?          |
 
 ### Return
 
 A message drawing context object.
+
+---
+
+## Suika.countChars()
+
+Count the remaining characters excluding escape sequences.
+
+### Parameters
+
+| Parameter      | Type     | Description            |
+|----------------|----------|------------------------|
+| context        | Object   | Draw message context.  |
+
+### Return
+
+Returns an integer.
+
+---
+
+## Suika.drawMessage()
+
+Draw characters in a message up to (maxChars) characters.
+
+### Parameters
+
+| Parameter      | Type     | Description            |
+|----------------|----------|------------------------|
+| context        | Object   | Draw message context.  |
+| maxChars       | Integer  | Max chars.             |
+
+### Return
+
+Returns an integer that indicates the count of characters drawn in the call.
 
 ---
 
@@ -2735,7 +2794,7 @@ Get the current pen position from a drawing context.
 
 ### Return
 
-An object containing `pen_x` and `pen_y`.
+An object containing `x` and `y`.
 
 ---
 
@@ -3028,7 +3087,7 @@ No parameters.
 
 ### Return
 
-Boolean value.
+No return.
 
 ---
 
@@ -3044,7 +3103,7 @@ No parameters.
 
 ### Return
 
-Boolean value.
+No return.
 
 ---
 

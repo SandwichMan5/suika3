@@ -701,7 +701,7 @@ static bool search_for_end_of_escape_sequence(const char **msg)
 }
 
 /*
- * Draw characters in a message up to (max_chars) characters.
+ * Draw characters in a message up to (char count) characters.
  */
 int
 s3_draw_msg_common(

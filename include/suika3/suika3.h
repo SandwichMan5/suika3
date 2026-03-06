@@ -1879,12 +1879,12 @@ s3_count_chars_common(
 	int *width);
 
 /*
- * Draw characters in a message up to (max_chars) characters.
+ * Draw characters in a message up to (char count) characters.
  */
 int
 s3_draw_msg_common(
 	struct s3_draw_msg_context *context,
-	int max_chars);
+	int char_count);
 
 /*
  * Get a pen position.
