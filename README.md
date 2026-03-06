@@ -24,6 +24,49 @@ Games made with Suika3 are powered by `NovelML 3.0` and `SuikaScript 3.0`.
 
 ---
 
+## Kanban (Status): Final Polishing for 1.0.0!
+
+We are planning the 1.0.0 release at the end of March 2026.
+Currently we are working very hard to complete Suika3.
+
+**Our current status is:**
+
+* ✅ Implemented tag execution skeleton.
+* ✅ Implemented all APIs in C.
+* ✅ Implemented all tags in C.
+* ✅ Wrote wrappers of most C APIs for the scripting language.
+
+* Remaining Tasks
+    * Final checking for API consistency. (March 7, 2026)
+    * Adjusting GUI functionality including GUI animations. (March 8, 2026)
+    * Engine Feature Freeze (March 8, 2026)
+    * Adding the exporter tool. (March 9, 2026)
+    * Adding a sample game. (March 10, 2026)
+
+* Quality Stabilization Period (March 10-30, 2026)
+    * Milestone: Release Candidate 1 (March 10, 2026)
+    * Milestone: Release Candidate 2 (March 15, 2026)
+    * Milestone: Release Candidate 3 (March 20, 2026)
+    * Milestone: Release Candidate 4 (March 25, 2026)
+    * Milestone: Release Candidate 5 / Golden Master (March 30, 2026)
+
+* Documentation (Simultaneous with Quality Stabilization)
+    * `C API`
+    * ✅ `SuikaScript Syntax`
+    * ✅ `SuikaScript API`
+    * `NovelML Syntax`
+    * ✅ `NovelML Tags`
+    * `Getting Started`
+    * `Plugin Development`
+    * ✅ `Build Instruction`
+    * `System Requirement Specification`
+    * `System Design Specification`
+    * ✅ Website
+
+* 1.0.0 Release (March 31, 2026)
+
+---
+
 ## Why SuikaScript?
 
 * **Instant Iteration:** No compile cycles, no waiting. The built-in
@@ -82,18 +125,6 @@ with the right tools, inevitably leads to self-reliance.
 
 Creators with different goals may also find excellent resources in
 other open-source projects or commercial engines like Unity.
-
----
-
-## Status: Working Hard for 1.0.0!
-
-We are planning the 1.0.0 release at the end of March 2026.
-Currently we are working very hard to complete Suika3.
-
-**Our current status is:**
-* ✅ We have implemented all APIs in C.
-* ✅ We have implemented all tags in C.
-* We are writing API warppers for the scripting language.
 
 ---
 
