@@ -852,13 +852,17 @@ s3_pop_for_return(
 /*
  * Read the call stack.
  */
-void
+bool
 s3_read_call_stack(
 	int sp,
-	const char **file,
+	char **file,
 	int *index)
 {
-	*file = stack_file[stack_pointer];
+	*file = strdup(stack_file[stack_pointer]);
+	if (*file == NULL) {
+		s3_log_out_of_memory();
+		return false;
+	}
 	*index = stack_index[stack_pointer];
 }
 
@@ -917,7 +921,7 @@ s3_get_call_argument(
 }
 
 /*
- * Set the script page mode.
+ * Check if the script page mode is enabled.
  */
 bool
 s3_is_page_mode(void)
@@ -998,7 +1002,7 @@ s3_inc_page_line(void)
 }
 
 /*
- * Check we are at the first line in a page.
+ * Check if we are at the first line in a page.
  */
 bool
 s3_is_page_top(void)
@@ -1044,7 +1048,7 @@ s3_set_bgvoice_playing(
 }
 
 /*
- * Check whether the BGVoice is playing or not.
+ * Check if the BGVoice is playing.
  */
 bool
 s3_is_bgvoice_playing(void)

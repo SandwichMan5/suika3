@@ -1087,7 +1087,7 @@ s3_get_config_key(
  * Check if config key is stored to global save data.
  */
 bool
-s3_is_config_global(
+s3_is_global_config(
 	const char *key)
 {
 	int i;
@@ -1123,7 +1123,7 @@ s3_get_config_type(
  * Get a string config value.
  */
 const char *
-s3_get_config_string(
+s3_get_string_config(
 	const char *key)
 {
 	int i;
@@ -1145,7 +1145,7 @@ s3_get_config_string(
  * Get a boolean config value.
  */
 bool
-s3_get_config_bool(
+s3_get_bool_config(
 	const char *key)
 {
 	int i;
@@ -1166,7 +1166,7 @@ s3_get_config_bool(
  * Get an integer config value.
  */
 int
-s3_get_config_int(
+s3_get_int_config(
 	const char *key)
 {
 	int i;
@@ -1187,7 +1187,7 @@ s3_get_config_int(
  * Get a float config value.
  */
 float
-s3_get_config_float(
+s3_get_float_config(
 	const char *key)
 {
 	int i;

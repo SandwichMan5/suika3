@@ -250,7 +250,7 @@ Set a config.
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
 | key       | String | Key of the config.                         |
-| val       | String | Value of the config.                       |
+| value     | String | Value of the config.                       |
 
 ### Return
 
@@ -954,7 +954,7 @@ Set the non-interruptible mode setting.
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
-| mode      | Boolean | Non-interruptible mode.    |
+| enable    | Boolean | Non-interruptible mode.    |
 
 ### Return
 
@@ -1048,7 +1048,47 @@ No parameters.
 
 ### Return
 
-An object containing `file` (String) and `index` (Integer), or null if the stack is empty.
+Returns a dictionary that contains:
+
+* obj.file: File name
+* obj.index: Tag index
+
+---
+
+## Suika.readCallStack()
+
+Read the call stack element at the specified index.
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| sp        | Integer | Stack element index.  |
+
+### Result
+
+Returns a dictionary that contains:
+
+* obj.file: File name
+* obj.index: Tag index
+
+---
+
+## Suika.writeCallStack()
+
+Write the call stack element at the specified index.
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| sp        | Integer | Stack element index.  |
+| file      | String  | Script file name.     |
+| index     | Integer | Tag index.            |
+
+### Result
+
+No return.
 
 ---
 
@@ -1061,7 +1101,7 @@ Set a calling argument for GUI or anime.
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
 | index     | Integer | Argument index.       |
-| val       | String  | Argument value.       |
+| value     | String  | Argument value.       |
 
 ### Return
 
@@ -1082,6 +1122,370 @@ Get a calling argument.
 ### Return
 
 String value.
+
+---
+
+## Suika.isPageMode()
+
+Check if the script page mode is enabled.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns boolean.
+
+---
+
+## Suika.appendBufferedMessage()
+
+Append a string to the page mode buffer string.
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| message   | String  | Message.              |
+
+### Return
+
+No return.
+
+---
+
+## Suika.getBufferedMessage()
+
+Get the page mode buffer string.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns a string.
+
+---
+
+## Suika.clearBufferedMessage()
+
+Clear the page mode buffer string.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.resetPageLine()
+
+Reset the message line count in a page.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.incPageLine()
+
+Increment the line count in a page.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.isPageTop()
+
+Check if we are at the first line in a page.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.registerBGVoice()
+
+Register a BGVoice.
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| file      | String  | BGVoice file.         |
+
+### Return
+
+No return.
+
+---
+
+## Suika.getBVoice()
+
+Get the BGVoice.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns a file name string.
+
+---
+
+## Suika.setBGVoicePlaying()
+
+Set the BGVoice state playing.
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| isPlaying | Boolean | State.                |
+
+### Return
+
+No return.
+
+---
+
+## Suika.isBGVoicePlaying()
+
+Check if the BGVoice is playing.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns boolean.
+
+---
+
+## Suika.setChapterName()
+
+Set the chapter name.
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| name      | String  | Chapter name.         |
+
+### Return
+
+No return.
+
+---
+
+## Suika.getChapterName()
+
+Get the chapter name.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns a string.
+
+---
+
+## Suika.setLastMessage()
+
+Set the last message.
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| message   | String  | Message.              |
+| isAppend  | Boolean | Append or replace.    |
+
+### Return
+
+No return.
+
+---
+
+## Suika.setPrevLastMessage()
+
+Set the previous last message.
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| message   | String  | Message.              |
+
+### Return
+
+No return.
+
+---
+
+## Suika.getLastMessage()
+
+Get the last message.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns a string.
+
+---
+
+## Suika.getPrevLastMessage()
+
+Get the previous last message.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns a string.
+
+---
+
+## Suika.setTextSpeed()
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| speed     | Float   | Text speed.           |
+
+### Return
+
+No return.
+
+---
+
+## Suika.getTextSpeed()
+
+Get the text speed.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns a float.
+
+---
+
+## Suika.setAutoSpeed()
+
+### Parameters
+
+| Parameter | Type    | Description           |
+|-----------|---------|-----------------------|
+| speed     | Float   | Auto speed.           |
+
+### Return
+
+No return.
+
+---
+
+## Suika.getAutoSpeed()
+
+Get the auto speed.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns a float.
+
+---
+
+## Suika.markLastEnglishTagIndex()
+
+Mark the last English index.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.getLastEnglishTagIndex()
+
+Get the last English index.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns an integer.
+
+---
+
+## Suika.clearLastEnglishTagIndex()
+
+Clear the last English index.
+
+### Parameters
+
+No parameters.
+
+### Return
+
+No return.
+
+---
+
+## Suika.getLastTagName()
+
+Get the last tag name.
+
+
+### Parameters
+
+No parameters.
+
+### Return
+
+Returns a string.
 
 ---
 

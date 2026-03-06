@@ -255,7 +255,7 @@ s3_execute_save_global(void)
 			break;
 		for (i = 0; i < count; i++) {
 			const char *key = s3_get_config_key(i);
-			if (!s3_is_config_global(key))
+			if (!s3_is_global_config(key))
 				continue;
 			if (!write_string(s3_get_config_as_string(key)))
 				break;
@@ -535,7 +535,7 @@ s3_execute_save_local(
 			break;
 		for (i = 0; i < count; i++) {
 			const char *key = s3_get_config_key(i);
-			if (s3_is_config_global(key))
+			if (s3_is_global_config(key))
 				continue;
 			if (!write_string(s3_get_config_as_string(key)))
 				break;

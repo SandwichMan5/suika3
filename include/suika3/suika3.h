@@ -454,7 +454,7 @@ s3_get_config_key(
  * Check if config key is stored to global save data.
  */
 bool
-s3_is_config_global(
+s3_is_global_config(
 	const char *key);
 
 /*
@@ -791,10 +791,10 @@ s3_pop_for_return(
 /*
  * Read the call stack.
  */
-void
+bool
 s3_read_call_stack(
 	int sp,
-	const char **file,
+	char **file,
 	int *index);
 
 /*
@@ -822,7 +822,7 @@ s3_get_call_argument(
 	int index);
 
 /*
- * Set the script page mode.
+ * Check if the script page mode is enabled.
  */
 bool
 s3_is_page_mode(void);
@@ -859,7 +859,7 @@ void
 s3_inc_page_line(void);
 
 /*
- * Check we are at the first line in a page.
+ * Check if we are at the first line in a page.
  */
 bool
 s3_is_page_top(void);
@@ -885,7 +885,7 @@ s3_set_bgvoice_playing(
 	bool is_playing);
 
 /*
- * Check whether the BGVoice is playing or not.
+ * Check if the BGVoice is playing.
  */
 bool
 s3_is_bgvoice_playing(void);
