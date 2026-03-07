@@ -241,7 +241,7 @@ industry.
 
 Since the 2010s, the visual novel market has faced significant growth
 challenges. One critical bottleneck has been the **lack of
-high-performance open-source engines** capable of delivering a
+high-performance free/libre software engines** capable of delivering a
 seamless **native experience on iOS and Android**.
 
 Without accessible, professional-grade tools for modern mobile
@@ -290,14 +290,14 @@ South—to build sustainable careers through their storytelling. We
 believe that with the right tools, creativity can overcome economic
 barriers.
 
-Our commitment to free software is rooted in a simple, practical goal:
-fostering sustainable economic independence. This mission is shaped by
-our core members' personal experiences in Asia and their journeys in
-overcoming adversity. We simply believe that talent, when equipped
-with the right tools, inevitably leads to self-reliance.
+Our commitment to free/libre software is rooted in a simple, practical
+goal: fostering sustainable economic independence. This mission is
+shaped by our core members' personal experiences in Asia and their
+journeys in overcoming adversity. We simply believe that talent, when
+equipped with the right tools, inevitably leads to self-reliance.
 
 Creators with different goals may also find excellent resources in
-other open-source projects or commercial engines like Unity.
+other engines like Unity and Godot.
 
 ---
 
@@ -349,13 +349,15 @@ This means that Suika3 is fully extensible using the Playfield API.
 
 ### StratoHAL
 
-StratoHAL originated as the codebase of a 2D game engine developed since 2001,
-and has been open-sourced with a proven record of exceptional stability.
-Evolving over a quarter century from the Windows 9x era,
-StratoHAL has grown to support macOS, Linux, iOS, Android, WebAssembly, and Unity.
-It has been running reliably on smartphones for more than a decade.
-While SDL3 already exists as a popular open-source alternative,
-StratoHAL covers the same major platforms as SDL3 — and uniquely provides console support through Unity without relying on any NDA-restricted code.
+StratoHAL originated as the codebase of a 2D game engine developed
+since 2001, and has been Zlib-licensed with a proven record of
+exceptional stability.  Evolving over a quarter century from the
+Windows 9x era, StratoHAL has grown to support macOS, Linux, iOS,
+Android, WebAssembly, and Unity.  It has been running reliably on
+smartphones for more than a decade.  While SDL3 already exists as a
+popular free/libre software alternative, StratoHAL covers the same
+major platforms as SDL3 — and uniquely provides console support
+through Unity without relying on any NDA-restricted code.
 
 ### Platform Support and Components
 
@@ -377,7 +379,7 @@ StratoHAL covers the same major platforms as SDL3 — and uniquely provides cons
 
 Playfield Engine provides Unity Plugin binaries for platforms
 including Windows 64-bit and game consoles.  These binaries are built
-entirely with the open-source version of LLVM/Clang toolchain (no
+entirely with the official version of LLVM/Clang toolchain (no
 proprietary SDKs).
 
 For Xbox series, you can use the native Microsoft GDK port directly, not via Unity.
@@ -644,11 +646,11 @@ If you want to help us reach more developers, here is how you can contribute:
 
 ## Third-party Libraries
 
-Our engine is built upon several open-source libraries. To ensure
-build reproducibility and long-term maintainability, all necessary
-source code tarballs and patches are bundled within this repository
-under the `external/PlayfieldEngine/external/StratoHAL/lib/archive/`
-directory.
+Our engine is built upon several free/libre software libraries. To
+ensure build reproducibility and long-term maintainability, all
+necessary source code tarballs and patches are bundled within this
+repository under the
+`external/PlayfieldEngine/external/StratoHAL/lib/archive/` directory.
 
 ### Core Libraries
 
@@ -668,7 +670,7 @@ directory.
 
 ### License Compliance
 
-Each library is used according to its respective open-source
+Each library is used according to its respective free/libre software
 license. Please refer to the `NOTICE` file in this repository for the
 full text of each license and copyright notice.
 
@@ -766,12 +768,20 @@ ensuring a solid foundation for the upcoming QA process.
 
 ## License
 
-This software is released under the `ZLib License`.
+Suika3 is
+[free/libre software](https://www.gnu.org/philosophy/free-sw.en.html),
+released under the permissive `ZLib License`.
 
 ```
 Suika3
 Copyright (c) 2026 The Suika3 Community
 ```
+
+While Suika3 represents more than just an "OSS" component — it is a
+free/libre software movement aimed at helping build a sustainable
+market for visual novels, guided by a clear philosophy — we are
+equally pleased if you choose to integrate it simply as a
+high-performance "OSS" component within your own projects.
 
 ---
 
