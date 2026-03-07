@@ -652,10 +652,10 @@ management:
 
 * Young Generation: Most objects die young. Suika3 handles these using
   a high-speed Copying Algorithm (Semi-space Copy GC), which clears
-  out temporary data in a flash. (< 0.1ms)
+  out temporary data in a flash. (typically < 0.1ms)
 * Old Generation: Long-lived objects are moved here. This area uses a
   Mark-Sweep-Compact GC algorithm, which periodically reorganizes
-  memory to prevent fragmentation. (10-300ms)
+  memory to prevent fragmentation. (typically 10-300ms)
 
 ### Frame-Synchronized Latency Hiding
 
