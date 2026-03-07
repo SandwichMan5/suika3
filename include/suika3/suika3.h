@@ -1322,6 +1322,13 @@ s3_set_layer_alpha(
 	int alpha);
 
 /*
+ * Get the layer belnd mode.
+ */
+int
+s3_get_layer_blend(
+	int layer);
+
+/*
  * Set the layer belnd mode.
  */
 void
@@ -1375,6 +1382,11 @@ void
 s3_set_layer_image(
 	int layer,
 	struct s3_image *img);
+
+/*
+ * Get the layer frame for eye blinking and lip synchronization.
+ */
+int s3_get_layer_frame(int layer);
 
 /*
  * Set the layer frame for eye blinking and lip synchronization.
@@ -1489,6 +1501,14 @@ s3_start_fade(
 	int method,
 	float t,
 	struct s3_image *rule_img);
+
+/*
+ * Get the offset for the shake command.
+ */
+void
+s3_get_shake_offset(
+	int *x,
+	int *y);
 
 /*
  * Set the offset for the shake command.

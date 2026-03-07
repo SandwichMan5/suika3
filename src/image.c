@@ -218,7 +218,7 @@ s3_get_image_height(
  */
 struct s3_image *
 s3_load_glyph_image(
-	int slot,
+	int font_type,
 	int codepoint,
 	int size,
 	hal_pixel_t color,
@@ -258,7 +258,7 @@ s3_load_glyph_image(
 	}
 
 	/* Get a texture. */
-	if (!pf_create_text_texture_outline(slot,
+	if (!pf_create_text_texture_outline(font_type,
 					    mbs,
 					    size,
 					    color,

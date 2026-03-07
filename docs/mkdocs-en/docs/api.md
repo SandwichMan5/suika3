@@ -140,7 +140,8 @@ Suika3 API Reference
     * [Suika.getFadeMethod()](#suikagetfademethod)
     * [Suika.getAccelMethod()](#suikagetaccelmethod)
     * [Suika.startFade()](#suikastartfade)
-    * [Suika.setShakeOffset()](#suikashakeoffset)
+    * [Suika.getShakeOffset()](#suikagetshakeoffset)
+    * [Suika.setShakeOffset()](#suikasetshakeoffset)
     * [Suika.isFadeRunning()](#suikaisfaderunning)
     * [Suika.finishFade()](#suikafinishfade)
     * [Suika.setChNameMapping()](#suikasetchnamemapping)
@@ -308,11 +309,43 @@ Suika3 API Reference
 
 ---
 
+## Suika.print()
+
+Print a debug message.
+
+### Parameters (Direct)
+
+| Parameter | Type   | Description     |
+|-----------|--------|-----------------|
+| msg       | Any    | Value to print. |
+
+### Return
+
+No return.
+
+---
+
+## Suika.loadPlugin()
+
+Load a plugin.
+
+### Parameters (Direct)
+
+| Parameter | Type   | Description     |
+|-----------|--------|-----------------|
+| name      | String | Plugin name.    |
+
+### Return
+
+No return.
+
+---
+
 ## Suika.setConfig()
 
 Set a config.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -329,7 +362,7 @@ No return.
 
 Get the number of the config keys.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -343,7 +376,7 @@ Integer that represents a number of config keys.
 
 Get a config key for index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -359,7 +392,7 @@ String that represents a key of the config at the specified index.
 
 Check if config key is stored to global save data.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -375,7 +408,7 @@ Boolean that represents whether the config is global or not.
 
 Get a config value type. ("s", "b", "i", "f")
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -398,7 +431,7 @@ One of the following strings.
 
 Get a string config value.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -414,7 +447,7 @@ String value of the config.
 
 Get a boolean config value.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -430,7 +463,7 @@ Boolean value of the config.
 
 Get an integer config value.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -446,7 +479,7 @@ Integer value of the config.
 
 Get a float config value.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -462,7 +495,7 @@ Float value of the config.
 
 Get a config value as a string.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -478,7 +511,7 @@ Stringified value of the config.
 
 Check if the specified locale is same as the current locale.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -496,7 +529,7 @@ current one.
 
 Get the mouse X position.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -510,7 +543,7 @@ Integer that represents the current mouse X coordinate.
 
 Get the mouse Y position.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -524,7 +557,7 @@ Integer that represents the current mouse Y coordinate.
 
 Check if mouse left button is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -538,7 +571,7 @@ Boolean that represents whether the left button is currently held down.
 
 Check if mouse right button is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -552,7 +585,7 @@ Boolean that represents whether the right button is currently held down.
 
 Check if mouse left button is pressed then released.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -566,7 +599,7 @@ Boolean that represents whether a left-click occurred in the current frame.
 
 Check if mouse right button is pressed then released.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -580,7 +613,7 @@ Boolean that represents whether a right-click occurred in the current frame.
 
 Check if mouse is dragging.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -594,7 +627,7 @@ Boolean that represents whether the mouse is being moved while a button is press
 
 Check if return key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -608,7 +641,7 @@ Boolean value.
 
 Check if space key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -622,7 +655,7 @@ Boolean value.
 
 Check if escape key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -636,7 +669,7 @@ Boolean value.
 
 Check if up key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -650,7 +683,7 @@ Boolean value.
 
 Check if down key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -664,7 +697,7 @@ Boolean value.
 
 Check if left key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -678,7 +711,7 @@ Boolean value.
 
 Check if right key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -692,7 +725,7 @@ Boolean value.
 
 Check if pageup key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -706,7 +739,7 @@ Boolean value.
 
 Check if pagedown key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -720,7 +753,7 @@ Boolean value.
 
 Check if control key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -734,7 +767,7 @@ Boolean value.
 
 Check if S key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -748,7 +781,7 @@ Boolean value.
 
 Check if L key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -762,7 +795,7 @@ Boolean value.
 
 Check if H key is pressed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -776,7 +809,7 @@ Boolean value.
 
 Check if touch is canceled.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -790,7 +823,7 @@ Boolean value.
 
 Check if swiped.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -804,7 +837,7 @@ Boolean value.
 
 Clear input states to avoid further input processing in the current frame.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -819,7 +852,7 @@ No return.
 
 Start a multiple-frame command execution.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -833,7 +866,7 @@ No return.
 
 Stop a multiple-frame command execution.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -847,7 +880,7 @@ No return.
 
 Check whether we are in a multiple-frame command execution or not.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -861,7 +894,7 @@ Boolean value.
 
 Set the message showing state to active.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -875,7 +908,7 @@ No return.
 
 Reset the message showing state.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -889,7 +922,7 @@ No return.
 
 Check whether the message showing state is set or not.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -903,7 +936,7 @@ Boolean value.
 
 Start the auto-mode.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -917,7 +950,7 @@ No return.
 
 Stop the auto-mode.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -931,7 +964,7 @@ No return.
 
 Check whether we are in the auto-mode or not.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -945,7 +978,7 @@ Boolean value.
 
 Start the skip-mode.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -959,7 +992,7 @@ No return.
 
 Stop the skip-mode.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -973,7 +1006,7 @@ No return.
 
 Check whether we are in the skip-mode or not.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -987,7 +1020,7 @@ Boolean value.
 
 Set the save/load enable setting.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                       |
 |-----------|---------|-----------------------------------|
@@ -1003,7 +1036,7 @@ No return.
 
 Get the save/load enable setting.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1017,7 +1050,7 @@ Boolean value.
 
 Set the non-interruptible mode setting.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1033,7 +1066,7 @@ No return.
 
 Get the non-interruptible mode setting.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1047,7 +1080,7 @@ Boolean value.
 
 Set the pen position for text drawing.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1064,7 +1097,7 @@ No return.
 
 Get the pen X position.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1078,7 +1111,7 @@ Integer value.
 
 Get the pen Y position.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1092,7 +1125,7 @@ Integer value.
 
 Push the return point to the call stack.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1109,7 +1142,7 @@ Boolean that represents success or failure.
 
 Pop the return point from the call stack.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1126,7 +1159,7 @@ Returns a dictionary that contains:
 
 Read the call stack element at the specified index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1145,7 +1178,7 @@ Returns a dictionary that contains:
 
 Write the call stack element at the specified index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1163,7 +1196,7 @@ No return.
 
 Set a calling argument for GUI or anime.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1180,7 +1213,7 @@ Boolean value.
 
 Get a calling argument.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1196,7 +1229,7 @@ String value.
 
 Check if the script page mode is enabled.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1210,7 +1243,7 @@ Returns boolean.
 
 Append a string to the page mode buffer string.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1226,7 +1259,7 @@ No return.
 
 Get the page mode buffer string.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1240,7 +1273,7 @@ Returns a string.
 
 Clear the page mode buffer string.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1254,7 +1287,7 @@ No return.
 
 Reset the message line count in a page.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1268,7 +1301,7 @@ No return.
 
 Increment the line count in a page.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1282,7 +1315,7 @@ No return.
 
 Check if we are at the first line in a page.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1296,7 +1329,7 @@ No return.
 
 Register a BGVoice.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1312,7 +1345,7 @@ No return.
 
 Get the BGVoice.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1326,7 +1359,7 @@ Returns a file name string.
 
 Set the BGVoice state playing.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1342,7 +1375,7 @@ No return.
 
 Check if the BGVoice is playing.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1356,7 +1389,7 @@ Returns boolean.
 
 Set the chapter name.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1372,7 +1405,7 @@ No return.
 
 Get the chapter name.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1386,7 +1419,7 @@ Returns a string.
 
 Set the last message.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1403,7 +1436,7 @@ No return.
 
 Set the previous last message.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1419,7 +1452,7 @@ No return.
 
 Get the last message.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1433,7 +1466,7 @@ Returns a string.
 
 Get the previous last message.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1447,7 +1480,7 @@ Returns a string.
 
 Set the text speed.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1463,7 +1496,7 @@ No return.
 
 Get the text speed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1477,7 +1510,7 @@ Returns a float.
 
 Set the auto mode speed.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -1493,7 +1526,7 @@ No return.
 
 Get the auto speed.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1507,7 +1540,7 @@ Returns a float.
 
 Mark the last English index.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1521,7 +1554,7 @@ No return.
 
 Get the last English index.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1535,7 +1568,7 @@ Returns an integer.
 
 Clear the last English index.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1550,7 +1583,7 @@ No return.
 Get the last tag name.
 
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1564,7 +1597,7 @@ Returns a string.
 
 Load an image from a file.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                   |
 |-----------|--------|-------------------------------|
@@ -1580,7 +1613,7 @@ An image object, or null on failure.
 
 Create a new blank image.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                   |
 |-----------|---------|-------------------------------|
@@ -1597,7 +1630,7 @@ An image object.
 
 Get the width of an image.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                   |
 |-----------|--------|-------------------------------|
@@ -1613,7 +1646,7 @@ Integer that represents the width.
 
 Get the height of an image.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                   |
 |-----------|--------|-------------------------------|
@@ -1629,7 +1662,7 @@ Integer that represents the height.
 
 Destroy an image and free its memory.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                   |
 |-----------|--------|-------------------------------|
@@ -1645,7 +1678,7 @@ No return.
 
 Copy an image to another image (no blending).
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter  | Type    | Description                      |
 |------------|---------|----------------------------------|
@@ -1668,7 +1701,7 @@ No return.
 
 Draw an image with alpha blending.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                      |
 |-----------|---------|----------------------------------|
@@ -1692,7 +1725,7 @@ No return.
 
 Draw an image with additive blending.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                      |
 |-----------|---------|----------------------------------|
@@ -1716,7 +1749,7 @@ No return.
 
 Draw an image with subtractive blending.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                      |
 |-----------|---------|----------------------------------|
@@ -1740,7 +1773,7 @@ No return.
 
 Create a pixel value from RGBA components.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description      |
 |-----------|---------|------------------|
@@ -1759,7 +1792,7 @@ A pixel value.
 
 Fill a rectangular area on an image with a color.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                         |
 |-----------|---------|-------------------------------------|
@@ -1780,7 +1813,7 @@ No return.
 
 Reload the stage images by the config.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1794,7 +1827,7 @@ Boolean that represents success or failure.
 
 Reload the stage positions by the config.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -1808,7 +1841,7 @@ No return.
 
 Get the current position of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1824,7 +1857,7 @@ Integer value of the coordinate.
 
 Get the current position of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1840,7 +1873,7 @@ Integer value of the coordinate.
 
 Set the position of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1858,7 +1891,7 @@ No return.
 
 Get the X scaling factor of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1874,7 +1907,7 @@ Float value of the scale.
 
 Get the Y scaling factor of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1890,7 +1923,7 @@ Float value of the scale.
 
 Set the scaling factor of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1908,7 +1941,7 @@ No return.
 
 Get the rotation angle of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1924,7 +1957,7 @@ Returns float.
 
 Set the rotation angle of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1941,7 +1974,7 @@ No return.
 
 Get the dimming state of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1957,7 +1990,7 @@ Returns boolean.
 
 Set the dimming state of a specific layer.
 
-### Parameters (Set)
+### Parameters (Dictionary) (Set)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1974,7 +2007,7 @@ No return.
 
 Get the transparency of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -1990,7 +2023,7 @@ Returns integer.
 
 Set the transparency of a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2007,7 +2040,7 @@ No return.
 
 Set the blending mode for a layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2024,7 +2057,7 @@ No return.
 
 Set a file to be displayed on a layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2041,7 +2074,7 @@ Boolean that represents success or failure.
 
 Set the frame index for eye blinking and lip synchronization.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2058,7 +2091,7 @@ No return.
 
 Get the string displayed on a text layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2074,7 +2107,7 @@ Returns string.
 
 Set the string displayed on a text layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2091,7 +2124,7 @@ No return.
 
 Get the sysbtn idle image.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2105,7 +2138,7 @@ Returns an image object.
 
 Get the sysbtn hover image.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2119,7 +2152,7 @@ Returns an image object.
 
 Clear the basic layers.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2133,7 +2166,7 @@ Returns an image object.
 
 Clear the stage and make it initial state.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2147,7 +2180,7 @@ Returns an image object.
 
 Convert a character position to a stage layer index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -2163,7 +2196,7 @@ Returns an integer.
 
 Convert a character position to a stage layer index (character eye).
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -2179,7 +2212,7 @@ Returns an integer.
 
 Convert a character position to a stage layer index (character lip).
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -2195,7 +2228,7 @@ Returns an integer.
 
 Convert a stage layer index to a character position.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description           |
 |-----------|---------|-----------------------|
@@ -2211,7 +2244,7 @@ Returns an integer.
 
 Render the stage with all stage layers.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2225,7 +2258,7 @@ No return.
 
 Start a transition effect.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                  |
 |-----------|---------|----------------------------------------------|
@@ -2240,11 +2273,27 @@ Boolean value.
 
 ---
 
+## Suika.getShakeOffset()
+
+Get the offset for the shake command.
+
+### Parameters (Dictionary)
+
+No parameters.
+
+### Return
+
+An object that contains:
+* x
+* y
+
+---
+
 ## Suika.setShakeOffset()
 
 Set the offset for the shake command.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description    |
 |-----------|---------|----------------|
@@ -2261,7 +2310,7 @@ No return.
 
 Check if the fading is running.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2275,7 +2324,7 @@ Boolean value.
 
 Immediately end the fading effect.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2289,7 +2338,7 @@ No return.
 
 Specify a character name index for a character position.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter   | Type    | Description                |
 |-------------|---------|----------------------------|
@@ -2306,22 +2355,13 @@ No return.
 
 Get the position of the character currently speaking.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
 ### Return
 
-Returns a string.
-
-| Name           | Description              |
-|----------------|--------------------------|
-| `center`       | Center Character         |
-| `back`         | Center Back Character    |
-| `left`         | Left Character           |
-| `left-center`  | Left Center Character    |
-| `right`        | Right Center Character   |
-| `right-center` | Right Center Character   |
+Returns an integer.
 
 ---
 
@@ -2329,22 +2369,11 @@ Returns a string.
 
 Set the talking character.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
-| chpos     | String  | Character position.        |
-
-### Character Position
-
-| Name           | Description              |
-|----------------|--------------------------|
-| `center`       | Center Character         |
-| `back`         | Center Back Character    |
-| `left`         | Left Character           |
-| `left-center`  | Left Center Character    |
-| `right`        | Right Character   |
-| `right-center` | Right Center Character   |
+| chpos     | Integer | Character position.        |
 
 ### Return
 
@@ -2356,7 +2385,7 @@ No return.
 
 Get the talker character position.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2370,7 +2399,7 @@ Returns an integer.
 
 Automatically update character dimming based on who is speaking.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2384,11 +2413,11 @@ No return.
 
 Update the character dimming manually.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
-| chpos     | String  | Character position.        |
+| chpos     | Integer | Character position.        |
 | dim       | Boolean | Dim or not.                |
 
 ### Return
@@ -2401,11 +2430,11 @@ No return.
 
 Get the dimming state.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
-| chpos     | String  | Character position.        |
+| chpos     | Integer | Character position.        |
 
 ### Return
 
@@ -2417,7 +2446,7 @@ Returns a boolean.
 
 Fill the name box by the name box image.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2431,7 +2460,7 @@ No return.
 
 Get the name box position and size.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2450,7 +2479,7 @@ Object.
 
 Show or hides the name box.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2466,7 +2495,7 @@ No return.
 
 Fill the message box by the message box image.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2480,7 +2509,7 @@ No return.
 
 Show or hide the message box.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2496,7 +2525,7 @@ No return.
 
 Get the message box rect.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2514,7 +2543,7 @@ An object that contains:
 
 Set the click animation position.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2531,7 +2560,7 @@ No return.
 
 Show or hide the click animation.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2547,7 +2576,7 @@ No return.
 
 Set the index of the click animation frame.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2563,7 +2592,7 @@ No return.
 
 Get the click animation rect.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2581,7 +2610,7 @@ An object that contains:
 
 Fill a choose box idle layer by the choose box idle image.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2597,7 +2626,7 @@ No return.
 
 Fill a choose box hover layer by the choose box hover image.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -2613,7 +2642,7 @@ No return.
 
 Show or hide a choice box.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter  | Type    | Description                 |
 |------------|---------|-----------------------------|
@@ -2631,7 +2660,7 @@ No return.
 
 Get the choose box rect.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2649,7 +2678,7 @@ An object that contains:
 
 Show or hide the auto mode banner.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter  | Type    | Description                 |
 |------------|---------|-----------------------------|
@@ -2665,7 +2694,7 @@ No return.
 
 Show or hide the skip mode banner.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter  | Type    | Description                 |
 |------------|---------|-----------------------------|
@@ -2684,7 +2713,7 @@ Perform direct rendering of an image to the screen.
 Note that you should consider using the stage layers for normal rendering.
 This API is useful for effects.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Omissible    | Type    | Description                                |
 |-----------|--------------|---------|--------------------------------------------|
@@ -2710,7 +2739,7 @@ Perform direct rendering of an image to the screen with 3D transformation.
 Note that you should consider using the stage layers for normal rendering.
 This API is useful for effects.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Omissible    | Type    | Description                                |
 |-----------|--------------|---------|--------------------------------------------|
@@ -2741,7 +2770,7 @@ Start Kirakira effect.
 
 Kirakira effect is an animation that is shown at the screen position where the mouse cursor is clicked.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2761,7 +2790,7 @@ Render Kirakira effect.
 
 Play a sound file on a specific mixer track.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Omissible    | Type    | Description                                |
 |-----------|--------------|---------|--------------------------------------------|
@@ -2788,7 +2817,7 @@ Boolean that represents whether the file was opened successfully.
 
 Set the volume for a specific mixer track.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2815,7 +2844,7 @@ No return.
 
 Get the volume for a specific mixer track.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2842,7 +2871,7 @@ Returns float.
 
 Set the master volume affecting all tracks.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2858,7 +2887,7 @@ No return.
 
 Get the master volume affecting all tracks.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -2872,7 +2901,7 @@ Returns float.
 
 Set the global volume for a track (often used for config settings).
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2898,7 +2927,7 @@ No return.
 
 Get the global volume for a track (often used for config settings).
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2923,7 +2952,7 @@ Returns float.
 
 Set the volume for a specific character's voice.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2940,7 +2969,7 @@ No return.
 
 Get the volume for a specific character's voice.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2956,7 +2985,7 @@ Get returns float.
 
 Check if the playback on a specific track is finished.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2972,7 +3001,7 @@ Boolean value.
 
 Get the file name of the sound currently loaded in a track.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -2988,7 +3017,7 @@ String representing the file path.
 
 Apply a character's specific volume setting to the VOICE track.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3004,7 +3033,7 @@ No return.
 
 Get the total width of a UTF-8 string.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description            |
 |-----------|---------|------------------------|
@@ -3022,7 +3051,7 @@ Integer value of the width in pixels.
 
 Get the total height of a UTF-8 string.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description            |
 |-----------|---------|------------------------|
@@ -3040,7 +3069,7 @@ Integer value of the height in pixels.
 
 Draw a single glyph onto an image.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter     | Type    | Description                                |
 |---------------|---------|--------------------------------------------|
@@ -3066,7 +3095,7 @@ Boolean that represents success.
 
 Create a complex message drawing context for high-level text rendering.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter      | Type     | Description            |
 |----------------|----------|------------------------|
@@ -3113,7 +3142,7 @@ A message drawing context object.
 
 Destroy a message drawing context.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter      | Type     | Description            |
 |----------------|----------|------------------------|
@@ -3129,7 +3158,7 @@ No return.
 
 Count the remaining characters excluding escape sequences.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter      | Type     | Description            |
 |----------------|----------|------------------------|
@@ -3145,7 +3174,7 @@ Returns an integer.
 
 Draw characters in a message up to (maxChars) characters.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter      | Type     | Description            |
 |----------------|----------|------------------------|
@@ -3162,7 +3191,7 @@ Returns an integer that indicates the count of characters drawn in the call.
 
 Get the current pen position from a drawing context.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3178,7 +3207,7 @@ An object containing `x` and `y`.
 
 Check if a character is part of an escape sequence.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -3194,7 +3223,7 @@ Boolean value.
 
 Load a new tag file and move the execution point to its beginning.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -3210,7 +3239,7 @@ Boolean that represents success or failure.
 
 Get the total number of tags in the current script file.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3224,7 +3253,7 @@ Integer representing the tag count.
 
 Move the execution pointer to a specific tag index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -3240,7 +3269,7 @@ Boolean value.
 
 Move the execution pointer to the very next tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3254,7 +3283,7 @@ Boolean value.
 
 Jump to a specific label.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description             |
 |-----------|--------|-------------------------|
@@ -3270,7 +3299,7 @@ Boolean value.
 
 Jump to a specific macro by name.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description             |
 |-----------|--------|-------------------------|
@@ -3286,7 +3315,7 @@ Boolean value.
 
 Jump to a correspoinding else/elseif/endif tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description             |
 |-----------|--------|-------------------------|
@@ -3302,7 +3331,7 @@ Boolean value.
 
 Jump to a correspoinding endif tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description             |
 |-----------|--------|-------------------------|
@@ -3318,7 +3347,7 @@ Boolean value.
 
 Jump to a correspoinding endmacro tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description             |
 |-----------|--------|-------------------------|
@@ -3334,7 +3363,7 @@ Boolean value.
 
 Get the current script file name current tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3348,7 +3377,7 @@ String representing the file name.
 
 Get the name of the current tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3362,7 +3391,7 @@ String representing the tag name.
 
 Get the number of the properties of the current tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3377,7 +3406,7 @@ String representing the name or value.
 Iterate through and retrieve the properties (arguments) of the current
 tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description       |
 |-----------|---------|-------------------|
@@ -3394,7 +3423,7 @@ String representing the name.
 Iterate through and retrieve the properties (arguments) of the current
 tag.
 
-### Parameters (for PropertyName/Value)
+### Parameters (Dictionary) (for PropertyName/Value)
 
 | Parameter | Type    | Description       |
 |-----------|---------|-------------------|
@@ -3411,7 +3440,7 @@ String representing the value.
 Get a specific argument of the current tag, with support for default
 values and optionality.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                       |
 |-----------|---------|-----------------------------------|
@@ -3430,7 +3459,7 @@ The value of the argument in the requested type.
 Get a specific argument of the current tag, with support for default
 values and optionality.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                       |
 |-----------|---------|-----------------------------------|
@@ -3449,7 +3478,7 @@ The value of the argument in the requested type.
 Get a specific argument of the current tag, with support for default
 values and optionality.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                       |
 |-----------|---------|-----------------------------------|
@@ -3468,7 +3497,7 @@ The value of the argument in the requested type.
 Get a specific argument of the current tag, with support for default
 values and optionality.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                       |
 |-----------|---------|-----------------------------------|
@@ -3489,7 +3518,7 @@ variables. (`${varname}` form)
 
 Calling this API updates the cache for the property values.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3505,7 +3534,7 @@ Manage the internal stack for `[if]` conditional blocks.
 
 This API marks the `if` block position for nested block processing.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3521,7 +3550,7 @@ Manage the internal stack for `if` conditional blocks.
 
 This API marks the end of `if` block for nested block processing.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3537,7 +3566,7 @@ Manage the internal stack for loops (`while`).
 
 This API marks the `while` block for nested block processing.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3553,7 +3582,7 @@ Manage the internal stack for loops (`while`).
 
 This API marks the end of `while` block for nested block processing.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3569,7 +3598,7 @@ Manage the internal stack for loops (`for`).
 
 This API marks the `for` block for nested block processing.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3585,7 +3614,7 @@ Manage the internal stack for loops (`for`).
 
 This API marks the end of `for` block for nested block processing.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3599,7 +3628,7 @@ Boolean value.
 
 Load an animation definition from a file and register it.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3617,7 +3646,7 @@ An array of boolean that indicate each layer is loaded or not.
 Begin describing a new animation sequence for a specific layer.
 This API is used for manually generated animations.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3634,7 +3663,7 @@ Boolean that represents success.
 Add a float property (e.g., position, alpha) to the current anime sequence.
 This API is used for manually generated animations.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3652,7 +3681,7 @@ Boolean value.
 Add an integer property (e.g., position, alpha) to the current anime sequence.
 This API is used for manually generated animations.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3669,7 +3698,7 @@ Boolean value.
 
 Start the registered animation sequence for a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3685,7 +3714,7 @@ Boolean value.
 
 Check the overall animation status.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3699,7 +3728,7 @@ Boolean value.
 
 Check if a specific layer's animation has ended.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -3715,7 +3744,7 @@ Boolean value.
 
 Update the animation frame state. Usually called once per frame.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3729,23 +3758,12 @@ No return.
 
 Manage eye-blinking (eye-patch) image and animation for a character position.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
-| chpos     | String  | Character position (Left, Center, etc.).   |
+| chpos     | Integer | Character position (Left, Center, etc.).   |
 | file      | String  | Path to the eye image file.                |
-
-### Character Position
-
-| Name         | Description              |
-|--------------|--------------------------|
-| center       | Center Character         |
-| back         | Center Back Character    |
-| left         | Left Character           |
-| left-center  | Left Center Character    |
-| right        | Right Center Character   |
-| right-center | Right Center Character   |
 
 ### Return
 
@@ -3757,22 +3775,11 @@ Boolean value.
 
 Restart the eye-blinking (eye-patch) animation for a character position.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
-| chpos     | String  | Character position (Left, Center, etc.).   |
-
-### Character Position
-
-| Name         | Description              |
-|--------------|--------------------------|
-| center       | Center Character         |
-| back         | Center Back Character    |
-| left         | Left Character           |
-| left-center  | Left Center Character    |
-| right        | Right Center Character   |
-| right-center | Right Center Character   |
+| chpos     | Integer | Character position (Left, Center, etc.).   |
 
 ### Return
 
@@ -3784,7 +3791,7 @@ Boolean value.
 
 Start lip-sync animation based on the message content for a character.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3801,7 +3808,7 @@ No return.
 
 Stop lip-sync animation.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3817,7 +3824,7 @@ No return.
 
 Clear animation sequences for a specific layer.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -3833,7 +3840,7 @@ No return.
 
 Clear animation sequences for all layers.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3847,7 +3854,7 @@ No return.
 
 Set a value to a local or global variable.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description            |
 |-----------|---------|------------------------|
@@ -3864,7 +3871,7 @@ Boolean that represents success or failure.
 
 Set a value to a local or global variable.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description             |
 |-----------|---------|-------------------------|
@@ -3881,7 +3888,7 @@ Boolean that represents success or failure.
 
 Set a value to a local or global variable.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description             |
 |-----------|---------|-------------------------|
@@ -3898,7 +3905,7 @@ Boolean that represents success or failure.
 
 Get the current value of a variable.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -3914,7 +3921,7 @@ The value of the variable in integer.
 
 Get the current value of a variable.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -3930,7 +3937,7 @@ The value of the variable in float.
 
 Get the current value of a variable.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -3946,7 +3953,7 @@ The value of the variable in string
 
 Unset (delete) a specific variable.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -3962,7 +3969,7 @@ No return.
 
 Unset (delete) all local variables.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -3976,7 +3983,7 @@ No return.
 
 Set a variable to be global (persistent across saves).
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -3993,7 +4000,7 @@ Boolean value.
 
 Check the variable's global status.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -4009,7 +4016,7 @@ Boolean value.
 
 Get the number of variables.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4023,7 +4030,7 @@ Integer for count.
 
 Iterate through the registered variables.
 
-### Parameters (for getVariableName)
+### Parameters (Dictionary) (for getVariableName)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4039,7 +4046,7 @@ String for name.
 
 Check if a variable with the specified name exists.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -4056,7 +4063,7 @@ Boolean value.
 Execute a global save.
 Global data typically includes persistent settings.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4071,7 +4078,7 @@ Boolean that represents success or failure.
 Execute a global load.
 Global data typically includes persistent settings.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4085,7 +4092,7 @@ Boolean that represents success or failure.
 
 Save the game progress to a specific slot.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4101,7 +4108,7 @@ Boolean that represents success or failure.
 
 Load game progress from a specific slot.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4117,7 +4124,7 @@ Boolean that represents success or failure.
 
 Check if the save data exists for the specified slot index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4133,7 +4140,7 @@ Boolean value.
 
 Delete a local save slot.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4149,7 +4156,7 @@ No return.
 
 Delete the entire global save data.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4163,7 +4170,7 @@ No return.
 
 Check if the current frame is immediately following a successful load operation.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4177,7 +4184,7 @@ Boolean value.
 
 Get the timestamp (Unix time) when the save data was created.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4193,7 +4200,7 @@ Integer (timestamp).
 
 Get the index of the most recently updated save slot.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4207,7 +4214,7 @@ Integer representing the slot index.
 
 Retrieve the chapter title stored in a save slot.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4223,7 +4230,7 @@ String representing the chapter name.
 
 Retrieve the last displayed message stored in a save slot.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4239,7 +4246,7 @@ String representing the message.
 
 Get the thumbnail image associated with a save slot.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4255,7 +4262,7 @@ An image object.
 
 Clear all messages from the history (backlog).
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4269,7 +4276,7 @@ No return.
 
 Add a new entry to the history.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter        | Type    | Description                                |
 |------------------|---------|--------------------------------------------|
@@ -4291,7 +4298,7 @@ Boolean that represents success.
 
 Get the total number of entries currently in the history.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4305,7 +4312,7 @@ Integer representing the history count.
 
 Retrieve the name at a specific history index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4321,7 +4328,7 @@ String value.
 
 Retrieve the message at a specific history index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4337,7 +4344,7 @@ String value.
 
 Retrieve the voice path at a specific history index.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4353,7 +4360,7 @@ String value.
 
 Load the seen (read) flags for the current script file.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4367,7 +4374,7 @@ Boolean that represents success.
 
 Save the seen (read) flags for the current script file.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4381,7 +4388,7 @@ Boolean that represents success.
 
 Get the seen status for the current tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4399,7 +4406,7 @@ For a `[choose]` tag, each bit indicates the option is selected before.
 
 Set the seen status for the current tag.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                |
 |-----------|---------|----------------------------|
@@ -4415,7 +4422,7 @@ No return.
 
 Load a GUI definition file and prepare it for execution.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type    | Description                                |
 |-----------|---------|--------------------------------------------|
@@ -4437,7 +4444,7 @@ Boolean that represents success or failure.
 
 Start the loaded GUI.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4451,7 +4458,7 @@ No return.
 
 Stop the currently running GUI.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4465,7 +4472,7 @@ No return.
 
 Check if a GUI is currently active.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4479,7 +4486,7 @@ Boolean value.
 
 Check if a GUI has completed its operation.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4493,7 +4500,7 @@ Boolean value.
 
 Get the label of the button that was selected to finish the GUI.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4507,7 +4514,7 @@ String representing the result label.
 
 Check if the GUI was closed with a "back to title" action.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4521,7 +4528,7 @@ Boolean value.
 
 Check if a save operation was performed while the GUI was active.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4535,7 +4542,7 @@ Boolean value.
 
 Check if a load operation was performed while the GUI was active.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4549,7 +4556,7 @@ Boolean value.
 
 Check if the current frame is immediately following a return from a system GUI.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4563,7 +4570,7 @@ Boolean value.
 
 Get a lap time since the time origin in milliseconds.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4577,7 +4584,7 @@ Integer in milliseconds.
 
 Check if a file exists.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -4593,7 +4600,7 @@ Returns boolean.
 
 Read an entire file content.
 
-### Parameters (for readFileContent)
+### Parameters (Dictionary) (for readFileContent)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -4609,7 +4616,7 @@ Returns a string.
 
 Directly write raw save data associated with a key.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -4626,7 +4633,7 @@ Boolean that represents success or failure.
 
 Directly read raw save data associated with a key.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|
@@ -4642,7 +4649,7 @@ Boolean that represents success or failure.
 
 Control video playback.
 
-### Parameters (for playVideo)
+### Parameters (Dictionary) (for playVideo)
 
 | Parameter    | Type    | Description                          |
 |--------------|---------|--------------------------------------|
@@ -4659,7 +4666,7 @@ Play returns Boolean; IsPlaying returns Boolean.
 
 Stop the video playback.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4673,7 +4680,7 @@ No return.
 
 Check if a video is playing back.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4687,7 +4694,7 @@ Returns boolean.
 
 Check for full-screen mode ability.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4701,7 +4708,7 @@ Boolean.
 
 Enter the full-screen mode.
 
-### Parameters
+### Parameters (Dictionary)
 
 No parameters.
 
@@ -4715,7 +4722,7 @@ No return.
 
 Execute Text-to-Speech (TTS) for the given message.
 
-### Parameters
+### Parameters (Dictionary)
 
 | Parameter | Type   | Description                                |
 |-----------|--------|--------------------------------------------|

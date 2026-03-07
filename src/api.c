@@ -172,7 +172,7 @@ static bool Suika_drawImageDim(void *p);
 static bool Suika_drawImageGlyph(void *p);
 static bool Suika_drawImageEmoji(void *p);
 static bool Suika_drawImageScale(void *p);
-static bool Suika_makePixel(void *p);
+static bool Suika_makeColor(void *p);
 static bool Suika_fillImageRect(void *p);
 static bool Suika_getImagePixels(void *p);
 
@@ -196,11 +196,13 @@ static bool Suika_getLayerWidth(void *p);
 static bool Suika_getLayerHeight(void *p);
 static bool Suika_getLayerAlpha(void *p);
 static bool Suika_setLayerAlpha(void *p);
+static bool Suika_getLayerBlend(void *p);
 static bool Suika_setLayerBlend(void *p);
 static bool Suika_getLayerFile(void *p);
 static bool Suika_setLayerFile(void *p);
 static bool Suika_getLayerImage(void *p);
 static bool Suika_setLayerImage(void *p);
+static bool Suika_getLayerFrame(void *p);
 static bool Suika_setLayerFrame(void *p);
 static bool Suika_getLayerText(void *p);
 static bool Suika_setLayerText(void *p);
@@ -218,6 +220,7 @@ static bool Suika_getThumbImage(void *p);
 static bool Suika_getFadeMethod(void *p);
 static bool Suika_getAccelMethod(void *p);
 static bool Suika_startFade(void *p);
+static bool Suika_getShakeOffset(void *p);
 static bool Suika_setShakeOffset(void *p);
 static bool Suika_isFadeRunning(void *p);
 static bool Suika_finishFade(void *p);
@@ -273,6 +276,7 @@ static bool Suika_getStringWidth(void *p);
 static bool Suika_getStringHeight(void *p);
 static bool Suika_drawGlyph(void *p);
 static bool Suika_createDrawMsg(void *p);
+static bool Suika_destroyDrawMsg(void *p);
 static bool Suika_countDrawMsgChars(void *p);
 static bool Suika_drawMessage(void *p);
 static bool Suika_getDrawMsgPenPosition(void *p);
@@ -390,7 +394,7 @@ static bool Suika_checkIfLoadedInGUI(void *p);
 /* HAL */
 static bool Suika_getMillisec(void *p);
 static bool Suika_checkFileExists(void *p);
-static bool Suika_read_file_content(void *p);
+static bool Suika_readFileContent(void *p);
 static bool Suika_writeSaveData(void *p);
 static bool Suika_readSaveData(void *p);
 static bool Suika_playVideo(void *p);
@@ -398,8 +402,27 @@ static bool Suika_stopVideo(void *p);
 static bool Suika_isVideoPlaying(void *p);
 static bool Suika_speakText(void *p);
 
-/* API function table. */
-static const char *single_param[] = {"p"};
+/*
+ * API function table.
+ */
+
+/*
+ * Single `dict` parameter pattern.
+ * Parameters are stored to a single parameter `dict`,
+ * and accessed via pf_get_call_arg_*().
+ */
+static const char *dict_param[] = {"dict"};
+
+/* Single `msg` parameter. */
+static const char *msg_param[] = {"msg"};
+
+/* Single `name` parameter. */
+static const char *name_param[] = {"name"};
+
+/*
+ * API table.
+ *  - All non-implemented APIs **should** be also listed here.
+ */
 static struct api_func api_func[] = {
 	/* Skeleton API */
 	{"start", Suika_start, 0, NULL},
@@ -407,21 +430,21 @@ static struct api_func api_func[] = {
 	{"render", Suika_render, 0, NULL},
 
 	/* Fundamental API */
-	{"print", Suika_print, 1, single_param},
-	{"loadPlugin", Suika_loadPlugin, 1, single_param},
+	{"print", Suika_print, 1, msg_param},
+	{"loadPlugin", Suika_loadPlugin, 1, name_param},
 
 	/* Config */
-	{"setConfig",			Suika_setConfig,		1, single_param},
-	{"getConfigCount",		Suika_getConfigCount,		1, single_param},
-	{"getConfigKey",		Suika_getConfigKey,		1, single_param},
-	{"isGlobalConfig",		Suika_isGlobalConfig,		1, single_param},
-	{"getConfigType",		Suika_getConfigType,		1, single_param},
-	{"getBoolConfig",		Suika_getBoolConfig,		1, single_param},
-	{"getIntConfig",		Suika_getIntConfig,		1, single_param},
-	{"getFloatConfig",		Suika_getFloatConfig,		1, single_param},
-	{"getStringConfig",		Suika_getStringConfig,		1, single_param},
-	{"getConfigAsString",		Suika_getConfigAsString,	1, single_param},
-	{"compareLocale",		Suika_compareLocale,		1, single_param},
+	{"setConfig",			Suika_setConfig,		1, dict_param},
+	{"getConfigCount",		Suika_getConfigCount,		1, dict_param},
+	{"getConfigKey",		Suika_getConfigKey,		1, dict_param},
+	{"isGlobalConfig",		Suika_isGlobalConfig,		1, dict_param},
+	{"getConfigType",		Suika_getConfigType,		1, dict_param},
+	{"getBoolConfig",		Suika_getBoolConfig,		1, dict_param},
+	{"getIntConfig",		Suika_getIntConfig,		1, dict_param},
+	{"getFloatConfig",		Suika_getFloatConfig,		1, dict_param},
+	{"getStringConfig",		Suika_getStringConfig,		1, dict_param},
+	{"getConfigAsString",		Suika_getConfigAsString,	1, dict_param},
+	{"compareLocale",		Suika_compareLocale,		1, dict_param},
 
 	/* Input */
 	{"getMousePosX",		Suika_getMousePosX,		0, NULL},
@@ -461,39 +484,39 @@ static struct api_func api_func[] = {
 	{"startSkipMode",		Suika_startSkipMode,		0, NULL},
 	{"stopSkipMode",		Suika_stopSkipMode,		0, NULL},
 	{"isSkipMode",			Suika_isSkipMode,		0, NULL},
-	{"setSaveLoad",			Suika_setSaveLoad,		1, single_param},
+	{"setSaveLoad",			Suika_setSaveLoad,		1, dict_param},
 	{"isSaveLoadEnabled",		Suika_isSaveLoadEnabled,	0, NULL},
-	{"setNonInterruptible",		Suika_setNonInterruptible,	1, single_param},
+	{"setNonInterruptible",		Suika_setNonInterruptible,	1, dict_param},
 	{"isNonInterruptible",		Suika_isNonInterruptible,	0, NULL},
-	{"setPenPosition",		Suika_setPenPosition,		1, single_param},
+	{"setPenPosition",		Suika_setPenPosition,		1, dict_param},
 	{"getPenPositionX",		Suika_getPenPositionX,		0, NULL},
 	{"getPenPositionY",		Suika_getPenPositionY,		0, NULL},
-	{"pushForCall",			Suika_pushForCall,		1, single_param},
+	{"pushForCall",			Suika_pushForCall,		1, dict_param},
 	{"popForReturn",		Suika_popForReturn,		0, NULL},
-	{"readCallStack",		Suika_readCallStack,		1, single_param},
-	{"writeCallStack",		Suika_writeCallStack,		1, single_param},
-	{"setCallArgument",		Suika_setCallArgument,		1, single_param},
-	{"getCallArgument",		Suika_getCallArgument,		1, single_param},
+	{"readCallStack",		Suika_readCallStack,		1, dict_param},
+	{"writeCallStack",		Suika_writeCallStack,		1, dict_param},
+	{"setCallArgument",		Suika_setCallArgument,		1, dict_param},
+	{"getCallArgument",		Suika_getCallArgument,		1, dict_param},
 	{"isPageMode",			Suika_isPageMode,		0, NULL},
-	{"appendBufferedMessage",	Suika_appendBufferedMessage,	1, single_param},
+	{"appendBufferedMessage",	Suika_appendBufferedMessage,	1, dict_param},
 	{"getBufferedMessage",		Suika_getBufferedMessage,	0, NULL},
 	{"clearBufferedMessage",	Suika_clearBufferedMessage,	0, NULL},
 	{"resetPageLine",		Suika_resetPageLine,		0, NULL},
 	{"incPageLine",			Suika_incPageLine,		0, NULL},
 	{"isPageTop",			Suika_isPageTop,		0, NULL},
-	{"registerBGVoice",		Suika_registerBGVoice,		1, single_param},
+	{"registerBGVoice",		Suika_registerBGVoice,		1, dict_param},
 	{"getBGVoice",			Suika_getBGVoice,		0, NULL},
-	{"setBGVoicePlaying",		Suika_setBGVoicePlaying,	1, single_param},
+	{"setBGVoicePlaying",		Suika_setBGVoicePlaying,	1, dict_param},
 	{"isBGVoicePlaying",		Suika_isBGVoicePlaying,		0, NULL},
-	{"setChapterName",		Suika_setChapterName,		1, single_param},
+	{"setChapterName",		Suika_setChapterName,		1, dict_param},
 	{"getChapterName",		Suika_getChapterName,		0, NULL},
-	{"setLastMessage",		Suika_setLastMessage,		1, single_param},
-	{"setPrevLastMessage",		Suika_setPrevLastMessage,	1, single_param},
+	{"setLastMessage",		Suika_setLastMessage,		1, dict_param},
+	{"setPrevLastMessage",		Suika_setPrevLastMessage,	1, dict_param},
 	{"getLastMessage",		Suika_getLastMessage,		0, NULL},
 	{"getPrevLastMessage",		Suika_getPrevLastMessage,	0, NULL},
-	{"setTextSpeed",		Suika_setTextSpeed,		1, single_param},
+	{"setTextSpeed",		Suika_setTextSpeed,		1, dict_param},
 	{"getTextSpeed",		Suika_getTextSpeed,		0, NULL},
-	{"setAutoSpeed",		Suika_setAutoSpeed,		1, single_param},
+	{"setAutoSpeed",		Suika_setAutoSpeed,		1, dict_param},
 	{"getAutoSpeed",		Suika_getAutoSpeed,		0, NULL},
 	{"markLastEnglishTagIndex",	Suika_markLastEnglishTagIndex,	0, NULL},
 	{"getLastEnglishTagIndex",	Suika_getLastEnglishTagIndex,	0, NULL},
@@ -501,138 +524,155 @@ static struct api_func api_func[] = {
 	{"getLastTagName",		Suika_getLastTagName,		0, NULL},
 
 	/* Image */
-	{"createImageFromFile",		Suika_createImageFromFile,	1, single_param},
-	{"createImage",			Suika_createImage,		1, single_param},
-	{"getImageWidth",		Suika_getImageWidth,		1, single_param},
-	{"getImageHeight",		Suika_getImageHeight,		1, single_param},
-	{"destroyImage",		Suika_destroyImage,		1, single_param},
-	{"drawImageCopy",		Suika_drawImageCopy,		1, single_param},
-	{"drawImageAlpha",		Suika_drawImageAlpha,		1, single_param},
-	{"drawImageAdd",		Suika_drawImageAdd,		1, single_param},
-	{"drawImageSub",		Suika_drawImageSub,		1, single_param},
-	{"makePixel",			Suika_makePixel,		1, single_param},
-	{"fillImageRect",		Suika_fillImageRect,		1, single_param},
-	{"getImagePixels",		Suika_getImagePixels,		1, single_param},
+	{"createImageFromFile",		Suika_createImageFromFile,	1, dict_param},
+	{"createImage",			Suika_createImage,		1, dict_param},
+	{"getImageWidth",		Suika_getImageWidth,		1, dict_param},
+	{"getImageHeight",		Suika_getImageHeight,		1, dict_param},
+	{"loadGlyphImage",		Suika_loadGlyphImage,		1, dict_param},
+	{"destroyImage",		Suika_destroyImage,		1, dict_param},
+	{"notifyImageUpdate",		Suika_notifyImageUpdate,	1, dict_param},
+	{"drawImageCopy",		Suika_drawImageCopy,		1, dict_param},
+	{"drawImageAlpha",		Suika_drawImageAlpha,		1, dict_param},
+	{"drawImageAdd",		Suika_drawImageAdd,		1, dict_param},
+	{"drawImageSub",		Suika_drawImageSub,		1, dict_param},
+	{"drawImageDim",		Suika_drawImageDim,		1, dict_param},
+	{"drawImageGlyph",		Suika_drawImageGlyph,		1, dict_param},
+	{"drawImageEmoji",		Suika_drawImageEmoji,		1, dict_param},
+	{"drawImageScale",		Suika_drawImageScale,		1, dict_param},
+	{"makeColor",			Suika_makeColor,		1, dict_param},
+	{"fillImageRect",		Suika_fillImageRect,		1, dict_param},
+	{"getImagePixels",		Suika_getImagePixels,		1, dict_param},
 
 	/* Stage */
 	{"reloadStageImages",		Suika_reloadStageImages,	0, NULL},
 	{"reloadStagePositions",	Suika_reloadStagePositions,	0, NULL},
-	{"getLayerX",			Suika_getLayerX,		1, single_param},
-	{"getLayerY",			Suika_getLayerY,		1, single_param},
-	{"setLayerPosition",		Suika_setLayerPosition,		1, single_param},
-	{"getLayerScaleX",		Suika_getLayerScaleX,		1, single_param},
-	{"getLayerScaleY",		Suika_getLayerScaleY,		1, single_param},
-	{"setLayerScale",		Suika_setLayerScale,		1, single_param},
-	{"getLayerRotate",		Suika_getLayerRotate,		1, single_param},
-	{"setLayerRotate",		Suika_setLayerRotate,		1, single_param},
-	{"getLayerDim",			Suika_getLayerDim,		1, single_param},
-	{"setLayerDim",			Suika_setLayerDim,		1, single_param},
-	{"getLayerAlpha",		Suika_getLayerAlpha,		1, single_param},
-	{"setLayerAlpha",		Suika_setLayerAlpha,		1, single_param},
-	{"setLayerBlend",		Suika_setLayerBlend,		1, single_param},
-	{"setLayerFile",		Suika_setLayerFile,		1, single_param},
-	{"setLayerFrame",		Suika_setLayerFrame,		1, single_param},
-	{"getLayerText",		Suika_getLayerText,		1, single_param},
-	{"setLayerText",		Suika_setLayerText,		1, single_param},
+	{"getLayerX",			Suika_getLayerX,		1, dict_param},
+	{"getLayerY",			Suika_getLayerY,		1, dict_param},
+	{"setLayerPosition",		Suika_setLayerPosition,		1, dict_param},
+	{"getLayerScaleX",		Suika_getLayerScaleX,		1, dict_param},
+	{"getLayerScaleY",		Suika_getLayerScaleY,		1, dict_param},
+	{"setLayerScale",		Suika_setLayerScale,		1, dict_param},
+	{"getLayerCenterX",		Suika_getLayerCenterX,		1, dict_param},
+	{"getLayerCenterY",		Suika_getLayerCenterY,		1, dict_param},
+	{"setLayerCenter",		Suika_setLayerCenter,		1, dict_param},
+	{"getLayerRotate",		Suika_getLayerRotate,		1, dict_param},
+	{"setLayerRotate",		Suika_setLayerRotate,		1, dict_param},
+	{"getLayerDim",			Suika_getLayerDim,		1, dict_param},
+	{"setLayerDim",			Suika_setLayerDim,		1, dict_param},
+	{"getLayerWidth",		Suika_getLayerWidth,		1, dict_param},
+	{"getLayerHeight",		Suika_getLayerHeight,		1, dict_param},
+	{"getLayerAlpha",		Suika_getLayerAlpha,		1, dict_param},
+	{"setLayerAlpha",		Suika_setLayerAlpha,		1, dict_param},
+	{"getLayerBlend",		Suika_getLayerBlend,		1, dict_param},
+	{"setLayerBlend",		Suika_setLayerBlend,		1, dict_param},
+	{"getLayerFile",		Suika_getLayerFile,		1, dict_param},
+	{"setLayerFile",		Suika_setLayerFile,		1, dict_param},
+	{"getLayerImage",		Suika_getLayerImage,		1, dict_param},
+	{"setLayerImage",		Suika_setLayerImage,		1, dict_param},
+	{"getLayerFrame",		Suika_getLayerFrame,		1, dict_param},
+	{"setLayerFrame",		Suika_setLayerFrame,		1, dict_param},
+	{"getLayerText",		Suika_getLayerText,		1, dict_param},
+	{"setLayerText",		Suika_setLayerText,		1, dict_param},
 	{"getSysBtnIdleImage",		Suika_getSysBtnIdleImage,	0, NULL},
 	{"getSysBtnHoverImage",		Suika_getSysBtnHoverImage,	0, NULL},
 	{"clearStageBasic",		Suika_clearStageBasic,		0, NULL},
 	{"clearStage",			Suika_clearStage,		0, NULL},
-	{"chposToLayer",		Suika_chposToLayer,		1, single_param},
-	{"chposToEyeLayer",		Suika_chposToEyeLayer,		1, single_param},
-	{"chposToLipLayer",		Suika.chposToLipLayer,		1, single_param},
-	{"layerToChpos",		Suika.layerToChpos,		1, single_param},
+	{"chposToLayer",		Suika_chposToLayer,		1, dict_param},
+	{"chposToEyeLayer",		Suika_chposToEyeLayer,		1, dict_param},
+	{"chposToLipLayer",		Suika_chposToLipLayer,		1, dict_param},
+	{"layerToChpos",		Suika_layerToChpos,		1, dict_param},
 	{"renderStage",			Suika_renderStage,		0, NULL},
-	{"startFade",			Suika_startFade,		1, single_param},
-	{"setShakeOffset",		Suika_setShakeOffset,		1, single_param},
+	{"drawStageToThumb",		Suika_drawStageToThumb,		0, NULL},
+	{"getThumbImage",		Suika_getThumbImage,		0, NULL},
+	{"getFadeMethod",		Suika_getFadeMethod,		1, dict_param},
+	{"getAccelMethod",		Suika_getAccelMethod,		1, dict_param},
+	{"startFade",			Suika_startFade,		1, dict_param},
+	{"getShakeOffset",		Suika_setShakeOffset,		1, dict_param},
+	{"setShakeOffset",		Suika_setShakeOffset,		1, dict_param},
 	{"isFadeRunning",		Suika_isFadeRunning,		0, NULL},
 	{"finishFade",			Suika_finishFade,		0, NULL},
-	{"setChNameMapping",		Suika_setChNameMapping,		1, single_param},
+	{"setChNameMapping",		Suika_setChNameMapping,		1, dict_param},
 	{"getChTalking",		Suika_getChTalking,		0, NULL},
-	{"setChTalking",		Suika_setChTalking,		1, single_param},
+	{"setChTalking",		Suika_setChTalking,		1, dict_param},
 	{"getTalkingChpos",		Suika_getTalkingChpos,		0, NULL},
 	{"updateChDimByTalkingCh",	Suika_updateChDimByTalkingCh,	0, NULL},
-	{"forceChDim",			Suika_forceChDim,		1, single_param},
-	{"getChDim",			Suika_getChDim,			1, single_param},
+	{"forceChDim",			Suika_forceChDim,		1, dict_param},
+	{"getChDim",			Suika_getChDim,			1, dict_param},
 	{"fillNameBox",			Suika_fillNameBox,		0, NULL},
-	{"getNameboxRect",		Suika_getNameBoxRect,		0, NULL},
-	{"showNameBox",			Suika_showNameBox,		1, single_param},
+	{"getNameBoxRect",		Suika_getNameBoxRect,		0, NULL},
+	{"showNameBox",			Suika_showNameBox,		1, dict_param},
 	{"fillMessageBox",		Suika_fillMessageBox,		0, NULL},
-	{"showMessageBox",		Suika_showMessageBox,		1, single_param},
+	{"showMessageBox",		Suika_showMessageBox,		1, dict_param},
 	{"getMessageBoxRect",		Suika_getMessageBoxRect,	0, NULL},
-	{"setClickPosition",		Suika_setClickPosition,		1, single_param},
-	{"showClick",			Suika_showClick,		1, single_param},
-	{"setClickIndex",		Suika_setClickIndex,		1, single_param},
+	{"setClickPosition",		Suika_setClickPosition,		1, dict_param},
+	{"showClick",			Suika_showClick,		1, dict_param},
+	{"setClickIndex",		Suika_setClickIndex,		1, dict_param},
 	{"getClickRect",		Suika_getClickRect,		0, NULL},
 	{"fillChooseBoxIdleImage",	Suika_fillChooseBoxIdleImage,	0, NULL},
 	{"fillChooseBoxHoverImage",	Suika_fillChooseBoxHoverImage,	0, NULL},
-	{"showChooseBox",		Suika_showChooseBox,		1, single_param},
+	{"showChooseBox",		Suika_showChooseBox,		1, dict_param},
 	{"getChooseBoxRect",		Suika_getChooseBoxRect,		0, NULL},
-	{"showAutoModeBanner",		Suika_showAutoModeBanner,	1, single_param},
-	{"showSkipModeBanner",		Suika_showSkipModeBanner,	1, single_param},
-	{"renderImage",			Suika_renderImage,		1, single_param},
-	{"renderImage3d",		Suika_renderImage3d,		1, single_param},
-	{"setClickPosition",		Suika_setClickPosition,		1, single_param},
-	{"showClick",			Suika_showClick,		1, single_param},
-	{"setClickIndex",		Suika_setClickIndex,		1, single_param},
-	{"getClickRect",		Suika_getClickRect,		0, NULL},
-	{"fillChooseBoxIdleImage",	Suika_fillChooseBoxIdleImage,	1, single_param},
-	{"fillChooseBoxHoverImage",	Suika_fillChooseBoxHoverImage,	1, single_param},
-	{"getChooseBoxRect",		Suika_getChooseBoxRect,		1, single_param},
-	{"startKirakira",		Suika_startKirakira,		0, NULL},
-	{"renderKirakira",		Suika_renderKirakira,		0, NULL},
+	{"showAutoModeBanner",		Suika_showAutoModeBanner,	1, dict_param},
+	{"showSkipModeBanner",		Suika_showSkipModeBanner,	1, dict_param},
+	{"renderImage",			Suika_renderImage,		1, dict_param},
+	{"renderImage3d",		Suika_renderImage3d,		1, dict_param},
 
 	/* Mixer */
-	{"setMixerInputFile",		Suika_setMixerInputFile,	1, single_param},
-	{"setMixerVolume",		Suika_setMixerVolume,		1, single_param},
-	{"getMixerVolume",		Suika_getMixerVolume,		1, single_param},
-	{"setMasterVolume",		Suika_setMasterVolume,		1, single_param},
+	{"setMixerInputFile",		Suika_setMixerInputFile,	1, dict_param},
+	{"setMixerVolume",		Suika_setMixerVolume,		1, dict_param},
+	{"getMixerVolume",		Suika_getMixerVolume,		1, dict_param},
+	{"setMasterVolume",		Suika_setMasterVolume,		1, dict_param},
 	{"getMasterVolume",		Suika_getMasterVolume,		0, NULL},
-	{"setMixerGlobalVolume",	Suika_setMixerGlobalVolume,	1, single_param},
-	{"getMixerGlobalVolume",	Suika_getMixerGlobalVolume,	1, single_param},
-	{"setCharacterVolume",		Suika_setCharacterVolume,	1, single_param},
-	{"getCharacterVolume",		Suika_getCharacterVolume,	1, single_param},
-	{"isMixerSoundFinished",	Suika_isMixerSoundFinished,	1, single_param},
-	{"getTrackFile",		Suika_getTrackFile,		1, single_param},
-	{"applyCharacterVolume",	Suika_applyCharacterVolume,	1, single_param},
+	{"setMixerGlobalVolume",	Suika_setMixerGlobalVolume,	1, dict_param},
+	{"getMixerGlobalVolume",	Suika_getMixerGlobalVolume,	1, dict_param},
+	{"setCharacterVolume",		Suika_setCharacterVolume,	1, dict_param},
+	{"getCharacterVolume",		Suika_getCharacterVolume,	1, dict_param},
+	{"isMixerSoundFinished",	Suika_isMixerSoundFinished,	1, dict_param},
+	{"getTrackFile",		Suika_getTrackFile,		1, dict_param},
+	{"applyCharacterVolume",	Suika_applyCharacterVolume,	1, dict_param},
 
 	/* System */
-	{"showSysBtn",			Suika_showSysBtn,		1, single_param},
+	{"showSysBtn",			Suika_showSysBtn,		1, dict_param},
 	{"isSysBtnVisible",		Suika_isSysBtnVisible,		0, NULL},
-	{"updateSysBtnState",		Suika_updateSysBtnState,	1, single_param},
+	{"updateSysBtnState",		Suika_updateSysBtnState,	1, dict_param},
 	{"isSysBtnPointed",		Suika_isSysBtnPointed,		0, NULL},
 	{"isSysBtnClicked",		Suika_isSysBtnClicked,		0, NULL},
 
 	/* Text */
-	{"getStringWidth",		Suika_getStringWidth,		1, single_param},
-	{"getStringHeight",		Suika_getStringHeight,		1, single_param},
-	{"drawGlyph",			Suika_drawGlyph,		1, single_param},
-	{"createDrawMsg",		Suika_createDrawMsg,		1, single_param}, 
-	{"drawMessage",			Suika_drawMessage,		1, single_param},
-	{"getDrawMsgPenPosition",	Suika_getDrawMsgPenPosition,	1, single_param},
-	{"setDrawMsgIgnoreInlineWait",	Suika_setDrawMsgIgnoreInlineWait, 1, single_param},
-	{"isQuotedSerif",		Suika_isQuotedSerif,		1, single_param},
-	{"isEscapeSequenceChar",	Suika_isEscapeSequenceChar,	1, single_param},
+	{"getStringWidth",		Suika_getStringWidth,		1, dict_param},
+	{"getStringHeight",		Suika_getStringHeight,		1, dict_param},
+	{"drawGlyph",			Suika_drawGlyph,		1, dict_param},
+	{"createDrawMsg",		Suika_createDrawMsg,		1, dict_param}, 
+	{"destroyDrawMsg",		Suika_destroyDrawMsg,		1, dict_param}, 
+	{"countDrawMsgChars",		Suika_countDrawMsgChars,	1, dict_param},
+	{"drawMessage",			Suika_drawMessage,		1, dict_param},
+	{"getDrawMsgPenPosition",	Suika_getDrawMsgPenPosition,	1, dict_param},
+	{"setDrawMsgIgnoreInlineWait",	Suika_setDrawMsgIgnoreInlineWait, 1, dict_param},
+	{"isQuotedSerif",		Suika_isQuotedSerif,		1, dict_param},
+	{"isEscapeSequenceChar",	Suika_isEscapeSequenceChar,	1, dict_param},
 
 	/* Tag */
 	{"getTagCount",			Suika_getTagCount,		0, NULL},
-	{"moveToTagFile",		Suika_moveToTagFile,		1, single_param},
-	{"moveToTagIndex",		Suika_moveToTagIndex,		1, single_param},
+	{"moveToTagFile",		Suika_moveToTagFile,		1, dict_param},
+	{"moveToTagIndex",		Suika_moveToTagIndex,		1, dict_param},
 	{"moveToNextTag",		Suika_moveToNextTag,		0, NULL},
-	{"moveToLabelTag",		Suika_moveToLabelTag,		1, single_param},
-	{"moveToMacroTag",		Suika_moveToMacroTag,		1, single_param},
+	{"moveToLabelTag",		Suika_moveToLabelTag,		1, dict_param},
+	{"moveToMacroTag",		Suika_moveToMacroTag,		1, dict_param},
 	{"moveToElseTag",		Suika_moveToElseTag,		0, NULL},
 	{"moveToEndIfTag",		Suika_moveToEndIfTag,		0, NULL},
 	{"moveToEndMacroTag",		Suika_moveToEndMacroTag,	0, NULL},
 	{"getTagFile",			Suika_getTagFile,		0, NULL},
+	{"getTagIndex",			Suika_getTagIndex,		0, NULL},
+	{"getTagLine",			Suika_getTagLine,		0, NULL},
 	{"getTagName",			Suika_getTagName,		0, NULL},
 	{"getTagPropertyCount",		Suika_getTagPropertyCount,	0, NULL},
-	{"getTagPropertyName",		Suika_getTagPropertyName,	1, single_param},
-	{"getTagPropertyValue",		Suika_getTagPropertyValue,	1, single_param},
-	{"getTagArgBool",		Suika_getTagArgBool,		1, single_param},
-	{"getTagArgInt",		Suika_getTagArgInt,		1, single_param},
-	{"getTagArgFloat",		Suika_getTagArgFloat,		1, single_param},
-	{"getTagArgString",		Suika_getTagArgString,		1, single_param},
+	{"getTagPropertyName",		Suika_getTagPropertyName,	1, dict_param},
+	{"getTagPropertyValue",		Suika_getTagPropertyValue,	1, dict_param},
+	{"checkTagArg",			Suika_checkTagArg,		1, dict_param},
+	{"getTagArgBool",		Suika_getTagArgBool,		1, dict_param},
+	{"getTagArgInt",		Suika_getTagArgInt,		1, dict_param},
+	{"getTagArgFloat",		Suika_getTagArgFloat,		1, dict_param},
+	{"getTagArgString",		Suika_getTagArgString,		1, dict_param},
 	{"evaluateTag",			Suika_evaluateTag,		0, NULL},
 	{"pushTagStackIf",		Suika_pushTagStackIf,		0, NULL},
 	{"popTagStackIf",		Suika_popTagStackIf,		0, NULL},
@@ -642,73 +682,73 @@ static struct api_func api_func[] = {
 	{"popTagStackFor",		Suika_popTagStackFor,		0, NULL},
 
 	/* Anime */
-	{"loadAnimeFromFile",		Suika_loadAnimeFromFile,		1, single_param},
-	{"clearLayerAnimeSequence",	Suika_clearLayerAnimeSequence,		1, single_param},
+	{"loadAnimeFromFile",		Suika_loadAnimeFromFile,		1, dict_param},
+	{"clearLayerAnimeSequence",	Suika_clearLayerAnimeSequence,		1, dict_param},
 	{"clearAllAnimeSequence",	Suika_clearAllAnimeSequence,		0, NULL},
-	{"newAnimeSequence",		Suika_newAnimeSequence,			1, single_param},
-	{"addAnimeSequencePropertyF",	Suika_addAnimeSequencePropertyF,	1, single_param},
-	{"addAnimeSequencePropertyI",	Suika_addAnimeSequencePropertyI,	1, single_param},
-	{"startLayerAnime",		Suika_startLayerAnime,			1, single_param},
+	{"newAnimeSequence",		Suika_newAnimeSequence,			1, dict_param},
+	{"addAnimeSequencePropertyF",	Suika_addAnimeSequencePropertyF,	1, dict_param},
+	{"addAnimeSequencePropertyI",	Suika_addAnimeSequencePropertyI,	1, dict_param},
+	{"startLayerAnime",		Suika_startLayerAnime,			1, dict_param},
 	{"isAnimeRunning",		Suika_isAnimeRunning,			0, NULL},
-	{"isAnimeRunningWithLayerMask",	Suika_isAnimeRunningWithLayerMask,	1, single_param},
-	{"isAnimeFinishedForLayer",	Suika_isAnimeFinishedForLayer,		1, single_param},
+	{"isAnimeRunningWithLayerMask",	Suika_isAnimeRunningWithLayerMask,	1, dict_param},
+	{"isAnimeFinishedForLayer",	Suika_isAnimeFinishedForLayer,		1, dict_param},
 	{"updateAnimeFrame",		Suika_updateAnimeFrame,			0, NULL},
-	{"unregisterAnime",		Suika_unregisterAnime,			1, single_param},
-	{"getRegAnimeName",		Suika_getRegAnimeName,			1, single_param},
-	{"getRegAnimeFile",		Suika_getRegAnimeFile,			1, single_param},
-	{"loadEyeImageIfExists",	Suika_loadEyeImageIfExists,		1, single_param},
-	{"reloadEyeAnime",		Suika_reloadEyeAnime,			1, single_param},
-	{"loadLipImageIfExists",	Suika_loadLipImageIfExists,		1, single_param},
-	{"runLipAnime",			Suika_runLipAnime,			1, single_param},
-	{"stopLipAnime",		Suika_stopLipAnime,			1, single_param},
+	{"unregisterAnime",		Suika_unregisterAnime,			1, dict_param},
+	{"getRegAnimeName",		Suika_getRegAnimeName,			1, dict_param},
+	{"getRegAnimeFile",		Suika_getRegAnimeFile,			1, dict_param},
+	{"loadEyeImageIfExists",	Suika_loadEyeImageIfExists,		1, dict_param},
+	{"reloadEyeAnime",		Suika_reloadEyeAnime,			1, dict_param},
+	{"loadLipImageIfExists",	Suika_loadLipImageIfExists,		1, dict_param},
+	{"runLipAnime",			Suika_runLipAnime,			1, dict_param},
+	{"stopLipAnime",		Suika_stopLipAnime,			1, dict_param},
 
 	/* Variable */
-	{"setVariableInt",		Suika_setVariableInt,		1, single_param},
-	{"setVariableFloat",		Suika_setVariableFloat,		1, single_param},
-	{"setVariableString",		Suika_setVariableString,	1, single_param},
-	{"unsetVariable",		Suika_unsetVariable,		1, single_param},
-	{"makeVariableGlobal",		Suika_makeVariableGlobal,	1, single_param},
-	{"getVariableInt",		Suika_getVariableInt,		1, single_param},
-	{"getVariableFloat",		Suika_getVariableFloat,		1, single_param},
-	{"getVariableString",		Suika_getVariableString,	1, single_param},
+	{"setVariableInt",		Suika_setVariableInt,		1, dict_param},
+	{"setVariableFloat",		Suika_setVariableFloat,		1, dict_param},
+	{"setVariableString",		Suika_setVariableString,	1, dict_param},
+	{"unsetVariable",		Suika_unsetVariable,		1, dict_param},
+	{"makeVariableGlobal",		Suika_makeVariableGlobal,	1, dict_param},
+	{"getVariableInt",		Suika_getVariableInt,		1, dict_param},
+	{"getVariableFloat",		Suika_getVariableFloat,		1, dict_param},
+	{"getVariableString",		Suika_getVariableString,	1, dict_param},
 	{"getVariableCount",		Suika_getVariableCount,		0, NULL},
-	{"getVariableName",		Suika_getVariableName,		1, single_param},
-	{"checkVariableExists",		Suika_checkVariableExists,	1, single_param},
-	{"isGlobalVariable",		Suika_isGlobalVariable,		1, single_param},
+	{"getVariableName",		Suika_getVariableName,		1, dict_param},
+	{"checkVariableExists",		Suika_checkVariableExists,	1, dict_param},
+	{"isGlobalVariable",		Suika_isGlobalVariable,		1, dict_param},
 	{"unsetLocalVariables",		Suika_unsetLocalVariables,	0, NULL},
 
 	/* Save */
 	{"executeSaveGlobal",		Suika_executeSaveGlobal,	0, NULL},
 	{"executeLoadGlobal",		Suika_executeLoadGlobal,	0, NULL},
-	{"executeSaveLocal",		Suika_executeSaveLocal,		1, single_param},
-	{"executeLoadLocal",		Suika_executeLoadLocal,		1, single_param},
-	{"checkSaveExists",		Suika_checkSaveExists,		1, single_param},
-	{"deleteLocalSave",		Suika_deleteLocalSave,		1, single_param},
+	{"executeSaveLocal",		Suika_executeSaveLocal,		1, dict_param},
+	{"executeLoadLocal",		Suika_executeLoadLocal,		1, dict_param},
+	{"checkSaveExists",		Suika_checkSaveExists,		1, dict_param},
+	{"deleteLocalSave",		Suika_deleteLocalSave,		1, dict_param},
 	{"deleteGlobalSave",		Suika_deleteGlobalSave,		0, NULL},
 	{"checkRightAfterLoad",		Suika_checkRightAfterLoad,	0, NULL},
-	{"getSaveTimestamp",		Suika_getSaveTimestamp,		1, single_param},
+	{"getSaveTimestamp",		Suika_getSaveTimestamp,		1, dict_param},
 	{"getLatestSaveIndex",		Suika_getLatestSaveIndex,	0, NULL},
-	{"getSaveChapterName",		Suika_getSaveChapterName,	1, single_param},
-	{"getSaveLastMessage",		Suika_getSaveLastMessage,	1, single_param},
-	{"getSaveThumbnail",		Suika_getSaveThumbnail,		1, single_param},
+	{"getSaveChapterName",		Suika_getSaveChapterName,	1, dict_param},
+	{"getSaveLastMessage",		Suika_getSaveLastMessage,	1, dict_param},
+	{"getSaveThumbnail",		Suika_getSaveThumbnail,		1, dict_param},
 
 	/* History */
 	{"clearHistory",		Suika_clearHistory,		0, NULL},
-	{"addHistory",			Suika_addHistory,		1, single_param},
+	{"addHistory",			Suika_addHistory,		1, dict_param},
 	{"getHistoryCount",		Suika_getHistoryCount,		0, NULL},
-	{"getHistoryName",		Suika_getHistoryName,		1, single_param},
-	{"getHistoryMessage",		Suika_getHistoryMessage,	1, single_param},
-	{"getHistoryVoice",		Suika_getHistoryVoice,		1, single_param},
+	{"getHistoryName",		Suika_getHistoryName,		1, dict_param},
+	{"getHistoryMessage",		Suika_getHistoryMessage,	1, dict_param},
+	{"getHistoryVoice",		Suika_getHistoryVoice,		1, dict_param},
 
 	/* Seen */
 	{"loadSeen",			Suika_loadSeen,			0, NULL},
 	{"saveSeen",			Suika_saveSeen,			0, NULL},
 	{"getSeenFlags",		Suika_getSeenFlags,		0, NULL},
-	{"setSeenFlags",		Suika_setSeenFlags,		1, single_param},
+	{"setSeenFlags",		Suika_setSeenFlags,		1, dict_param},
 
 	/* GUI */
 	{"checkRightAfterSysGUI",	Suika_checkRightAfterSysGUI,	0, NULL},
-	{"loadGUIiFile",		Suika_loadGUIFile,		1, single_param},
+	{"loadGUIFile",			Suika_loadGUIFile,		1, dict_param},
 	{"startGUI",			Suika_startGUI,			0, NULL},
 	{"stopGUI",			Suika_stopGUI,			0, NULL},
 	{"isGUIRunning",		Suika_isGUIRunning,		0, NULL},
@@ -720,14 +760,14 @@ static struct api_func api_func[] = {
 
 	/* HAL */
 	{"getMillisec",			Suika_getMillisec,		0, NULL},
-	{"checkFileExists",		Suika_checkFileExists,		1, single_param},
-	{"readFileContent",		Suika_read_file_content,	1, single_param},
-	{"writeSaveData",		Suika_writeSaveData,		1, single_param},
-	{"readSaveData",		Suika_readSaveData,		1, single_param},
-	{"playVideo",			Suika_playVideo,		1, single_param},
+	{"checkFileExists",		Suika_checkFileExists,		1, dict_param},
+	{"readFileContent",		Suika_readFileContent,		1, dict_param},
+	{"writeSaveData",		Suika_writeSaveData,		1, dict_param},
+	{"readSaveData",		Suika_readSaveData,		1, dict_param},
+	{"playVideo",			Suika_playVideo,		1, dict_param},
 	{"stopVideo",			Suika_stopVideo,		0, NULL},
 	{"isVideoPlaying",		Suika_isVideoPlaying,		0, NULL},
-	{"speakText",			Suika_speakText,		1, single_param},
+	{"speakText",			Suika_speakText,		1, dict_param},
 };
 
 /* Time origin. */
@@ -818,7 +858,12 @@ Suika_print(
 }
 
 static bool
-serialize_printer(NoctEnv *env, char *buf, size_t size, NoctValue *value, bool is_inside_obj)
+serialize_printer(
+	NoctEnv *env,
+	char *buf,
+	size_t size,
+	NoctValue *value,
+	bool is_inside_obj)
 {
 	int type;
 	int ival;
@@ -836,27 +881,27 @@ serialize_printer(NoctEnv *env, char *buf, size_t size, NoctValue *value, bool i
 		if (!noct_get_int(env, value, &ival))
 			return false;
 		snprintf(digits, sizeof(digits), "%d", ival);
-		strncat(buf, digits, size);
+		strncat(buf, digits, size - strlen(buf));
 		break;
 	case NOCT_VALUE_FLOAT:
 		if (!noct_get_float(env, value, &fval))
 			return false;
 		snprintf(digits, sizeof(digits), "%f", fval);
-		strncat(buf, digits, size);
+		strncat(buf, digits, size - strlen(buf));
 		break;
 	case NOCT_VALUE_STRING:
 		if (!noct_get_string(env, value, &sval))
 			return false;
 		if (is_inside_obj)
-			strncat(buf, "\"", size);
-		strncat(buf, sval, size);
+			strncat(buf, "\"", size - strlen(buf));
+		strncat(buf, sval, size - strlen(buf));
 		if (is_inside_obj)
-			strncat(buf, "\"", size);
+			strncat(buf, "\"", size - strlen(buf));
 		break;
 	case NOCT_VALUE_ARRAY:
 		if (!noct_get_array_size(env, value, &items))
 			return false;
-		strncat(buf, "[", size);
+		strncat(buf, "[", size - strlen(buf));
 		for (i = 0; i < items; i++) {
 			NoctValue elem;
 			if (!noct_get_array_elem(env, value, i, &elem))
@@ -864,32 +909,33 @@ serialize_printer(NoctEnv *env, char *buf, size_t size, NoctValue *value, bool i
 			if (!serialize_printer(env, buf, size, &elem, true))
 				return false;
 			if (i != items - 1)
-				strncat(buf, ", ", size);
+				strncat(buf, ", ", size - strlen(buf));
 		}
-		strncat(buf, "]", size);
+		strncat(buf, "]", size - strlen(buf));
 		break;
 	case NOCT_VALUE_DICT:
 		if (!noct_get_dict_size(env, value, &items))
 			return false;
-		strncat(buf, "{", size);
+		strncat(buf, "{", size - strlen(buf));
 		for (i = 0; i < items; i++) {
 			NoctValue k, v;
 			if (!noct_get_dict_key_by_index(env, value, i, &k))
 				return false;
 			if (!noct_get_string(env, &k, &sval))
 				return false;
-			strncat(buf, sval, size);
-			strncat(buf, ": ", size);
+			strncat(buf, sval, size - strlen(buf));
+			strncat(buf, ": ", size - strlen(buf));
 			if (!noct_get_dict_value_by_index(env, value, i, &v))
 				return false;
-			serialize_printer(env, buf, size, &v, true);
+			if (!serialize_printer(env, buf, size, &v, true))
+				return false;
 			if (i != items - 1)
-				strncat(buf, ", ", size);
+				strncat(buf, ", ", size - strlen(buf));
 		}
-		strncat(buf, "}", size);
+		strncat(buf, "}", size - strlen(buf));
 		break;
 	case NOCT_VALUE_FUNC:
-		strncat(buf, "<func>", size);
+		strncat(buf, "<func>", size - strlen(buf));
 		break;
 	default:
 		assert(0);
@@ -1036,10 +1082,6 @@ Suika_getConfigKey(
 	} while (0);
 
         return ret;
-
-
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
 }
 
 static bool
@@ -1059,7 +1101,6 @@ Suika_isGlobalConfig(
 
 		/* Check if the config is global. */
 		is_global = s3_is_global_config(key);
-			break;
 
 		/* Set the return value. */
 		if (!pf_set_return_int(is_global ? 1 : 0))
@@ -1352,7 +1393,7 @@ Suika_isMouseLeftPressed(void *p)
 	val = s3_is_mouse_left_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1367,7 +1408,7 @@ Suika_isMouseRightPressed(void *p)
 	val = s3_is_mouse_right_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1382,7 +1423,7 @@ Suika_isMouseLeftClicked(void *p)
 	val = s3_is_mouse_left_clicked();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1397,7 +1438,7 @@ Suika_isMouseRightClicked(void *p)
 	val = s3_is_mouse_right_clicked();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1412,7 +1453,7 @@ Suika_isMouseDragging(void *p)
 	val = s3_is_mouse_dragging();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1427,7 +1468,7 @@ Suika_isReturnKeyPressed(void *p)
 	val = s3_is_return_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1442,7 +1483,7 @@ Suika_isSpaceKeyPressed(void *p)
 	val = s3_is_space_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1457,7 +1498,7 @@ Suika_isEscapeKeyPressed(void *p)
 	val = s3_is_escape_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1472,7 +1513,7 @@ Suika_isUpKeyPressed(void *p)
 	val = s3_is_up_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1487,7 +1528,7 @@ Suika_isDownKeyPressed(void *p)
 	val = s3_is_down_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1502,7 +1543,7 @@ Suika_isLeftKeyPressed(void *p)
 	val = s3_is_left_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1517,7 +1558,7 @@ Suika_isRightKeyPressed(void *p)
 	val = s3_is_right_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1532,7 +1573,7 @@ Suika_isPageUpKeyPressed(void *p)
 	val = s3_is_pageup_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1547,7 +1588,7 @@ Suika_isPageDownKeyPressed(void *p)
 	val = s3_is_pagedown_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1562,7 +1603,7 @@ Suika_isControlKeyPressed(void *p)
 	val = s3_is_control_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1577,7 +1618,7 @@ Suika_isSKeyPressed(void *p)
 	val = s3_is_s_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1592,7 +1633,7 @@ Suika_isLKeyPressed(void *p)
 	val = s3_is_l_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1607,7 +1648,7 @@ Suika_isHKeyPressed(void *p)
 	val = s3_is_h_key_pressed();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1622,7 +1663,7 @@ Suika_isTouchCanceled(void *p)
 	val = s3_is_touch_canceled();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1637,7 +1678,7 @@ Suika_isSwiped(void *p)
 	val = s3_is_swiped();
 
 	/* Set the return value. */
-	if (!pf_set_return_int(val ? 0 : 1))
+	if (!pf_set_return_int(val ? 1 : 0))
 		return false;
 	
         return true;
@@ -1979,7 +2020,6 @@ static bool
 Suika_popForReturn(void *p)
 {
 	NoctEnv *env;
-	int sp;
 	char *file;
 	int index;
 	NoctValue dic, tmp;
@@ -2440,7 +2480,7 @@ Suika_setPrevLastMessage(void *p)
 	if (message != NULL)
 		free(message);
 
-		return ret;
+	return ret;
 }
 
 static bool
@@ -2476,6 +2516,7 @@ Suika_setTextSpeed(void *p)
 {
 	float speed;
 	bool ret;
+
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -2604,127 +2645,853 @@ Suika_getLastTagName(void *p)
 static bool
 Suika_createImageFromFile(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *file;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	file = NULL;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("file", &file))
+			break;
+
+		img = s3_create_image_from_file(file);
+		if (img == NULL)
+			break;
+
+		val = s3i_image_to_int(img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (file != NULL)
+		free(file);
+
+	return ret;
 }
 
 static bool
 Suika_createImage(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int width;
+	int height;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("width", &width))
+			break;
+		if (!pf_get_call_arg_int("height", &height))
+			break;
+
+		img = s3_create_image(width, height);
+		if (img == NULL)
+			break;
+
+		val = s3i_image_to_int(img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getImageWidth(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int image;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("image", &image))
+			break;
+
+		img = s3i_int_to_image(image);
+		if (img == NULL)
+			break;
+
+		val = s3_get_image_width(img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getImageHeight(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int image;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("image", &image))
+			break;
+
+		img = s3i_int_to_image(image);
+		if (img == NULL)
+			break;
+
+		val = s3_get_image_height(img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_loadGlyphImage(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int font_type;
+	char *glyph;
+	int size;
+	int color;
+	int outline_width;
+	int outline_color;
+	uint32_t wc;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	glyph = NULL;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("fontType", &font_type))
+			break;
+		if (!pf_get_call_arg_string("glyph", &glyph))
+			break;
+		if (!pf_get_call_arg_int("size", &size))
+			break;
+		if (!pf_get_call_arg_int("color", &color))
+			break;
+		if (!pf_get_call_arg_int("outlineWidth", &outline_width))
+			break;
+		if (!pf_get_call_arg_int("outlineColor", &outline_color))
+			break;
+
+		if (!s3_utf8_to_utf32(glyph, &wc))
+			break;
+
+		img = s3_load_glyph_image(font_type,
+					  wc,
+					  size,
+					  color,
+					  outline_width,
+					  outline_color);
+		if (img == NULL)
+			break;
+
+		val = s3i_image_to_int(img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (glyph != NULL)
+		free(glyph);
+
+	return ret;
 }
 
 static bool
 Suika_destroyImage(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int image;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("image", &image))
+			break;
+
+		img = s3i_int_to_image(image);
+		if (img == NULL)
+			break;
+
+		s3_destroy_image(img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_notifyImageUpdate(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int image;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("image", &image))
+			break;
+
+		img = s3i_int_to_image(image);
+		if (img == NULL)
+			break;
+
+		s3_notify_image_update(img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_drawImageCopy(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int dst_image;
+	int dst_left;
+	int dst_top;
+	int src_image;
+	int dst_width;
+	int dst_height;
+	int src_left;
+	int src_top;
+	struct s3_image *src_img;
+	struct s3_image *dst_img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("dstImage", &dst_image))
+			break;
+		if (!pf_get_call_arg_int("dstLeft", &dst_left))
+			break;
+		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("srcImage", &src_image))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
+			break;
+		if (!pf_get_call_arg_int("srcLeft", &src_left))
+			break;
+		if (!pf_get_call_arg_int("srcTop", &src_top))
+			break;
+
+		src_img = s3i_int_to_image(src_image);
+		if (src_img == NULL)
+			break;
+		dst_img = s3i_int_to_image(dst_image);
+		if (dst_img == NULL)
+			break;
+
+		s3_draw_image_copy(dst_img,
+				   dst_left,
+				   dst_top,
+				   src_img,
+				   dst_width,
+				   dst_height,
+				   src_left,
+				   src_top);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_drawImageAlpha(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int dst_image;
+	int dst_left;
+	int dst_top;
+	int src_image;
+	int dst_width;
+	int dst_height;
+	int src_left;
+	int src_top;
+	int alpha;
+	struct s3_image *src_img;
+	struct s3_image *dst_img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("dstImage", &dst_image))
+			break;
+		if (!pf_get_call_arg_int("dstLeft", &dst_left))
+			break;
+		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("srcImage", &src_image))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
+			break;
+		if (!pf_get_call_arg_int("srcLeft", &src_left))
+			break;
+		if (!pf_get_call_arg_int("srcTop", &src_top))
+			break;
+		if (!pf_get_call_arg_int("alpha", &alpha))
+			break;
+
+		src_img = s3i_int_to_image(src_image);
+		if (src_img == NULL)
+			break;
+		dst_img = s3i_int_to_image(dst_image);
+		if (dst_img == NULL)
+			break;
+
+		s3_draw_image_alpha(dst_img,
+				    dst_left,
+				    dst_top,
+				    dst_width,
+				    dst_height,
+				    src_img,
+				    src_left,
+				    src_top,
+				    alpha);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_drawImageAdd(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int dst_image;
+	int dst_left;
+	int dst_top;
+	int src_image;
+	int dst_width;
+	int dst_height;
+	int src_left;
+	int src_top;
+	int alpha;
+	struct s3_image *src_img;
+	struct s3_image *dst_img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("dstImage", &dst_image))
+			break;
+		if (!pf_get_call_arg_int("dstLeft", &dst_left))
+			break;
+		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("srcImage", &src_image))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
+			break;
+		if (!pf_get_call_arg_int("srcLeft", &src_left))
+			break;
+		if (!pf_get_call_arg_int("srcTop", &src_top))
+			break;
+		if (!pf_get_call_arg_int("alpha", &alpha))
+			break;
+
+		src_img = s3i_int_to_image(src_image);
+		if (src_img == NULL)
+			break;
+		dst_img = s3i_int_to_image(dst_image);
+		if (dst_img == NULL)
+			break;
+
+		s3_draw_image_add(dst_img,
+				  dst_left,
+				  dst_top,
+				  dst_width,
+				  dst_height,
+				  src_img,
+				  src_left,
+				  src_top,
+				  alpha);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_drawImageSub(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int dst_image;
+	int dst_left;
+	int dst_top;
+	int src_image;
+	int dst_width;
+	int dst_height;
+	int src_left;
+	int src_top;
+	int alpha;
+	struct s3_image *src_img;
+	struct s3_image *dst_img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("dstImage", &dst_image))
+			break;
+		if (!pf_get_call_arg_int("dstLeft", &dst_left))
+			break;
+		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("srcImage", &src_image))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
+			break;
+		if (!pf_get_call_arg_int("srcLeft", &src_left))
+			break;
+		if (!pf_get_call_arg_int("srcTop", &src_top))
+			break;
+		if (!pf_get_call_arg_int("alpha", &alpha))
+			break;
+
+		src_img = s3i_int_to_image(src_image);
+		if (src_img == NULL)
+			break;
+		dst_img = s3i_int_to_image(dst_image);
+		if (dst_img == NULL)
+			break;
+
+		s3_draw_image_sub(dst_img,
+				  dst_left,
+				  dst_top,
+				  dst_width,
+				  dst_height,
+				  src_img,
+				  src_left,
+				  src_top,
+				  alpha);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_drawImageDim(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int dst_image;
+	int dst_left;
+	int dst_top;
+	int src_image;
+	int dst_width;
+	int dst_height;
+	int src_left;
+	int src_top;
+	int alpha;
+	struct s3_image *src_img;
+	struct s3_image *dst_img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("dstImage", &dst_image))
+			break;
+		if (!pf_get_call_arg_int("dstLeft", &dst_left))
+			break;
+		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("srcImage", &src_image))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
+			break;
+		if (!pf_get_call_arg_int("srcLeft", &src_left))
+			break;
+		if (!pf_get_call_arg_int("srcTop", &src_top))
+			break;
+		if (!pf_get_call_arg_int("alpha", &alpha))
+			break;
+
+		src_img = s3i_int_to_image(src_image);
+		if (src_img == NULL)
+			break;
+		dst_img = s3i_int_to_image(dst_image);
+		if (dst_img == NULL)
+			break;
+
+		s3_draw_image_dim(dst_img,
+				  dst_left,
+				  dst_top,
+				  dst_width,
+				  dst_height,
+				  src_img,
+				  src_left,
+				  src_top,
+				  alpha);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_drawImageGlyph(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int dst_image;
+	int dst_left;
+	int dst_top;
+	int src_image;
+	int dst_width;
+	int dst_height;
+	int src_left;
+	int src_top;
+	int alpha;
+	struct s3_image *src_img;
+	struct s3_image *dst_img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("dstImage", &dst_image))
+			break;
+		if (!pf_get_call_arg_int("dstLeft", &dst_left))
+			break;
+		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("srcImage", &src_image))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
+			break;
+		if (!pf_get_call_arg_int("srcLeft", &src_left))
+			break;
+		if (!pf_get_call_arg_int("srcTop", &src_top))
+			break;
+		if (!pf_get_call_arg_int("alpha", &alpha))
+			break;
+
+		src_img = s3i_int_to_image(src_image);
+		if (src_img == NULL)
+			break;
+		dst_img = s3i_int_to_image(dst_image);
+		if (dst_img == NULL)
+			break;
+
+		s3_draw_image_glyph(dst_img,
+				    dst_left,
+				    dst_top,
+				    dst_width,
+				    dst_height,
+				    src_img,
+				    src_left,
+				    src_top,
+				    alpha);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_drawImageEmoji(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int dst_image;
+	int dst_left;
+	int dst_top;
+	int src_image;
+	int dst_width;
+	int dst_height;
+	int src_left;
+	int src_top;
+	int alpha;
+	struct s3_image *src_img;
+	struct s3_image *dst_img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("dstImage", &dst_image))
+			break;
+		if (!pf_get_call_arg_int("dstLeft", &dst_left))
+			break;
+		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("srcImage", &src_image))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
+			break;
+		if (!pf_get_call_arg_int("srcLeft", &src_left))
+			break;
+		if (!pf_get_call_arg_int("srcTop", &src_top))
+			break;
+		if (!pf_get_call_arg_int("alpha", &alpha))
+			break;
+
+		src_img = s3i_int_to_image(src_image);
+		if (src_img == NULL)
+			break;
+		dst_img = s3i_int_to_image(dst_image);
+		if (dst_img == NULL)
+			break;
+
+		s3_draw_image_emoji(dst_img,
+				    dst_left,
+				    dst_top,
+				    dst_width,
+				    dst_height,
+				    src_img,
+				    src_left,
+				    src_top,
+				    alpha);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_drawImageScale(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int dst_image;
+	int dst_width;
+	int dst_height;
+	int dst_left;
+	int dst_top;
+	int src_image;
+	struct s3_image *src_img;
+	struct s3_image *dst_img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("dstImage", &dst_image))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
+			break;
+		if (!pf_get_call_arg_int("dstLeft", &dst_left))
+			break;
+		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("srcImage", &src_image))
+			break;
+
+		src_img = s3i_int_to_image(src_image);
+		if (src_img == NULL)
+			break;
+		dst_img = s3i_int_to_image(dst_image);
+		if (dst_img == NULL)
+			break;
+
+		s3_draw_image_scale(dst_img,
+				    dst_left,
+				    dst_top,
+				    dst_width,
+				    dst_height,
+				    src_img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
-Suika_makePixel(void *p)
+Suika_makeColor(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int r;
+	int g;
+	int b;
+	int a;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("r", &r))
+			break;
+		if (!pf_get_call_arg_int("g", &g))
+			break;
+		if (!pf_get_call_arg_int("b", &b))
+			break;
+		if (!pf_get_call_arg_int("a", &a))
+			break;
+
+		val = (int)s3_make_pixel(a, r, g, b);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_fillImageRect(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int image;
+	int left;
+	int top;
+	int width;
+	int height;
+	int color;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("image", &image))
+			break;
+		if (!pf_get_call_arg_int("left", &left))
+			break;
+		if (!pf_get_call_arg_int("top", &top))
+			break;
+		if (!pf_get_call_arg_int("width", &width))
+			break;
+		if (!pf_get_call_arg_int("height", &height))
+			break;
+		if (!pf_get_call_arg_int("color", &color))
+			break;
+
+		img = s3i_int_to_image(image);
+		if (img == NULL)
+			break;
+
+		s3_fill_image_rect(img,
+				   left,
+				   top,
+				   width,
+				   height,
+				   color);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
 Suika_getImagePixels(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	/*
+	 * Pixel access is not implemented yet because NoctLang does
+	 * not support binary data.
+	 */
+	s3_log_error(S3_TR("This API is not implemented yet."));
+	return false;
 }
 
 /*
@@ -3202,10 +3969,55 @@ Suika_setLayerAlpha(void *p)
 }
 
 static bool
+Suika_getLayerBlend(void *p)
+{
+	int layer;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("layer", &layer))
+			break;
+	
+		val = s3_get_layer_blend(layer);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;	
+}
+
+static bool
 Suika_setLayerBlend(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int layer;
+	int blend;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("layer", &layer))
+			break;
+		if (!pf_get_call_arg_int("blend", &blend))
+			break;
+	
+		s3_set_layer_blend(layer, blend);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;	
 }
 
 static bool
@@ -3319,6 +4131,31 @@ Suika_setLayerImage(void *p)
 	} while (0);
 
 	return ret;	
+}
+
+static bool
+Suika_getLayerFrame(void *p)
+{
+	int layer;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the arguments. */
+		if (!pf_get_call_arg_int("layer", &layer))
+			break;
+
+		val = s3_get_layer_frame(layer);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 static bool
@@ -3498,7 +4335,7 @@ Suika_chposToLayer(void *p)
 static bool
 Suika_chposToEyeLayer(void *p)
 {
-		int chpos;
+	int chpos;
 	int val;
 	bool ret;
 
@@ -3615,29 +4452,134 @@ Suika_getThumbImage(void *p)
 static bool
 Suika_getFadeMethod(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int val;
+	bool ret;
+
+	name = NULL;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_get_fade_method(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_getAccelMethod(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	char *name;
+	int val;
+	bool ret;
+
+	name = NULL;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("name", &name))
+			break;
+
+		val = s3_get_accel_method(name);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (name != NULL)
+		free(name);
+
+	return ret;
 }
 
 static bool
 Suika_startFade(void *p)
 {
+	/*
+	 * TODO: Write this function before the 1.0.0 release.
+	 */
         s3_log_error(S3_TR("This API is not implemented yet."));
         return false;
 }
 
 static bool
+Suika_getShakeOffset(void *p)
+{
+	int x;
+	int y;
+	NoctEnv *env;
+	NoctValue dic, tmp;
+
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("x", &y))
+			break;
+		if (!pf_get_call_arg_int("y", &y))
+			break;
+
+		s3_get_shake_offset(&x, &y);
+
+		/* Set the return value. */
+		env = p;
+		if (!noct_make_empty_dict(env, &dic))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "x", &tmp, x))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "y", &tmp, y))
+			break;
+		if (!noct_set_return(env, &dic))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+static bool
 Suika_setShakeOffset(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int x;
+	int y;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("x", &y))
+			break;
+		if (!pf_get_call_arg_int("y", &y))
+			break;
+
+		s3_set_shake_offset(x, y);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(1))
+			break;
+
+		ret = true;
+	} while (0);
+
+
+	return ret;
 }
 
 static bool
@@ -3824,8 +4766,37 @@ Suika_fillNameBox(void *p)
 static bool
 Suika_getNameBoxRect(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	NoctEnv *env;
+	NoctValue dic, tmp;
+	int x;
+	int y;
+	int w;
+	int h;
+	bool ret;
+
+	ret = false;
+	do {
+		s3_get_namebox_rect(&x, &y, &w, &h);
+
+		/* Set the return value. */
+		env = p;
+		if (!noct_make_empty_dict(env, &dic))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "x", &tmp, x))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "y", &tmp, y))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "w", &tmp, w))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "h", &tmp, h))
+			break;
+		if (!noct_set_return(env, &dic))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;	
 }
 
 static bool
@@ -3891,9 +4862,37 @@ Suika_showMessageBox(void *p)
 static bool
 Suika_getMessageBoxRect(void *p)
 {
-	/* TODO */
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	NoctEnv *env;
+	NoctValue dic, tmp;
+	int x;
+	int y;
+	int w;
+	int h;
+	bool ret;
+
+	ret = false;
+	do {
+		s3_get_msgbox_rect(&x, &y, &w, &h);
+
+		/* Set the return value. */
+		env = p;
+		if (!noct_make_empty_dict(env, &dic))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "x", &tmp, x))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "y", &tmp, y))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "w", &tmp, w))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "h", &tmp, h))
+			break;
+		if (!noct_set_return(env, &dic))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;	
 }
 
 static bool
@@ -4061,8 +5060,42 @@ Suika_showChooseBox(void *p)
 static bool
 Suika_getChooseBoxRect(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	NoctEnv *env;
+	NoctValue dic, tmp;
+	int index;
+	int x;
+	int y;
+	int w;
+	int h;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		s3_get_choosebox_rect(index, &x, &y, &w, &h);
+
+		/* Set the return value. */
+		env = p;
+		if (!noct_make_empty_dict(env, &dic))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "x", &tmp, x))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "y", &tmp, y))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "w", &tmp, w))
+			break;
+		if (!noct_set_dict_elem_make_int(env, &dic, "h", &tmp, h))
+			break;
+		if (!noct_set_return(env, &dic))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;	
 }
 
 static bool
@@ -4135,6 +5168,10 @@ Suika_renderImage(void *p)
 		if (!pf_get_call_arg_int("dstLeft", &dst_left))
 			break;
 		if (!pf_get_call_arg_int("dstTop", &dst_top))
+			break;
+		if (!pf_get_call_arg_int("dstWidth", &dst_width))
+			break;
+		if (!pf_get_call_arg_int("dstHeight", &dst_height))
 			break;
 		if (!pf_get_call_arg_int("image", &image))
 			break;
@@ -4246,6 +5283,7 @@ Suika_setMixerInputFile(void *p)
 	int is_looped;
 	bool ret;
 
+	file = NULL;
 	ret = false;
 	do {
 		/* Get the arguments. */
@@ -4645,6 +5683,7 @@ Suika_getStringWidth(void *p)
 	int val;
 	bool ret;
 
+	text = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -4679,6 +5718,7 @@ Suika_getStringHeight(void *p)
 	int val;
 	bool ret;
 
+	text = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -4723,6 +5763,7 @@ Suika_drawGlyph(void *p)
 	uint32_t wc;
 	bool ret;
 
+	glyph = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5107,6 +6148,7 @@ Suika_isQuotedSerif(void *p)
 	int val;
 	bool ret;
 
+	text = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5135,6 +6177,7 @@ Suika_isEscapeSequenceChar(void *p)
 	int val;
 	bool ret;
 
+	text = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5180,6 +6223,7 @@ Suika_moveToTagFile(void *p)
 	char *file;
 	bool ret;
 
+	file = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5199,7 +6243,7 @@ Suika_moveToTagFile(void *p)
 	if (file != NULL)
 		free(file);
 
-		return ret;
+	return ret;
 }
 
 static bool
@@ -5254,6 +6298,7 @@ Suika_moveToLabelTag(void *p)
 	char *label;
 	bool ret;
 
+	label = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5282,6 +6327,7 @@ Suika_moveToMacroTag(void *p)
 	char *macro;
 	bool ret;
 
+	macro = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5478,6 +6524,7 @@ Suika_checkTagArg(void *p)
 	int val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5508,6 +6555,7 @@ Suika_getTagArgBool(void *p)
 	int val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5544,6 +6592,7 @@ Suika_getTagArgInt(void *p)
 	int val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5580,6 +6629,7 @@ Suika_getTagArgFloat(void *p)
 	float val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5616,6 +6666,7 @@ Suika_getTagArgString(void *p)
 	const char *val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5750,6 +6801,8 @@ Suika_loadAnimeFromFile(void *p)
 	bool used_layer[S3_STAGE_LAYERS];
 	bool ret;
 
+	file = NULL;
+	reg_name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -5857,6 +6910,7 @@ Suika_addAnimeSequencePropertyF(void *p)
 	float value;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the arguments. */
@@ -5887,6 +6941,7 @@ Suika_addAnimeSequencePropertyI(void *p)
 	int value;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the arguments. */
@@ -5951,8 +7006,11 @@ Suika_isAnimeRunning(void *p)
 static bool
 Suika_isAnimeRunningWithLayerMask(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	/*
+	 * TODO: Should be implemented before 1.0.0.
+	 */
+	s3_log_error(S3_TR("This API is not implemented yet."));
+	return false;
 }
 
 static bool
@@ -5998,6 +7056,7 @@ Suika_unregisterAnime(void *p)
 	char *name;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6025,6 +7084,7 @@ Suika_getRegAnimeName(void *p)
 	int index;
 	const char *name;
 	bool ret;
+
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6051,6 +7111,8 @@ Suika_getRegAnimeFile(void *p)
 	int index;
 	const char *file;
 	bool ret;
+
+	file = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6078,6 +7140,7 @@ Suika_loadEyeImageIfExists(void *p)
 	char *file;
 	bool ret;
 
+	file = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6134,6 +7197,7 @@ Suika_loadLipImageIfExists(void *p)
 	char *file;
 	bool ret;
 
+	file = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6165,6 +7229,7 @@ Suika_runLipAnime(void *p)
 	char *text;
 	bool ret;
 
+	text = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6182,7 +7247,7 @@ Suika_runLipAnime(void *p)
 		ret = true;
 	} while (0);
 
-	if (text == NULL)
+	if (text != NULL)
 		free(text);
 
 	return ret;
@@ -6223,6 +7288,7 @@ Suika_setVariableInt(void *p)
 	int value;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the arguments. */
@@ -6253,6 +7319,7 @@ Suika_setVariableFloat(void *p)
 	float value;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the arguments. */
@@ -6283,6 +7350,8 @@ Suika_setVariableString(void *p)
 	char *value;
 	bool ret;
 
+	name = NULL;
+	value = NULL;
 	ret = false;
 	do {
 		/* Get the arguments. */
@@ -6314,6 +7383,7 @@ Suika_unsetVariable(void *p)
 	char *name;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6342,6 +7412,7 @@ Suika_makeVariableGlobal(void *p)
 	int is_global;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6372,6 +7443,7 @@ Suika_getVariableInt(void *p)
 	int val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6400,6 +7472,7 @@ Suika_getVariableFloat(void *p)
 	float val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6428,6 +7501,7 @@ Suika_getVariableString(void *p)
 	const char *val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6497,6 +7571,7 @@ Suika_checkVariableExists(void *p)
 	int val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6525,6 +7600,7 @@ Suika_isGlobalVariable(void *p)
 	int val;
 	bool ret;
 
+	name = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -6808,8 +7884,31 @@ Suika_getSaveLastMessage(void *p)
 static bool
 Suika_getSaveThumbnail(void *p)
 {
-        s3_log_error(S3_TR("This API is not implemented yet."));
-        return false;
+	int index;
+	struct s3_image *img;
+	int val;
+	bool ret;
+
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_int("index", &index))
+			break;
+
+		img = s3_get_save_thumbnail(index);
+		if (img == NULL)
+			break;
+
+		val = s3i_image_to_int(img);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(val))
+			break;
+
+		ret = true;
+	} while (0);
+
+	return ret;
 }
 
 /*
@@ -6840,6 +7939,9 @@ Suika_addHistory(void *p)
 	int name_outline_color;
 	bool ret;
 
+	name = NULL;
+	message = NULL;
+	voice = NULL;
 	ret = false;
 	do {
 		/* Get the arguments. */
@@ -6848,6 +7950,14 @@ Suika_addHistory(void *p)
 		if (!pf_get_call_arg_string("message", &message))
 			break;
 		if (!pf_get_call_arg_string("voice", &voice))
+			break;
+		if (!pf_get_call_arg_int("bodyColor", &body_color))
+			break;
+		if (!pf_get_call_arg_int("bodyOutlineColor", &body_outline_color))
+			break;
+		if (!pf_get_call_arg_int("nameColor", &name_color))
+			break;
+		if (!pf_get_call_arg_int("nameOutlineColor", &name_outline_color))
 			break;
 
 		if (!s3_add_history(name,
@@ -7063,6 +8173,7 @@ Suika_loadGUIFile(void *p)
 	int is_sys;
 	bool ret;
 
+	file = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -7222,6 +8333,7 @@ Suika_checkFileExists(void *p)
 	int val;
 	bool ret;
 
+	file = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -7244,8 +8356,12 @@ Suika_checkFileExists(void *p)
 }
 
 static bool
-Suika_read_file_content(void *p)
+Suika_readFileContent(void *p)
 {
+	/*
+	 * Not Implemented Yet
+	 * NoctLang does not support binary data yet.
+	 */
         s3_log_error(S3_TR("This API is not implemented yet."));
         return false;
 }
@@ -7253,6 +8369,11 @@ Suika_read_file_content(void *p)
 static bool
 Suika_writeSaveData(void *p)
 {
+	/*
+	 * Not Implemented Yet
+	 * NoctLang does not support binary data yet.
+	 * Maybe write serialized data?
+	 */
         s3_log_error(S3_TR("This API is not implemented yet."));
         return false;
 }
@@ -7260,6 +8381,11 @@ Suika_writeSaveData(void *p)
 static bool
 Suika_readSaveData(void *p)
 {
+	/*
+	 * Not Implemented Yet
+	 * NoctLang does not support binary data yet.
+	 * Maybe write serialized data?
+	 */
         s3_log_error(S3_TR("This API is not implemented yet."));
         return false;
 }
@@ -7271,6 +8397,7 @@ Suika_playVideo(void *p)
 	int is_skippable;
 	bool ret;
 
+	file = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */
@@ -7327,6 +8454,7 @@ Suika_speakText(void *p)
 	char *text;
 	bool ret;
 
+	text = NULL;
 	ret = false;
 	do {
 		/* Get the argument. */

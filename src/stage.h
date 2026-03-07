@@ -88,4 +88,18 @@ s3i_setup_sysbtn(void);
 bool
 s3i_setup_banners(void);
 
+/*
+ * Starts the Kirakira effect.
+ */
+void
+s3i_start_kirakira(
+	int x,
+	int y);
+
+/*
+ * Renders a Kirakira effect frame.
+ */
+void
+s3i_render_kirakira(void);
+
 #endif

@@ -441,13 +441,14 @@ s3_execute_save_local(
 
 		/* Write the gosub return index. */
 		for (i = 0; i < S3_CALL_STACK_MAX; i++) {
-			const char *file;
+			char *file;
 			int index;
 			s3_read_call_stack(i, &file, &index);
 			if (!write_string(file))
 				break;
 			if (!write_u32(index))
 				break;
+			free(file);
 		}
 
 		/* Write the stage. */

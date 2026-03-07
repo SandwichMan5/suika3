@@ -1045,6 +1045,17 @@ s3_set_layer_alpha(
 }
 
 /*
+ * Get the layer belnd mode.
+ */
+int
+s3_get_layer_blend(
+	int layer)
+{
+	assert(layer >= 0 && layer < S3_STAGE_LAYERS);
+	return layer_blend[layer];
+}
+
+/*
  * Set the layer belnd mode.
  */
 void
@@ -1125,6 +1136,16 @@ s3_set_layer_image(
 	destroy_layer(layer);
 
 	layer_image[layer] = img;
+}
+
+/*
+ * Get the layer frame for eye blinking and lip synchronizing.
+ */
+int
+s3_get_layer_frame(
+	int layer)
+{
+	return layer_frame[layer];
 }
 
 /*
@@ -2041,10 +2062,24 @@ s3_start_fade(
 }
 
 /*
+ * Get the offset for the shake command.
+ */
+void
+s3_get_shake_offset(
+	int *x,
+	int *y)
+{
+	assert(stage_mode == STAGE_MODE_FADE);
+
+	*x = shake_offset_x;
+	*y = shake_offset_y;
+}
+
+/*
  * Set the offset for the shake command.
  */
 void
-s3set_shake_offset(
+s3_set_shake_offset(
 	int x,
 	int y)
 {
@@ -2625,7 +2660,7 @@ s3_render_image_3d(
  * Starts the Kirakira effect.
  */
 void
-s3_start_kirakira(
+s3i_start_kirakira(
 	int x,
 	int y)
 {
@@ -2648,7 +2683,7 @@ s3_start_kirakira(
  * Renders a Kirakira effect frame.
  */
 void
-s3_render_kirakira(void)
+s3i_render_kirakira(void)
 {
 	float lap, frame_time;
 	int index;

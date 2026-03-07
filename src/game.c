@@ -304,6 +304,10 @@ s3i_on_game_update(void)
 	is_touch_canceled = pf_is_touch_canceled;
 	is_swiped = pf_is_swiped;
 
+	/* Start Kirakira effect. */
+	if (is_mouse_left_clicked || is_mouse_right_clicked)
+		s3i_start_kirakira(mouse_pos_x, mouse_pos_y);
+
 	/* Call tags. */
 	while (1) {
 		/* If a GUI is running, do not run a tag. */
@@ -385,6 +389,9 @@ bool
 s3i_on_game_render(void)
 {
 	s3_render_stage();
+
+	if (conf_kirakira_enable)
+		s3i_render_kirakira();
 
 	return true;
 }
