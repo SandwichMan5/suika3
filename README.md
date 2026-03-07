@@ -8,6 +8,18 @@ Suika3
 A next-generation cross-platform visual novel engine designed for the 2030s and beyond,
 empowering creators to build a sustainable future for the visual novel industry.
 
+---
+
+## TL;DR
+
+* Native performance visual novel engine
+* JIT VM scripting + AOT mobile support
+* Runs on Windows, macOS, Linux, iOS, Android, Web, consoles
+
+---
+
+## Introduction
+
 Suika3 is a high-performance, production-grade visual novel engine
 specifically engineered for commercial app development, maintained by
 the `Suika3 Community` and led by Awe Morris.
