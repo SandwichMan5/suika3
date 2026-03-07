@@ -655,7 +655,7 @@ management:
   out temporary data in a flash. (< 0.1ms)
 * Old Generation: Long-lived objects are moved here. This area uses a
   Mark-Sweep-Compact GC algorithm, which periodically reorganizes
-  memory to prevent fragmentation. (10ms)
+  memory to prevent fragmentation. (10-300ms)
 
 ### Frame-Synchronized Latency Hiding
 
