@@ -684,6 +684,33 @@ This isn't a weekend project, but a "matured" codebase evolved over 25+ years.
 
 ---
 
+## Quality Assurance
+
+Reliability is a function of time. As Suika3 is currently in its
+pre-release phase, we define its cumulative operational time as
+zero. Consequently, formal quality metrics are not yet applicable.
+
+### Our Path to Stability
+
+We are committed to delivering a production-grade engine. Our QA
+roadmap is as follows:
+
+1.  **Release Candidate (RC) Phase**: Upon reaching the RC milestone,
+    we will initiate rigorous tracking of all identified issues.
+
+2.  **Data-Driven Hardening**: We will analyze bug discovery and
+    resolution rates to quantify the software's stability.
+
+3.  **Commercial-Grade Standards**: Our final goal is to achieve a
+    level of robustness that meets the requirements of commercial
+    visual novel productions.
+
+While the engine is still "young" in terms of uptime, the underlying
+architecture inherits over two decades of development philosophy,
+ensuring a solid foundation for the upcoming QA process.
+
+---
+
 ## License
 
 This software is released under the `ZLib License`.
