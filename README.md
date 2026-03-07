@@ -7,11 +7,14 @@ Suika3
 
 A next-generation cross-platform visual novel engine designed for the 2030s and beyond.
 
-Suika3 is a high-performance, rock-solid visual novel engine developed by the `Suika3 Community`.
+Suika3 is a high-performance, production-grade visual novel engine
+specifically engineered for commercial app development, maintained by
+the `Suika3 Community`.
 
 Engineered with state-of-the-art techniques in computer science,
-Suika3 delivers blazing speed, native performance, and true portability
-empowering creators worldwide to build timeless experiences that endure for decades.
+Suika3 delivers native performance and true portability empowering
+creators worldwide to build timeless experiences that endure for
+decades.
 
 Games made with Suika3 are powered by `NovelML 3.0` and `SuikaScript 3.0`.
 
