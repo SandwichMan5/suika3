@@ -134,6 +134,9 @@ struct gui_button {
 	 * Properties written in GUI files.
 	 */
 
+	/* Button ID */
+	int bid;
+
 	/* Button type. */
 	int type;
 
@@ -351,6 +354,8 @@ static bool process_move(void);
 static void process_se(void);
 static bool process_left_right_arrow_keys(void);
 static bool add_button(int index, const char *file);
+static int get_unused_bid(void);
+static int is_bid_unused(int bid);
 static bool set_global_key_value(const char *key, const char *val, const char *file, int line);
 static bool set_button_key_value(const int index, const char *key, const char *val, const char *file, int line);
 static int get_type_for_name(const char *name, const char *file, int line);
@@ -3419,7 +3424,38 @@ add_button(
 
 	button[index].is_initialized = true;
 
+	/* Get an unused layer. */
+	button[index].bid = get_unused_bid();
+	if (button[index].bid == -1) {
+		s3_log_error(S3_TR("No available button-id for a GUI button in GUI file %s"), file);
+		return false;
+	}
+
 	/* There is no specific processing for adding a button, just checking the count. */
+	return true;
+}
+
+static int
+get_unused_bid(void)
+{
+	int i, j;
+
+	for (i = 0; i < S3_BUTTON_LAYERS; i++)
+		if (is_bid_unused(i))
+			return i;
+
+	return -1;
+}
+
+static int
+is_bid_unused(int bid)
+{
+	int i;
+
+	for (i = 0; i < S3_BUTTON_LAYERS; i++)
+		if (button[i].bid == bid)
+			return false;
+
 	return true;
 }
 
@@ -3858,6 +3894,3 @@ get_type_for_name(
 	s3_log_error(S3_TR("Unknown button type name '%s' in GUI file %s line %d."), name, file, line);
 	return TYPE_INVALID;
 }
-
-
-

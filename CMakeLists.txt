@@ -11,8 +11,9 @@ option(SUIKA_TARGET_MACOS            "Build for macOS"                       OFF
 option(SUIKA_TARGET_LINUX            "Build for Linux X11"                   OFF)
 option(SUIKA_TARGET_LINUX_WAYLAND    "Build for Linux Wayland"               OFF)
 option(SUIKA_TARGET_LINUX_GBM        "Build for Linux Framebuffer"           OFF)
-Option(SUIKA_TARGET_IOS              "Build for iOS"                         OFF)
+option(SUIKA_TARGET_IOS              "Build for iOS"                         OFF)
 option(SUIKA_TARGET_ANDROID          "Build for Android"                     OFF)
+option(SUIKA_TARGET_OPENHARMONY      "Build for HarmonyOS NEXT"              OFF)
 option(SUIKA_TARGET_WASM             "Build for Emscripten"                  OFF)
 option(SUIKA_TARGET_WASM_LOCAL       "Build for Emscripten (local file)"     OFF)
 option(SUIKA_TARGET_UNITY            "Build for Unity"                       OFF)
@@ -45,6 +46,7 @@ if(   SUIKA_TARGET_WINDOWS
    OR SUIKA_TARGET_LINUX_GBM
    OR SUIKA_TARGET_IOS
    OR SUIKA_TARGET_ANDROID
+   OR SUIKA_TARGET_OPENHARMONY
    OR SUIKA_TARGET_WASM
    OR SUIKA_TARGET_WASM_LOCAL
    OR SUIKA_TARGET_UNITY
@@ -102,6 +104,7 @@ else()
 
   # No automatic detection for:
   #  - Android
+  #  - HarmonyOS NEXT
   #  - Wasm (Emscripten)
   #  - Unity
 endif()
@@ -128,6 +131,8 @@ elseif(SUIKA_TARGET_IOS)
   set(PLAYFIELD_TARGET_IOS ON)
 elseif(SUIKA_TARGET_ANDROID)
   set(PLAYFIELD_TARGET_ANDROID ON)
+elseif(SUIKA_TARGET_OPENHARMONY)
+  set(PLAYFIELD_TARGET_OPENHARMONY ON)
 elseif(SUIKA_TARGET_WASM)
   set(PLAYFIELD_TARGET_WASM ON)
 elseif(SUIKA_TARGET_WASM_LOCAL)
@@ -331,6 +336,7 @@ endif()
 # Add Target
 if(   SUIKA_TARGET_IOS
    OR SUIKA_TARGET_ANDROID
+   OR SUIKA_TARGET_OPENHARMONY
    OR SUIKA_TARGET_UNITY
    OR SUIKA_ENABLE_STATIC
 )

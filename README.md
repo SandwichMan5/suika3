@@ -8,13 +8,22 @@ Suika3
 A next-generation cross-platform visual novel engine designed for the 2030s and beyond,
 empowering creators to build a sustainable future for visual novels.
 
+![platforms](https://github.com/awemorris/PlayfieldEngine/blob/main/docs/img/platforms.png)
+
 ---
 
 ## TL;DR
 
-* Native performance visual novel engine
-* JIT VM scripting + AOT mobile support
-* Runs on Windows, macOS, Linux, iOS, Android, Web, and gaming consoles
+* **High-Performance:** Native, written in C
+* **Better Scripting:** JIT VM, with AOT for App Store compliance
+* **Multi-platform support:**
+    * **Desktop:** Windows, macOS, Linux, Chromebook, Raspberry Pi
+    * **Mobile:** iOS, Android, HarmonyOS NEXT
+    * **Web:** WebAssembly (Wasm)
+    * **Console:** Xbox (GDK), PS5 and Switch (via Unity Integration)
+* Target: Empowering both commercial and indie studios
+
+[Join Discord](https://discord.gg/YZsq9u9Mgr)
 
 ---
 
@@ -46,7 +55,7 @@ Games made with Suika3 are powered by `NovelML 3.0` and `SuikaScript 3.0`.
 
 ## Kanban (Status): Final Polishing for 1.0.0!
 
-We are planning the 1.0.0 release at the end of March 2026.
+We are planning the 1.0.0 release on July 1 2026.
 Currently we are working very hard to complete Suika3.
 
 **Our current status is:**
@@ -66,12 +75,11 @@ Currently we are working very hard to complete Suika3.
     * Adding the exporter tool. (March 9, 2026)
     * Adding a sample game. (March 10, 2026)
 
-* Quality Stabilization Period (March 10-30, 2026)
-    * Milestone: Release Candidate 1 (March 10, 2026)
-    * Milestone: Release Candidate 2 (March 15, 2026)
-    * Milestone: Release Candidate 3 (March 20, 2026)
-    * Milestone: Release Candidate 4 (March 25, 2026)
-    * Milestone: Release Candidate 5 / Golden Master (March 30, 2026)
+* Quality Stabilization Period (March 10 - May 30, 2026)
+    * Milestone: Release Candidate 1 (March 30, 2026)
+    * Milestone: Release Candidate 2 (April 30, 2026)
+    * Milestone: Release Candidate 3 (May 30, 2026)
+    * Milestone: Release Candidate 4 / Golden Master (June 30, 2026)
 
 * Documentation (Simultaneous with Quality Stabilization)
     * `C API`
@@ -86,14 +94,14 @@ Currently we are working very hard to complete Suika3.
     * `System Design Specification`
     * ✅ Website
 
-* 1.0.0 Release (March 31, 2026)
+* 1.0.0 Release (July 1, 2026)
 
 ---
 
 ## Key Features
 
 * **High Performance**: Powered by the Suika JIT VM, it delivers
-    ~10x execution speed compared to interpreter.
+    5~10x execution speed compared to interpreter.
 
 * **Lightweight**: Engineered to run smoothly at 60 fps even on low-spec
     hardware such as Raspberry Pi in developing regions.
@@ -392,6 +400,7 @@ through Unity without relying on any NDA-restricted code.
 |               |Qt                  |OpenGL 3                 |Qt Sound              |Qt                   |
 |Mobile         |iOS                 |Metal                    |Audio Unit            |UIKit (Objective-C)  |
 |               |Android             |OpenGL ES 2              |OpenSL ES             |Android NDK          |
+|               |HarmonyOS NEXT      |OpenGL ES 2              |OpenSL ES             |OpenHarmony SDK      |
 |Web            |WebAssembly (Wasm)  |WebGL 2                  |OpenAL (Emscripten)   |Emscripten (C)       |
 |Console        |Unity               |Unity                    |Unity                 |Unity Native Plugin  |
 |               |Xbox Series X\|S    |DirectX 12               |XAudio2               |Microsoft GDK        |
@@ -444,8 +453,8 @@ even in tightly controlled environments.
 |Linux armv7    |JIT                |
 |Linux arm64    |JIT                |
 |iOS            |Interpreter or AOT |
-|Android ARMv7  |Interpreter or AOT |
-|Android Arm64  |Interpreter or AOT |
+|Android        |Interpreter or AOT |
+|HarmonyOS NEXT |Interpreter or AOT |
 |WebAssembly    |Interpreter or AOT |
 |Unity Plugin   |Interpreter or AOT |
 |Xbox           |Interpreter or AOT |
@@ -515,6 +524,7 @@ systems via the Playfield Engine.
 |             | Linux              | ✅ Supported | 3 Mar 2026   | Ubuntu 24.04 LTS (x86_64)        |
 | **Mobile**  | iOS                | ✅ Supported | -            | iOS 18                           |
 |             | Android            | ✅ Supported | -            | Android 15                       |
+|             | HarmonyOS NEXT     | ✅ Supported | -            | API 10+                          |
 | **BSD**     | FreeBSD            | ✅ Supported | -            | 14.0-RELEASE amd64               |
 |             | NetBSD             | ✅ Supported | -            | 10.0 amd64, aarch64, armv7       |
 |             | OpenBSD            | ✅ Supported | -            | 10.0 amd64, aarch64, armv7       |
@@ -612,6 +622,12 @@ systems through specialized runtimes.
 | Android 5   | N/A    |
 | Android 4.4 | N/A    |
 
+### HarmonyOS / OpenHarmony Compatibility List
+
+| OS          | Status |
+|-------------|--------|
+| API 12      | ✅     |
+
 ---
 
 ## Documentation
@@ -706,47 +722,50 @@ full text of each license and copyright notice.
 Suika3 ships with CMake presets covering various platforms and build
 configurations.
 
-|Preset                         |Platform       |Compiler   |Directory                              |Target           |Type           |
-|-------------------------------|---------------|-----------|---------------------------------------|-----------------|---------------|
-|windows-vs2022-x86-debug       |Windows        |MSVC       |out/build/windows-vs2022-x86-debug     |playfield.exe    |Executable     |
-|windows-vs2022-x86-release     |Windows        |MSVC       |out/build/windows-vs2022-x86-release   |playfield.exe    |Executable     |
-|windows-vs2022-x64-debug       |Windows        |MSVC       |out/build/windows-vs2022-x64-debug     |playfield.exe    |Executable     |
-|windows-vs2022-x64-release     |Windows        |MSVC       |out/build/windows-vs2022-x64-release   |playfield.exe    |Executable     |
-|windows-vs2022-arm64-debug     |Windows        |MSVC       |out/build/windows-vs2022-arm64-debug   |playfield.exe    |Executable     |
-|windows-vs2022-arm64-release   |Windows        |MSVC       |out/build/windows-vs2022-arm64-release |playfield.exe    |Executable     |
-|windows-vs2022-gdk-desktop     |Windows        |MSVC       |out/build/windows-vs2022-gdk-desktop   |playfield.exe    |Executable     |
-|windows-vs2022-gdk-xbox-xs     |Windows        |MSVC       |out/build/windows-vs2022-gdk-xbox-xs   |playfield.exe    |Executable     |
-|windows-vs2026-x86-debug       |Windows        |MSVC       |out/build/windows-vs2026-x86-debug     |playfield.exe    |Executable     |
-|windows-vs2026-x86-release     |Windows        |MSVC       |out/build/windows-vs2026-x86-release   |playfield.exe    |Executable     |
-|windows-vs2026-x64-debug       |Windows        |MSVC       |out/build/windows-vs2026-x64-debug     |playfield.exe    |Executable     |
-|windows-vs2026-x64-release     |Windows        |MSVC       |out/build/windows-vs2026-x64-release   |playfield.exe    |Executable     |
-|windows-vs2026-arm64-debug     |Windows        |MSVC       |out/build/windows-vs2026-arm64-debug   |playfield.exe    |Executable     |
-|windows-vs2026-arm64-release   |Windows        |MSVC       |out/build/windows-vs2026-arm64-release |playfield.exe    |Executable     |
-|windows-vs2026-gdk-desktop     |Windows        |MSVC       |out/build/windows-vs2026-gdk-desktop   |playfield.exe    |Executable     |
-|windows-vs2026-gdk-xbox-xs     |Windows        |MSVC       |out/build/windows-vs2026-gdk-xbox-xs   |playfield.exe    |Executable     |
-|windows-mingw-x86              |Windows        |MinGW      |build-mingw-x86                        |playfield.exe    |Executable     |
-|windows-mingw-x86_64           |Windows        |MinGW      |build-mingw-x86_64                     |playfield.exe    |Executable     |
-|windows-mingw-arm64            |Windows        |MinGW-LLVM |build-mingw-arm64                      |playfield.exe    |Executable     |
-|macos                          |macOS          |Clang      |build-macos                            |Playfield.app    |App Bundle     |
-|linux-x11                      |Linux          |GCC        |build-linux                            |playfield        |Executable     |
-|linux-wayland                  |Linux          |GCC        |build-linux                            |playfield        |Executable     |
-|linux-gdm                      |Linux          |GCC        |build-linux                            |playfield        |Executable     |
-|linux-gdm-rot90                |Linux          |GCC        |build-linux                            |playfield        |Executable     |
-|freebsd                        |FreeBSD        |Clang      |build-freebsd                          |playfield        |Executable     |
-|netbsd                         |NetBSD         |GCC        |build-netbsd                           |playfield        |Executable     |
-|openbsd                        |OpenBSD        |Clang      |build-openbsd                          |playfield        |Executable     |
-|wasm                           |WebAssembly    |Emscripten |build-wasm                             |index.html       |HTML + Wasm    |
-|wasm-local                     |Chromebook     |Emscripten |build-wasm-local                       |index.html       |HTML + Wasm    |
-|ios-device                     |iOS Device     |Clang      |build-ios-device                       |libplayfield.a   |Static Library |
-|ios-simulator                  |iOS Simulator  |Clang      |build-ios-simulator                    |libplayfield.a   |Static Library |
-|android-x86                    |Android x86    |Clang      |build-android-x86                      |libplayfield.so  |Shared Library |
-|android-x86_64                 |Android x86_64 |Clang      |build-android-x86_64                   |libplayfield.so  |Shared Library |
-|android-armv7                  |Android armv7  |Clang      |build-android-armv7                    |libplayfield.so  |Shared Library |
-|android-arm64                  |Android arm64  |Clang      |build-android-arm64                    |libplayfield.so  |Shared Library |
-|unity-win64                    |Unity Plugin   |Clang-CL   |build-unity-win64                      |libplayfield.dll |DLL Plugin     |
-|unity-switch                   |Unity Plugin   |Clang      |build-unity-switch                     |libplayfield.a   |Static Library |
-|unity-ps5                      |Unity Plugin   |Clang      |build-unity-ps5                        |libplayfield.a   |Static Library |
-|unity-xbox                     |Unity Plugin   |Clang      |build-unity-xbox                       |libplayfield.a   |Static Library |
+|Preset                         |Platform              |Compiler   |Directory                              |Target           |Type           |
+|-------------------------------|----------------------|-----------|---------------------------------------|-----------------|---------------|
+|windows-vs2022-x86-debug       |Windows               |MSVC       |out/build/windows-vs2022-x86-debug     |suika3.exe    |Executable     |
+|windows-vs2022-x86-release     |Windows               |MSVC       |out/build/windows-vs2022-x86-release   |suika3.exe    |Executable     |
+|windows-vs2022-x64-debug       |Windows               |MSVC       |out/build/windows-vs2022-x64-debug     |suika3.exe    |Executable     |
+|windows-vs2022-x64-release     |Windows               |MSVC       |out/build/windows-vs2022-x64-release   |suika3.exe    |Executable     |
+|windows-vs2022-arm64-debug     |Windows               |MSVC       |out/build/windows-vs2022-arm64-debug   |suika3.exe    |Executable     |
+|windows-vs2022-arm64-release   |Windows               |MSVC       |out/build/windows-vs2022-arm64-release |suika3.exe    |Executable     |
+|windows-vs2022-gdk-desktop     |Windows               |MSVC       |out/build/windows-vs2022-gdk-desktop   |suika3.exe    |Executable     |
+|windows-vs2022-gdk-xbox-xs     |Windows               |MSVC       |out/build/windows-vs2022-gdk-xbox-xs   |suika3.exe    |Executable     |
+|windows-vs2026-x86-debug       |Windows               |MSVC       |out/build/windows-vs2026-x86-debug     |suika3.exe    |Executable     |
+|windows-vs2026-x86-release     |Windows               |MSVC       |out/build/windows-vs2026-x86-release   |suika3.exe    |Executable     |
+|windows-vs2026-x64-debug       |Windows               |MSVC       |out/build/windows-vs2026-x64-debug     |suika3.exe    |Executable     |
+|windows-vs2026-x64-release     |Windows               |MSVC       |out/build/windows-vs2026-x64-release   |suika3.exe    |Executable     |
+|windows-vs2026-arm64-debug     |Windows               |MSVC       |out/build/windows-vs2026-arm64-debug   |suika3.exe    |Executable     |
+|windows-vs2026-arm64-release   |Windows               |MSVC       |out/build/windows-vs2026-arm64-release |suika3.exe    |Executable     |
+|windows-vs2026-gdk-desktop     |Windows               |MSVC       |out/build/windows-vs2026-gdk-desktop   |suika3.exe    |Executable     |
+|windows-vs2026-gdk-xbox-xs     |Windows               |MSVC       |out/build/windows-vs2026-gdk-xbox-xs   |suika3.exe    |Executable     |
+|windows-mingw-x86              |Windows               |MinGW      |build-mingw-x86                        |suika3.exe    |Executable     |
+|windows-mingw-x86_64           |Windows               |MinGW      |build-mingw-x86_64                     |suika3.exe    |Executable     |
+|windows-mingw-arm64            |Windows               |MinGW-LLVM |build-mingw-arm64                      |suika3.exe    |Executable     |
+|macos                          |macOS                 |Clang      |build-macos                            |Suika3.app    |App Bundle     |
+|linux-x11                      |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
+|linux-wayland                  |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
+|linux-gdm                      |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
+|linux-gdm-rot90                |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
+|freebsd                        |FreeBSD               |Clang      |build-freebsd                          |suika3        |Executable     |
+|netbsd                         |NetBSD                |GCC        |build-netbsd                           |suika3        |Executable     |
+|openbsd                        |OpenBSD               |Clang      |build-openbsd                          |suika3        |Executable     |
+|wasm                           |WebAssembly           |Emscripten |build-wasm                             |index.html    |HTML + Wasm    |
+|wasm-local                     |Chromebook            |Emscripten |build-wasm-local                       |index.html    |HTML + Wasm    |
+|ios-device                     |iOS Device            |Clang      |build-ios-device                       |libsuika3.a   |Static Library |
+|ios-simulator                  |iOS Simulator         |Clang      |build-ios-simulator                    |libsuika3.a   |Static Library |
+|android-x86                    |Android x86           |Clang      |build-android-x86                      |libsuika3.so  |Shared Library |
+|android-x86_64                 |Android x86_64        |Clang      |build-android-x86_64                   |libsuika3.so  |Shared Library |
+|android-armv7                  |Android armv7         |Clang      |build-android-armv7                    |libsuika3.so  |Shared Library |
+|android-arm64                  |Android arm64         |Clang      |build-android-arm64                    |libsuika3.so  |Shared Library |
+|openharmony-arm64              |HarmonyOS NEXT arm64  |Clang      |build-openharmony-arm64                |libsuika3.a   |Static Library |
+|openharmony-armv7              |HarmonyOS NEXT armv7  |Clang      |build-openharmony-armv7                |libsuika3.a   |Static Library |
+|openharmony-x86_64             |HarmonyOS NEXT x86_64 |Clang      |build-openharmony-x86_64               |libsuika3.a   |Static Library |
+|unity-win64                    |Unity Plugin          |Clang-CL   |build-unity-win64                      |libsuika3.dll |DLL Plugin     |
+|unity-switch                   |Unity Plugin          |Clang      |build-unity-switch                     |libsuika3.a   |Static Library |
+|unity-ps5                      |Unity Plugin          |Clang      |build-unity-ps5                        |libsuika3.a   |Static Library |
+|unity-xbox                     |Unity Plugin          |Clang      |build-unity-xbox                       |libsuika3.a   |Static Library |
 
 ---
 
@@ -850,6 +869,15 @@ do our best to respond or push a fix as soon as possible! ;-)
 ## Community
 
 [Discord Server](https://discord.gg/YZsq9u9Mgr)
+
+### Recruiting
+
+We are currently looking for contributors in the following areas:
+
+* Documentation writers
+* HarmonyOS NEXT engineer
+* Android engineers
+* iOS engineers
 
 ### Our Commitment to Inclusivity
 
