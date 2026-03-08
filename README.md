@@ -2,11 +2,12 @@ Suika3
 ======
 
 <div align="center">
-   <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png">
+  <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png">
 </div>
 
-A next-generation cross-platform visual novel engine designed for the 2030s and beyond,
-empowering creators to build a sustainable future for visual novels.
+A next-generation visual novel engine for professional creators,
+designed to run across virtually all platforms,
+ensuring long-term maintenance for the 2030s and beyond.
 
 ![platforms](https://github.com/awemorris/PlayfieldEngine/blob/main/docs/img/platforms.png)
 

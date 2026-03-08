@@ -638,8 +638,8 @@
         "CMAKE_BUILD_TYPE":             "Debug",
         "OHOS_PLATFORM_LEVEL":          "12",
         "OHOS_ARCH":                    "x86_64",
-        "PLAYFIELD_TARGET_OPENHARMONY": "ON",
-        "PLAYFIELD_ENABLE_STATIC":      "ON"
+        "SUIKA_TARGET_OPENHARMONY":     "ON",
+        "SUIKA_ENABLE_STATIC":          "ON"
       }
     },
     {
@@ -652,8 +652,8 @@
         "CMAKE_BUILD_TYPE":             "Debug",
         "OHOS_PLATFORM_LEVEL":          "12",
         "OHOS_ARCH":                    "arm64-v8a",
-        "PLAYFIELD_TARGET_OPENHARMONY": "ON",
-        "PLAYFIELD_ENABLE_STATIC":      "ON"
+        "SUIKA_TARGET_OPENHARMONY":     "ON",
+        "SUIKA_ENABLE_STATIC":          "ON"
       }
     },
     {
@@ -666,8 +666,8 @@
         "CMAKE_BUILD_TYPE":             "Release",
         "OHOS_PLATFORM_LEVEL":          "12",
         "OHOS_ARCH":                    "armeabi-v7a",
-        "PLAYFIELD_TARGET_OPENHARMONY": "ON",
-        "PLAYFIELD_ENABLE_STATIC":      "ON"
+        "SUIKA_TARGET_OPENHARMONY":     "ON",
+        "SUIKA_ENABLE_STATIC":          "ON"
       }
     },
     {
