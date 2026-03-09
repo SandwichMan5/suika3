@@ -17,7 +17,7 @@ ensuring long-term support for the 2030s and beyond.
 
 * **High-Performance:** Native, written in C
 * **Better Scripting:** JIT VM with AOT fallback for App Store compliance
-* **Virtuall All Platforms:**
+* **Virtually All Platforms:**
     * **Desktop:** Windows, macOS, Linux, Chromebook, Raspberry Pi
     * **Mobile:** iOS, Android, HarmonyOS NEXT
     * **Web:** WebAssembly
