@@ -533,101 +533,151 @@ systems via the Playfield Engine.
 |             | Chromebook         | ✅ Supported | -            | Chrome Browser / Linux Container |
 | **Other**   | Unity Integration  | ✅ Supported | -            | Unity 6.2 (Windows x86_64)       |
 
-### Windows Compatibility List
+### 64-bit Windows Compatibility List
 
-Suika3 maintains exceptional backward compatibility, supporting legacy
-systems through specialized runtimes.
+The official recommended binary is the 64-bit version.
 
-| OS      | Version | Patch | CPU    | Required Runtimes                                                                    | 32-bit Binary | 64-bit Binary | Direct3D |
-|---------|---------|-------|--------|--------------------------------------------------------------------------------------|---------------|---------------|----------|
-| Windows | 11      |       | x64    |                                                                                      | ✅            | ✅            | 12.0     |
-| Windows | 11      |       | arm64  |                                                                                      | ✅            | ✅            | 12.0     |
-| Windows | 10      |       | x86    |                                                                                      | ✅            | ❌            | 12.0     |
-| Windows | 10      |       | x64    |                                                                                      | ✅            | ✅            | 12.0     |
-| Windows | 10      |       | arm64  |                                                                                      | ✅            | ✅            | 12.0     |
-| Windows | 8.1     |       | x86    |                                                                                      | ✅            | ❌            | 11.0     |
-| Windows | 8.1     |       | x64    |                                                                                      | ✅            | ✅            | 11.0     |
-| Windows | 8       |       | x86    |                                                                                      | ✅            | ❌            | 11.0     |
-| Windows | 8       |       | x64    | Microsoft Visual C++ Redistributable 2015                                            | ✅            | ✅            | 11.0     |
-| Windows | 7       |       | x86    |                                                                                      | ✅            | ❌            | 11.0     |
-| Windows | 7       |       | x64    | Microsoft Visual C++ Redistributable 2015                                            | ✅            | ✅            | 11.0     |
-| Windows | 7       | SP1   | x86    |                                                                                      | ✅            | ❌            | 11.0     |
-| Windows | 7       | SP1   | x64    | Microsoft Visual C++ Redistributable 2015                                            | ✅            | ✅            | 11.0     |
-| Windows | Vista   |       | x86    | DirectX End-User Runtimes (June 2010)                                                | ✅            | ❌            | 9.0      |
-| Windows | Vista   |       | x64    | DirectX End-User Runtimes (June 2010)                                                | ✅            | ❌            | 9.0      |
-| Windows | Vista   | SP1   | x86    | DirectX End-User Runtimes (June 2010)                                                | ✅            | ❌            | 9.0      |
-| Windows | Vista   | SP1   | x64    | DirectX End-User Runtimes (June 2010), Microsoft Visual C++ Redistributable 2015     | ✅            | ✅            | 9.0      |
-| Windows | Vista   | SP2   | x86    | DirectX 11 Platform Update                                                           | ✅            | ❌            | 11.0     |
-| Windows | Vista   | SP2   | x64    | DirectX 11 Platform Update, Microsoft Visual C++ Redistributable 2015                | ✅            | ✅            | 11.0     |
-| Windows | XP      | SP3   | x86    | DirectX End-User Runtimes (June 2010)                                                | ✅            | ❌            | 9.0      |
-| Windows | XP      | SP3   | x64    | DirectX End-User Runtimes (June 2010)                                                | ✅            | ❌            | 9.0      |
+| OS      | Version                     | Patch | CPU    | Runtimes                                        | 64-bit Binary | Direct3D |
+|---------|-----------------------------|-------|--------|-------------------------------------------------|---------------|----------|
+| Windows | 11                          |       | x64    | (None required)                                 | ✅            | 12.0     |
+| Windows | 11                          |       | arm64  | (None required)                                 | ✅            | 12.0     |
+| Windows | 10                          |       | x64    | (None required)                                 | ✅            | 12.0     |
+| Windows | 10                          |       | arm64  | (None required)                                 | ✅            | 12.0     |
+| Windows | 8.1                         |       | x64    | (None required)                                 | ✅            | 11.0     |
+| Windows | 8                           |       | x64    | Microsoft Visual C++ Redistributable 2015       | ✅            | 11.0     |
+| Windows | 7                           |       | x64    | UCRT Update (KB2999226)                         | ✅            | 11.0     |
+|         |                             |       |        | Microsoft Visual C++ Redistributable 2015       |               |          |
+| Windows | 7                           | SP1   | x64    | Microsoft Visual C++ Redistributable 2015       | ✅            | 11.0     |
+| Windows | Vista                       |       | x64    | (No UCRT)                                       | ❌            | -        |
+| Windows | Vista                       | SP1   | x64    | DirectX End-User Runtimes (June 2010)           | ✅            | 9.0      |
+| Windows |                             |       |        | Microsoft Visual C++ Redistributable 2015       |               |          |
+| Windows | Vista                       | SP2   | x64    | Platform Update for Windows Vista               | ✅            | 11.0     |
+|         |                             |       |        | Microsoft Visual C++ Redistributable 2015       |               |          |
+| Windows | XP Professional x64 Edition |       | x64    | (No UCRT)                                       | ❌            | -        |
+| Windows | XP Professional x64 Edition | SP1   | x64    | (No UCRT)                                       | ❌            | -        |
+| Windows | XP Professional x64 Edition | SP2   | x64    | (No UCRT)                                       | ❌            | -        |
+
+### 32-bit Windows Compatibility List
+
+Suika3 provides the 32-bit binary for backward compatibility,
+supporting legacy systems through older runtimes. If you change the
+source code to remove the XInput support, you can run Suika3 even on
+Windows 2000.
+
+| OS      | Version                     | Patch | CPU    | Runtimes                               | 32-bit Binary | Direct3D | Special   |
+|---------|-----------------------------|-------|--------|----------------------------------------|---------------|----------|-----------|
+| Windows | 11                          |       | x64    | (None required)                        | ✅            | 12.0     |           |
+| Windows | 11                          |       | arm64  | (None required)                        | ✅            | 12.0     |           |
+| Windows | 10                          |       | x86    | (None required)                        | ✅            | 12.0     |           |
+| Windows | 10                          |       | x64    | (None required)                        | ✅            | 12.0     |           |
+| Windows | 10                          |       | arm64  | (None required)                        | ✅            | 12.0     |           |
+| Windows | 8.1                         |       | x86    | (None required)                        | ✅            | 11.0     |           |
+| Windows | 8.1                         |       | x64    | (None required)                        | ✅            | 11.0     |           |
+| Windows | 8                           |       | x86    | (None required)                        | ✅            | 11.0     |           |
+| Windows | 8                           |       | x64    | (None required)                        | ✅            | 11.0     |           |
+| Windows | 7                           |       | x86    | (None required)                        | ✅            | 11.0     |           |
+| Windows | 7                           |       | x64    | (None required)                        | ✅            | 11.0     |           |
+| Windows | 7                           | SP1   | x86    | (None required)                        | ✅            | 11.0     |           |
+| Windows | 7                           | SP1   | x64    | (None required)                        | ✅            | 11.0     |           |
+| Windows | Vista                       |       | x86    | DirectX End-User Runtimes (June 2010)  | ✅            | 9.0      |           |
+| Windows | Vista                       |       | x64    | DirectX End-User Runtimes (June 2010)  | ✅            | 9.0      |           |
+| Windows | Vista                       | SP1   | x86    | DirectX End-User Runtimes (June 2010)  | ✅            | 9.0      |           |
+| Windows | Vista                       | SP1   | x64    | DirectX End-User Runtimes (June 2010)  | ✅            | 9.0      |           |
+| Windows | Vista                       | SP2   | x86    | DirectX 11 Platform Update             | ✅            | 11.0     |           |
+| Windows | Vista                       | SP2   | x64    | DirectX 11 Platform Update             | ✅            | 11.0     |           |
+| Windows | XP                          |       | x86    | DirectX 9.0b Runtime                   | ❌            | 9.0      | No XInput |
+| Windows | XP                          | SP1   | x86    | DirectX 9.0b Runtime                   | ✅            | 9.0      |           |
+| Windows | XP                          | SP2   | x86    | DirectX End-User Runtimes (June 2010)  | ✅            | 9.0      |           |
+| Windows | XP                          | SP3   | x86    | DirectX End-User Runtimes (June 2010)  | ✅            | 9.0      |           |
+| Windows | XP Professional x64 Edition |       | x64    | DirectX End-User Runtimes (June 2010)  | ❌            | 9.0      | No XInput |
+| Windows | XP Professional x64 Edition | SP1   | x64    | DirectX End-User Runtimes (June 2010)  | ✅            | 9.0      |           |
+| Windows | XP Professional x64 Edition | SP2   | x64    | DirectX End-User Runtimes (June 2010)  | ✅            | 9.0      |           |
+| Windows | 2000                        |       | x86    | DirectX End-User Runtimes (Dec 2006)   | ❌            | 9.0      | No XInput |
+| Windows | 2000                        | SP1   | x86    | DirectX End-User Runtimes (Dec 2006)   | ❌            | 9.0      | No XInput |
+| Windows | 2000                        | SP2   | x86    | DirectX End-User Runtimes (Dec 2006)   | ❌            | 9.0      | No XInput |
+| Windows | 2000                        | SP3   | x86    | DirectX End-User Runtimes (Dec 2006)   | ❌            | 9.0      | No XInput |
+| Windows | 2000                        | SP4   | x86    | DirectX End-User Runtimes (Dec 2006)   | ❌            | 9.0      | No XInput |
 
 ### macOS Compatibility List
 
-| OS                | Version    | CPU           | Status     |
-|-------------------|------------|---------------|------------|
-| macOS Tahoe       | 26.0       | Apple / Intel | ✅         |
-| macOS Sequoia     | 15.0       | Apple / Intel | ✅         |
-| macOS Sonoma      | 14.0       | Apple / Intel | ✅         |
-| macOS Ventura     | 13.0       | Apple / Intel | ✅         |
-| macOS Monterey    | 12.0       | Apple / Intel | ✅         |
-| macOS Big Sur     | 11.0       | Apple / Intel | ✅         |
-| macOS Catalina    | 10.15      | Intel         | ✅         |
-| macOS Mojave      | 10.14      | Intel         | ✅         |
-| macOS High Sierra | 10.13      | Intel         | ✅         |
-| macOS Sierra      | 10.12      | Intel         | ✅         |
-| OS X El Capitan   | 10.11      | Intel         | ✅         |
-| Legacy Mac OS X   | 10.7-10.10 | Intel         | N/A        |
-| Legacy Mac OS X   | 10.0-10.6  | PowerPC       | N/A        |
+| OS                     | Version | Mac CPU              | Status                       |
+|------------------------|---------|----------------------|------------------------------|
+| macOS Tahoe            | 26.0    | arm64 / x86_64       | ✅ OK                        |
+| macOS Sequoia          | 15.0    | arm64 / x86_64       | ✅ OK                        |
+| macOS Sonoma           | 14.0    | arm64 / x86_64       | ✅ OK                        |
+| macOS Ventura          | 13.0    | arm64 / x86_64       | ✅ OK                        |
+| macOS Monterey         | 12.0    | arm64 / x86_64       | ✅ OK                        |
+| macOS Big Sur          | 11.0    | arm64 / x86_64       | ✅ OK                        |
+| macOS Catalina         | 10.15   | x86_64               | ✅ OK                        |
+| macOS Mojave           | 10.14   | x86_64               | ✅ OK                        |
+| macOS High Sierra      | 10.13   | x86_64               | ✅ OK                        |
+| macOS Sierra           | 10.12   | x86_64               | ✅ OK                        |
+| OS X El Capitan        | 10.11   | x86_64               | ✅ OK                        |
+| OS X Yosemite          | 10.10   | x86_64               | ❌ No Metal                  |
+| OS X Mavericks         | 10.9    | x86_64               | ❌ No Metal                  |
+| OS X Mountain Lion     | 10.8    | x86_64               | ❌ No Metal                  |
+| Mac OS X Lion          | 10.7    | x86_64               | ❌ No Metal                  |
+| Mac OS X Snow Leopard  | 10.6    | i386 / x86_64        | ❌ No Metal, No AVFoundation |
+| Mac OS X Leopard       | 10.5    | ppc / ppc64 / i386   | ❌ No Metal, No AVFoundation |
+| Mac OS X Tiger         | 10.4    | ppc / ppc64 / i386   | ❌ No Metal, No AVFoundation |
+| Mac OS X Panther       | 10.3    | ppc                  | ❌ No Metal, No AVFoundation |
+| Mac OS X Jaguar        | 10.2    | ppc                  | ❌ No Metal, No AVFoundation |
+| Mac OS X Puma          | 10.1    | ppc                  | ❌ No Metal, No AVFoundation |
+| Mac OS X Cheetah       | 10.0    | ppc                  | ❌ No Metal, No AVFoundation |
 
 ### Linux Compatibility List
 
-| Distribution      | Version               | CPU             | Status |
-|-------------------|-----------------------|-----------------|--------|
-| Raspberry Pi OS   | Debian 13             | arm64, armv7    | ✅     |
-| Ubuntu            | 24.04 / 22.04 / 20.04 | x86_64, arm64   | ✅     |
-| Kubuntu           | 25.04                 | x86_64, arm64   | ✅     |
-| Linux Mint        | 22.3                  | x86_64          | ✅     |
-| Fedora            | 43                    | x86_64          | ✅     |
+| Distribution      | Version               | CPU             | Status | Graphics                      |
+|-------------------|-----------------------|-----------------|--------|-------------------------------|
+| Raspberry Pi OS   | Debian 13             | arm64, armv7    | ✅     | X11, OpenGL ES                |
+| Ubuntu            | 24.04 / 22.04 / 20.04 | x86_64, arm64   | ✅     | X11, OpenGL 3                 |
+| Kubuntu           | 25.04                 | x86_64, arm64   | ✅     | Wayland + OpenGL 3            |
+| Linux Mint        | 22.3                  | x86_64          | ✅     | X11 + OpenGL 3                |
+| Fedora            | 43                    | x86_64          | ✅     | X11 + OpenGL 3                |
+| Odroid            |                       | arm64           | ✅     | GBM + DRM + EGL + OpenGL ES 2 |
 
 ### iOS Compatibility List
 
-| OS      | Status     |
-|---------|------------|
-| iOS 26  | ✅         |
-| iOS 18  | ✅         |
-| iOS 17  | ✅         |
-| iOS 16  | ✅         |
-| iOS 15  | ✅         |
-| iOS 14  | ✅         |
-| iOS 13  | ✅         |
-| iOS 12  | ✅         |
-| iOS 11  | ✅         |
-| iOS -10 | N/A        |
+| OS     | Status   |
+|--------|----------|
+| iOS 26 | ✅       |
+| iOS 18 | ✅       |
+| iOS 17 | ✅       |
+| iOS 16 | ✅       |
+| iOS 15 | ✅       |
+| iOS 14 | ✅       |
+| iOS 13 | ✅       |
+| iOS 12 | ✅       |
+| iOS 11 | ✅       |
+| iOS 10 | ?        |
+| iOS 9  | ?        |
+| iOS 8  | ?        |
+| iOS 7  | No Metal |
 
 ### Android Compatibility List
 
-| OS          | Status |
-|-------------|--------|
-| Android 16  | ✅     |
-| Android 15  | ✅     |
-| Android 14  | ✅     |
-| Android 13  | ✅     |
-| Android 12  | ✅     |
-| Android 11  | ✅     |
-| Android 10  | ✅     |
-| Android 9   | ✅     |
-| Android 8   | ✅     |
-| Android 7   | ✅     |
-| Android 6   | ✅     |
-| Android 5   | N/A    |
-| Android 4.4 | N/A    |
+| OS          | Status | Special                      |
+|-------------|--------|------------------------------|
+| Android 16  | ✅     |                              |
+| Android 15  | ✅     |                              |
+| Android 14  | ✅     |                              |
+| Android 13  | ✅     |                              |
+| Android 12  | ✅     |                              |
+| Android 11  | ✅     |                              |
+| Android 10  | ✅     |                              |
+| Android 9   | ✅     |                              |
+| Android 8   | ✅     |                              |
+| Android 7   | ✅     | Change the build properties. |
+| Android 6   | ✅     | Change the build properties. |
+| Android 5   | ✅     | Change the build properties. |
+| Android 4.4 | ✅     | Change the build properties. |
 
 ### HarmonyOS / OpenHarmony Compatibility List
 
-| OS          | Status |
-|-------------|--------|
-| API 12      | ✅     |
+| OS         | Status |
+|------------|--------|
+| API 20     | ✅     |
+| API 12     | ✅     |
 
 ---
 
