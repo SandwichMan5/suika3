@@ -512,16 +512,12 @@ experience for the player.
 
 ## Supported Platforms
 
-Suika3 primarily targets desktop environments (Windows, Linux, macOS)
-while providing a robust migration path for mobile and embedded
-systems via the Playfield Engine.
-
 ### Platform Availability at a Glance
 
 `Supported` means the upstream (`Playfield Engine`) fully supports it.
 
 | Category    | OS / Environment   | Status       | Last Checked | Checked On                       |
-| :---        | :---               | :---         | :---         | :---                             |
+|-------------|--------------------|--------------|--------------|----------------------------------|
 | **Desktop** | Windows            | ✅ Supported | 3 Mar 2026   | Windows 11 (x64/Arm64)           |
 |             | macOS              | ✅ Supported | 1 Mar 2026   | macOS 26 Tahoe (Apple Silicon)   |
 |             | Linux              | ✅ Supported | 3 Mar 2026   | Ubuntu 24.04 LTS (x86_64)        |
@@ -749,7 +745,7 @@ repository under the
 ### Core Libraries
 
 | Library          | Purpose             | Key Feature                                            |
-| :---             | :---                | :---                                                   |
+|------------------|---------------------|--------------------------------------------------------|
 | Playfield Engine | 2D Game Engine      | Our base game engine. (in-house)                       |
 | NoctLang         | Scripting Language  | Our scripting language. (in-house)                     |
 | zlib             | Compression         | Deflate algorithm for general data compression.        |
@@ -775,8 +771,8 @@ full text of each license and copyright notice.
 Suika3 ships with CMake presets covering various platforms and build
 configurations.
 
-|Preset                         |Platform              |Compiler   |Directory                              |Target           |Type           |
-|-------------------------------|----------------------|-----------|---------------------------------------|-----------------|---------------|
+|Preset                         |Platform              |Compiler   |Directory                              |Target        |Type           |
+|-------------------------------|----------------------|-----------|---------------------------------------|--------------|---------------|
 |windows-vs2022-x86-debug       |Windows               |MSVC       |out/build/windows-vs2022-x86-debug     |suika3.exe    |Executable     |
 |windows-vs2022-x86-release     |Windows               |MSVC       |out/build/windows-vs2022-x86-release   |suika3.exe    |Executable     |
 |windows-vs2022-x64-debug       |Windows               |MSVC       |out/build/windows-vs2022-x64-debug     |suika3.exe    |Executable     |
