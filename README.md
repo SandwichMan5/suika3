@@ -105,7 +105,8 @@ Currently we are working very hard to complete the release.
 ## Key Features
 
 * **High Performance**: Powered by the Suika JIT VM, it delivers
-    5~10x execution speed compared to interpreter.
+    5~10x execution speed compared to our interpreter backend.
+    (The exact speedup varies by CPU architecture)
 
 * **Lightweight**: Engineered to run smoothly at 60 fps even on low-spec
     hardware such as Raspberry Pi in developing regions.
@@ -121,6 +122,10 @@ Currently we are working very hard to complete the release.
 
 * **Jot-and-Run**: A powerful markup language designed to bring your
     stories to life in an instant.
+
+* **Mobile UI/UX:** The default UX is mobile-first with a hamburger
+    menu. Desktop-style tiny buttons on message windows are not a
+    primary target due to mobile usability and store review risks.
 
 ---
 
@@ -244,6 +249,10 @@ See the `game/` directory for:
 * **True Native Performance:** Run extensions at full speed on iOS,
     Android, and consoles. Even on platforms where JIT is restricted,
     you never have to sacrifice performance thanks to AOT.
+
+* **Sandbox Model:** Scripts cannot access arbitrary
+    files/network. Only game assets and save data are accessible via
+    engine-managed APIs.
 
 * **Smooth Store Approval:** Dramatically lower the risk of
     rejection. Since final builds consist of native code via AOT,
@@ -967,6 +976,18 @@ but not limited to:
     criminal records, firmly believing in the power of second chances
     and the inherent value of every contributor who participates
     respectfully.
+
+### Governance
+
+Suika3 provides a clean upstream codebase intended to serve as a
+reliable foundation for downstream customizations. Users are
+encouraged to maintain private forks tailored to their own needs.
+Creating your own rebranded version is a natural and fully supported
+use of the project.
+
+Because of this philosophy, Suika3 does not employ a formal governance
+structure. Instead, the project is guided by its lead maintainers
+together with a community of contributors.
 
 ---
 
