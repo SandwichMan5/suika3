@@ -1871,6 +1871,8 @@ blit_pending_message(void)
 	body_color = save_body_color;
 	body_outline_color = save_body_outline_color;
 	avoid_dimming = true;
+
+	return true;
 }
 
 /* Whether the main text has finished drawing */

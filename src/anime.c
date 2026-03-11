@@ -182,6 +182,38 @@ static struct layer_name_map layer_name_map[] = {
 	{"text6",		S3_LAYER_TEXT6},
 	{"text7",		S3_LAYER_TEXT7},
 	{"text8",		S3_LAYER_TEXT8},
+	{"gui1",		S3_LAYER_GUI_BTN1},
+	{"gui2",		S3_LAYER_GUI_BTN2},
+	{"gui3",		S3_LAYER_GUI_BTN3},
+	{"gui4",		S3_LAYER_GUI_BTN4},
+	{"gui5",		S3_LAYER_GUI_BTN5},
+	{"gui6",		S3_LAYER_GUI_BTN6},
+	{"gui7",		S3_LAYER_GUI_BTN7},
+	{"gui8",		S3_LAYER_GUI_BTN8},
+	{"gui9",		S3_LAYER_GUI_BTN9},
+	{"gui10",		S3_LAYER_GUI_BTN10},
+	{"gui11",		S3_LAYER_GUI_BTN11},
+	{"gui12",		S3_LAYER_GUI_BTN12},
+	{"gui13",		S3_LAYER_GUI_BTN13},
+	{"gui14",		S3_LAYER_GUI_BTN14},
+	{"gui15",		S3_LAYER_GUI_BTN15},
+	{"gui16",		S3_LAYER_GUI_BTN16},
+	{"gui17",		S3_LAYER_GUI_BTN17},
+	{"gui18",		S3_LAYER_GUI_BTN18},
+	{"gui19",		S3_LAYER_GUI_BTN19},
+	{"gui20",		S3_LAYER_GUI_BTN20},
+	{"gui21",		S3_LAYER_GUI_BTN21},
+	{"gui22",		S3_LAYER_GUI_BTN22},
+	{"gui23",		S3_LAYER_GUI_BTN23},
+	{"gui24",		S3_LAYER_GUI_BTN24},
+	{"gui25",		S3_LAYER_GUI_BTN25},
+	{"gui26",		S3_LAYER_GUI_BTN26},
+	{"gui27",		S3_LAYER_GUI_BTN27},
+	{"gui28",		S3_LAYER_GUI_BTN28},
+	{"gui29",		S3_LAYER_GUI_BTN29},
+	{"gui30",		S3_LAYER_GUI_BTN30},
+	{"gui31",		S3_LAYER_GUI_BTN31},
+	{"gui32",		S3_LAYER_GUI_BTN31},
 };
 
 /*
@@ -256,7 +288,7 @@ s3i_cleanup_anime(void)
 }
 
 /*
- * Load an anime file.
+ * Load an anime file and start it.
  */
 bool
 s3_load_anime_from_file(
@@ -926,6 +958,8 @@ s3_unregister_anime(
 	reg_anime_name[reg_index] = NULL;
 	reg_anime_file[reg_index] = NULL;
 	memset(reg_anime_file, 0, sizeof(reg_anime_layers[0]));
+
+	return true;
 }
 
 /*

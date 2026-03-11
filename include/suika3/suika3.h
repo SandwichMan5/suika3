@@ -2234,7 +2234,7 @@ s3_pop_tag_stack_for(void);
  */
 
 /*
- * Load an anime file.
+ * Load an anime file and start it.
  */
 bool
 s3_load_anime_from_file(

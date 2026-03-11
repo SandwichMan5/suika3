@@ -50,10 +50,10 @@
 /* Button types. */
 enum {
 	/* Invalid button. */
-	TYPE_INVALID = 0,
+	TYPE_INVALID = -1,
 
 	/* No action. */
-	TYPE_NOACTION,
+	TYPE_NOACTION = 0,
 
 	/* Jump to a label when clicked. */
 	TYPE_LABEL,
@@ -177,6 +177,10 @@ struct gui_button {
 	/* TYPE_HISTORY, TYPE_SAVE, TYPE_LOAD, TYPE_PREVIEW */
 	int clear_r, clear_g, clear_b;
 
+	/* Anime */
+	char *idle_anime;
+	char *hover_anime;
+
 	/*
 	 * Runtime information.
 	 */
@@ -203,6 +207,9 @@ struct gui_button {
 
 		/* Whether to show NEW button for when TYPE_SAVE/TYPE_LOAD. */
 		bool is_new_enabled;
+
+		/* Anime used layers */
+		bool used_layers[S3_STAGE_LAYERS];
 
 		/*
 		 * Text preview information.
@@ -447,6 +454,10 @@ s3i_cleanup_gui(void)
 			free(button[i].file);
 		if (button[i].msg != NULL)
 			free(button[i].msg);
+		if (button[i].idle_anime != NULL)
+			free(button[i].idle_anime);
+		if (button[i].hover_anime != NULL)
+			free(button[i].hover_anime);
 		if (button[i].clickse != NULL)
 			free(button[i].clickse);
 		if (button[i].pointse != NULL)
@@ -463,6 +474,8 @@ s3i_cleanup_gui(void)
 
 	/* Zero out buttons. */
 	memset(button, 0, sizeof(button));
+	for (i = 0; i < S3_BUTTON_LAYERS; i++)
+		button[i].bid = -1;
 
 	/* Free strings. */
 	if (cancel_se != NULL) {
@@ -574,6 +587,8 @@ s3_load_gui_file(
 void
 s3_start_gui(void)
 {
+	int i;
+
 	assert(!is_gui_running);
 
 	/* Enable GUI mode. */
@@ -589,12 +604,29 @@ s3_start_gui(void)
 	suppress_se = false;
 	suppress_se_forever = false;
 
+	/* Copy positions to stage layers */
+	for (i = 0; i < S3_BUTTON_LAYERS; i++) {
+		if (button[i].bid != -1) {
+			s3_set_layer_position(S3_LAYER_GUI_BTN1 + button[i].bid, button[i].x, button[i].y);
+			s3_set_layer_scale(S3_LAYER_GUI_BTN1 + button[i].bid, 1.0f, 1.0f);
+			s3_set_layer_center(S3_LAYER_GUI_BTN1 + button[i].bid, 0, 0);
+			s3_set_layer_rotate(S3_LAYER_GUI_BTN1 + button[i].bid, 0);
+		}
+	}
+
+	/* Start the idle animations. */
+	for (i = 0; i < S3_BUTTON_LAYERS; i++) {
+		if (button[i].idle_anime != NULL)
+			s3_load_anime_from_file(button[i].idle_anime, NULL, button[i].rt.used_layers);
+	}
+
 	/* Hide the sysbtn. */
 	s3_show_sysbtn(false);
 
 	/* Disable skip action by continuous swipe. */
 	s3_set_continuous_swipe_enabled(false);
 }
+
 /*
  * Stop the running GUI.
  */
@@ -851,6 +883,10 @@ static void process_input(void)
 			if (process_button_point(i, false))
 				break;
 		}
+		if (i == -1) {
+			/* No pointed button. */
+			pointed_index = -1;
+		}
 	}
 
 	/* Update the state of mouse dragging. */
@@ -888,6 +924,20 @@ static void process_input(void)
 				break;
 		}
 		is_drag_finished = false;
+	}
+
+	/* If the pointed button is changed. */
+	if (prev_pointed_index != pointed_index && prev_pointed_index != -1) {
+		if (button[prev_pointed_index].idle_anime != NULL) {
+			for (i = 0; i < S3_STAGE_LAYERS; i++) {
+				if (button[pointed_index].rt.used_layers[i])
+					s3_clear_layer_anime_sequence(i);
+			}
+		}
+	}
+	if (prev_pointed_index != pointed_index && pointed_index != -1) {
+		if (button[pointed_index].hover_anime != NULL)
+			s3_load_anime_from_file(button[pointed_index].hover_anime, NULL, button[pointed_index].rt.used_layers);
 	}
 
 	/* If a button is chosen, exit. */
@@ -1266,10 +1316,6 @@ process_button_point(int index, bool key)
 
 	b = &button[index];
 
-	/* If the button is TYPE_INVALID, it cannot be pointed at. (no button) */
-	if (b->type == TYPE_INVALID)
-		return false;
-
 	/* If the button is TYPE_NOACTION, it cannot be pointed at. (no button) */
 	if (b->type == TYPE_NOACTION)
 		return false;
@@ -1324,8 +1370,7 @@ process_button_point(int index, bool key)
 	}
 
 	/* If the mouse is within the button area. */
-	if (!is_mouse_point_detected &&
-	    mouse_pos_x >= b->x && mouse_pos_x <= b->x + b->width &&
+	if (mouse_pos_x >= b->x && mouse_pos_x <= b->x + b->width &&
 	    mouse_pos_y >= b->y && mouse_pos_y <= b->y + b->height) {
 		/* If the item is already selected by key. */
 		if (is_pointed_by_key && index == pointed_index)
@@ -1879,10 +1924,22 @@ process_button_render_generic(
 
 	b = &button[index];
 
+	if (b->bid == -1)
+		return;
+
 	if (index != pointed_index) {
 		if (b->rt.img_idle != NULL) {
-			s3_render_image(b->x,
-					b->y,
+			int x, y, cx, cy;
+			float sx, sy, rot;
+			x = s3_get_layer_x(S3_LAYER_GUI_BTN1 + b->bid);
+			y = s3_get_layer_y(S3_LAYER_GUI_BTN1 + b->bid);
+			sx = s3_get_layer_scale_x(S3_LAYER_GUI_BTN1 + b->bid);
+			sy = s3_get_layer_scale_y(S3_LAYER_GUI_BTN1 + b->bid);
+			cx = s3_get_layer_center_x(S3_LAYER_GUI_BTN1 + b->bid);
+			cy = s3_get_layer_center_y(S3_LAYER_GUI_BTN1 + b->bid);
+			rot = s3_get_layer_rotate(S3_LAYER_GUI_BTN1 + b->bid);
+			s3_render_image(x,
+					y,
 					b->width,
 					b->height,
 					b->rt.img_idle,
@@ -1896,8 +1953,17 @@ process_button_render_generic(
 		struct s3_image *img;
 		img = b->rt.img_hover != NULL ? b->rt.img_hover : b->rt.img_idle;
 		if (img != NULL) {
-			s3_render_image(b->x,
-					b->y,
+			int x, y, cx, cy;
+			float sx, sy, rot;
+			x = s3_get_layer_x(S3_LAYER_GUI_BTN1 + b->bid);
+			y = s3_get_layer_y(S3_LAYER_GUI_BTN1 + b->bid);
+			sx = s3_get_layer_scale_x(S3_LAYER_GUI_BTN1 + b->bid);
+			sy = s3_get_layer_scale_y(S3_LAYER_GUI_BTN1 + b->bid);
+			cx = s3_get_layer_center_x(S3_LAYER_GUI_BTN1 + b->bid);
+			cy = s3_get_layer_center_y(S3_LAYER_GUI_BTN1 + b->bid);
+			rot = s3_get_layer_rotate(S3_LAYER_GUI_BTN1 + b->bid);
+			s3_render_image(x,
+					y,
 					b->width,
 					b->height,
 					img,
@@ -3474,23 +3540,31 @@ set_button_key_value(
 
 	b = &button[index];
 
-	/* Process the type key. */
+	/*
+	 * Process keys other than type.
+	 */
+
+	/* id */
+	if (strcmp("id", key) == 0) {
+		int bid = atoi(val);
+		if (bid != b->bid) {
+			if (is_bid_unused(bid)) {
+				b->bid = bid;
+			} else {
+				s3_log_warn(S3_TR("Specified ID is already used in GUI file \"%s\" line %d."), file, line);
+			}
+		}
+		b->type = TYPE_NOACTION;
+		return true;
+	}
+
+	/* type */
 	if (strcmp("type", key) == 0) {
 		b->type = get_type_for_name(val, file, line);
 		if (b->type == TYPE_INVALID)
 			return false;
 		return true;
 	}
-
-	/* If type is not specified. */
-	if (b->type == TYPE_INVALID) {
-		s3_log_error(S3_TR("Button type must be specified before other properties in file %s line %d."), file, line);
-		return false;
-	}
-
-	/*
-	 * Process keys other than type.
-	 */
 
 	/* x */
 	if (strcmp("x", key) == 0) {
@@ -3838,6 +3912,26 @@ set_button_key_value(
 	if (strcmp("new-y", key) == 0) {
 		b->new_y = atoi(val);
 		b->rt.is_new_enabled = true;
+		return true;
+	}
+
+	/* idle-anime */
+	if (strcmp("idle-anime", key) == 0) {
+		b->idle_anime = strdup(val);
+		if (b->idle_anime == NULL) {
+			s3_log_out_of_memory();
+			return false;
+		}
+		return true;
+	}
+
+	/* hover-anime */
+	if (strcmp("hover-anime", key) == 0) {
+		b->hover_anime = strdup(val);
+		if (b->hover_anime == NULL) {
+			s3_log_out_of_memory();
+			return false;
+		}
 		return true;
 	}
 

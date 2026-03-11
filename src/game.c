@@ -871,6 +871,7 @@ s3_read_call_stack(
 		return false;
 	}
 	*index = stack_index[stack_pointer];
+	return true;
 }
 
 /*
