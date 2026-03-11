@@ -507,6 +507,7 @@ s3_load_gui_file(
 	bool sys)
 {
 	bool success;
+	int i;
 
 	assert(!is_gui_running);
 
@@ -519,6 +520,8 @@ s3_load_gui_file(
 
 	/* Zero out buttons. */
 	memset(button, 0, sizeof(button));
+	for (i = 0; i < S3_BUTTON_LAYERS; i++)
+		button[i].bid = -1;
 
 	/* Set initial values for global properties. */
 	save_page = conf_gui_save_last_page;
@@ -928,11 +931,13 @@ static void process_input(void)
 
 	/* If the pointed button is changed. */
 	if (prev_pointed_index != pointed_index && prev_pointed_index != -1) {
-		if (button[prev_pointed_index].idle_anime != NULL) {
+		if (button[prev_pointed_index].idle_anime != NULL &&
+		    button[prev_pointed_index].hover_anime != NULL) {
 			for (i = 0; i < S3_STAGE_LAYERS; i++) {
 				if (button[pointed_index].rt.used_layers[i])
 					s3_clear_layer_anime_sequence(i);
 			}
+			s3_load_anime_from_file(button[prev_pointed_index].idle_anime, NULL, button[pointed_index].rt.used_layers);
 		}
 	}
 	if (prev_pointed_index != pointed_index && pointed_index != -1) {
