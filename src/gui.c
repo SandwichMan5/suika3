@@ -3081,7 +3081,39 @@ static void
 truncate_variable(
 	const char *var)
 {
-	/* TODO */
+	int count;
+	uint32_t wc;
+	const char *val;
+	const char *s;
+	int last_len;
+	int copy_len;
+	char buf[1024];
+
+	val = s3_get_variable_string(var);
+
+	count = 0;
+	last_len = 0;
+	s = val;
+	while (*s != '\0') {
+		int len = s3_utf8_to_utf32(s, &wc);
+		if (len < 0)
+			return;
+		count++;
+		last_len = len;
+		s += len;
+	}
+
+	if (count == 0)
+		return;
+
+	copy_len = strlen(val) - last_len;
+	if (copy_len >= sizeof(buf) - 1)
+		return;
+
+	strncpy(buf, val, copy_len);
+	buf[copy_len] = '\0';
+
+	s3_set_variable_string(var, buf);
 }
 
 /*
