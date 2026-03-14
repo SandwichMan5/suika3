@@ -1117,6 +1117,7 @@ of contributors.
 ### Lead Maintainers
 
 * Awe Morris
+* Aitsuki
 
 ---
 
