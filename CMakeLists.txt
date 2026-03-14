@@ -286,7 +286,6 @@ set(SUIKA_BASE_SOURCES
   src/sysbtn.c
   src/tag.c
   src/text.c
-  src/translation.c
   src/vars.c
   src/cmd.c
   src/cmd_anime.c
@@ -321,12 +320,11 @@ set(SUIKA_BASE_SOURCES
 )
 
 # I18N Source
-#if(SUIKA_ENABLE_I18N)
-#  set(SUIKA_I18N_SOURCES
-#    src/i18n.c
-#    src/translation.c
-#  )
-#endif()
+if(SUIKA_ENABLE_I18N)
+  set(SUIKA_I18N_SOURCES
+    src/translation.c
+  )
+endif()
 
 # Resource
 if(   SUIKA_TARGET_WINDOWS
