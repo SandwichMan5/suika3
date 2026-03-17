@@ -287,6 +287,11 @@ if(SUIKA_ENABLE_GST)
   set(PLAYFIELD_ENABLE_GST ON)
 endif()
 
+# libstratopack
+if(SUIKA_ENABLE_PACK)
+  set(PLAYFIELD_ENABLE_PACK ON)
+endif()
+
 # ---
 
 #
