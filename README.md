@@ -9,6 +9,7 @@ runtime for mobile app store compliance.
 <br clear="left">
 
 <p align="center">
+<a href="https://discord.gg/YZsq9u9Mgr"><img src="https://img.shields.io/badge/Suika3.VN-Discord-orange"></a>
 <img src="https://img.shields.io/github/stars/suika3-community/suika3.svg?style=flat&logo=github&colorB=deeppink&label=stars">
 <img src="https://img.shields.io/github/forks/suika3-community/suika3.svg">
 <img src="https://img.shields.io/badge/License-ZLib-purple.svg">
@@ -43,7 +44,6 @@ runtime for mobile app store compliance.
     * **Web:** WebAssembly
     * **Console:** Xbox GDK, PS5 and Switch via Unity Integration
 - **Users:** Professional creators, indie studios, enterprise companies, and hobbyists.
-- [Join Discord](https://discord.gg/YZsq9u9Mgr)
 
 To build and run:
 ```
