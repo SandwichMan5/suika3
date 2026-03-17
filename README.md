@@ -545,6 +545,96 @@ The footprint of Suika3 is very small.
 > loading any game assets. The engine itself consumes only 8 MB on
 > Windows 2000.
 
+### JIT Pipeline
+
+SuikaScript employs two distinct intermediate representations (IRs) to
+balance high-level program analysis with efficient execution:
+
+- **HIR (High-level Intermediate Representation)**
+    - Structured control flow graph (CFG) for program analysis.
+    - Expression DAG for algebraic simplification.
+    - Basis for future advanced optimizations.
+
+```
+CFG for "func foo(a) { if (a > 0) { return a; } else { return -a; } }"
+
+  +---------------+
+  | 0: Func Block |         -- pred: none, succ: 1
+  +---------------+
+     +-------------+
+     | 1: IF Block |        -- pred: 0, succ: 2 (true), 3 (false)
+     +-------------+
+        +----------------+
+        | 2: Basic Block |  -- pred 1, succ 5
+        +----------------+
+     +---------------+
+     | 3: Else Block |      -- pred 1, succ 4
+     +---------------+
+        +----------------+
+        | 4: Basic Block |  -- pred 3, succ 5
+        +----------------+
+  +--------------+
+  | 5: End Block |          -- pred 2, 4
+  +--------------+
+                                 (pred = predecessor, succ = successor)
+     
+```
+
+```
+  DAG for "a = 1 + 2"
+
+
+     LHS   ---- ASSIGN  ----   RHS
+      |                         |
+     term                      ADD
+      |                        / \
+   symbol a                 term  term
+                             |       |
+                           int 1   int 2
+```
+
+- **LIR (Low-level Intermediate Representation)**
+    - VM bytecode, serving as the primary format for both interpretation and JIT codegen input.
+    - High abstraction level to achieve fast, portable interpretation.
+    - Compact enough for efficient machine code lowering in the JIT.
+
+```
+  LIR for "a = 1 + 2"
+
+    ICONST       %0, 1               ; Load constant 1
+    ICONST       %1, 2               ; Load constant 2
+    ADD          %2, %0, %1          ; Compute sum
+    STORESYMBOL  "a", %2             ; Store result into global variable "a"
+```
+
+Compilation stages are as below.
+
+```
+ +-----+     +-----+     +-----+     +-----+
+ | SRC | --> | AST | --> | HIR | --> | LIR | ----> [Interpreter]
+ +-----+     +-----+     +-----+     +-----+
+                                        |
+                                        +--------> [JIT Code Generator]
+                                        |
+                                        +--------> [C Source Backend]
+```
+
+- The AST captures the syntactic structure.
+- The HIR provides an analyzable, optimization-friendly form.
+- The LIR bridges execution, serving both the interpreter and JIT.
+
+The separation of HIR and LIR enables:
+
+- **A lightweight JIT pipeline**: minimal overhead from analysis to code generation.
+- **Clarity in architecture**: each stage has a well-defined role, simplifying maintenance.
+- **Portability**: the same LIR can be interpreted directly or lowered into optimized machine code.
+
+As shown above, HIR expresses structure, while LIR expresses execution.
+This split allows SuikaScript to keep the JIT pipeline lightweight without sacrificing optimization opportunities.
+
+Because all JIT backends translate from the same LIR, portability across architectures comes naturally.
+This unified approach is what makes SuikaScript both portable and maintainable.
+
 ---
 
 ## Garbage Collection
