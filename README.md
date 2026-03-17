@@ -380,7 +380,10 @@ engine.
 
 Suika3 is based on `PlayField Engine`, a comprehensive 2D game engine.
 This means that Suika3 is fully extensible using the Playfield API.
-(And Playfield Engine was actually developed just for Suika3.)
+
+(Playfield Engine was originally developed specifically for Suika3.
+The name "Playfield" was inspired by PlayStation during Awe's time at
+the SIE PlayStation firmware team.)
 
 ```
 +------------------------------+
