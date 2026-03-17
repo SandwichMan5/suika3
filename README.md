@@ -2,7 +2,7 @@ Suika3
 ======
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" align="left" width="120" hspace="20">
+  <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" width="120" hspace="20">
   <br>
   <a href="https://discord.gg/YZsq9u9Mgr"><img src="https://img.shields.io/badge/Suika3.VN-Discord-orange"></a>
   <img src="https://img.shields.io/github/stars/suika3-community/suika3.svg?style=flat&logo=github&colorB=deeppink&label=stars">
