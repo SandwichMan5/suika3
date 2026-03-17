@@ -11,8 +11,9 @@
     Suika3 is a portable visual novel engine designed to run on a wide range of platforms.
   </p>
   <p>
-    Our custom JIT/AOT hybrid scripting infrastructure and C89-based
-    rendering & audio runtime enables your game compliant to app stores.
+    Our custom JIT-VM / AOT-fallback scripting infrastructure lets you
+    publish the exact same game across both PC and app stores,
+    eliminating porting headaches!
   </p>
   <a href="https://discord.gg/YZsq9u9Mgr"><img src="https://img.shields.io/badge/Suika3.VN-Discord-orange"></a>
   <img src="https://img.shields.io/github/stars/suika3-community/suika3.svg?style=flat&logo=github&colorB=deeppink&label=stars">
@@ -50,7 +51,7 @@
     * **Mobile:** iOS, Android, HarmonyOS NEXT
     * **Web:** WebAssembly
     * **Console:** Xbox GDK, PS5 and Switch via Unity Integration
-- **Users:** Professional creators, indie studios, enterprise companies, and hobbyists.
+- **Users:** Professional creators, indie studios, enterprise companies.
 
 To build and run:
 ```
