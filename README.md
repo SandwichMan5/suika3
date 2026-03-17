@@ -6,8 +6,6 @@
 </h1>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" width="120" hspace="20">
-  <br>
   <p>
     Suika3 is a portable visual novel engine designed to run on a wide range of platforms.
   </p>
@@ -16,12 +14,6 @@
   <img src="https://img.shields.io/github/stars/suika3-community/suika3.svg?style=flat&logo=github&colorB=deeppink&label=stars">
   <img src="https://img.shields.io/github/forks/suika3-community/suika3.svg">
   <img src="https://img.shields.io/badge/License-ZLib-purple.svg">
-  <br><br>
-  <img src="https://img.shields.io/badge/Desktop-Windows%20%2F%20macOS%20%2F%20Linux%20%2F%20Chromebook%20%2F%20Raspberry%20Pi-blue">
-  <img src="https://img.shields.io/badge/Mobile-iOS%20%2F%20Andoid%20%2F%20HarmonyOS%20NEXT-blue">
-  <img src="https://img.shields.io/badge/Console-Switch%20%2F%20PS5%20%2F%20Xbox-blue">
-  <img src="https://img.shields.io/badge/Web-Emscripten-blue">
-  <img src="https://img.shields.io/badge/UNIX-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011-blue">
   <br><br>
 </div>
 
@@ -32,10 +24,17 @@
 
 <!-- PLATFORMS -->
 <div align="center">
+  <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" width="120" hspace="20">
   <p>
     Our custom JIT/AOT hybrid scripting infrastructure and C89-based
     rendering & audio runtime enables your game compliant to app stores.
   </p>
+  <img src="https://img.shields.io/badge/Desktop-Windows%20%2F%20macOS%20%2F%20Linux%20%2F%20Chromebook%20%2F%20Raspberry%20Pi-blue">
+  <img src="https://img.shields.io/badge/Mobile-iOS%20%2F%20Andoid%20%2F%20HarmonyOS%20NEXT-blue">
+  <img src="https://img.shields.io/badge/Console-Switch%20%2F%20PS5%20%2F%20Xbox-blue">
+  <img src="https://img.shields.io/badge/Web-Emscripten-blue">
+  <img src="https://img.shields.io/badge/UNIX-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011-blue">
+  <br><br>
   <img src="https://github.com/suika3-community/suika3/blob/main/docs/img/platforms.png" alt="Suika3 runs everywhere."><br>
 </div>
 
