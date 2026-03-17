@@ -555,7 +555,7 @@ jobs:
           mkdir dist/misc/macos/project/Game.xcodeproj
           cp resources/projects/macos/Game.xcodeproj/project.pbxproj dist/misc/macos/project/Game.xcodeproj/
           mkdir dist/misc/macos/project/Game
-          tar xfz macos/Playfield.xcframework.tar.gz -C dist/misc/macos/project/Game/
+          tar xfz macos/Suika3.xcframework.tar.gz -C dist/misc/macos/project/Game/
           cp -R resources/projects/macos/Game/Assets.xcassets dist/misc/macos/project/Game/
           cp resources/projects/macos/Game/main.m dist/misc/macos/project/Game/
           cp resources/macos/macos.entitlements dist/misc/macos/project/Game/
