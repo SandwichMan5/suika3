@@ -1,6 +1,11 @@
 Suika3
 ======
 
+Suika3 is a portable visual novel engine designed to run on a wide
+range of platforms (PC/iOS/Android/Web/etc.) using a custom JIT/AOT
+hybrid scripting infrastructure and C89-based rendering & audio
+runtime for mobile app store compliance.
+
 <div align="center">
   <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" width="120" hspace="20">
   <br>
@@ -8,13 +13,6 @@ Suika3
   <img src="https://img.shields.io/github/stars/suika3-community/suika3.svg?style=flat&logo=github&colorB=deeppink&label=stars">
   <img src="https://img.shields.io/github/forks/suika3-community/suika3.svg">
   <img src="https://img.shields.io/badge/License-ZLib-purple.svg">
-</div>
-
-<div>
-Suika3 is a portable visual novel engine designed to run on a wide
-range of platforms (PC/iOS/Android/Web/etc.) using a custom JIT/AOT
-hybrid scripting infrastructure and C89-based rendering & audio
-runtime for mobile app store compliance.
 </div>
 
 <div align="center">
