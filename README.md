@@ -8,7 +8,7 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" width="120" hspace="20">
   <p>
-    Suika3 is a portable visual novel engine designed to run on a wide range of platforms.
+    Suika3 is a production-grade visual novel engine designed to run natively across a wide range of platforms
   </p>
   <a href="https://discord.gg/YZsq9u9Mgr"><img src="https://img.shields.io/badge/Suika3.VN-Discord-orange"></a>
   <img src="https://img.shields.io/github/stars/suika3-community/suika3.svg?style=flat&logo=github&colorB=deeppink&label=stars">
@@ -18,10 +18,10 @@
   <p>
     Our custom JIT-VM / AOT-fallback scripting infrastructure lets you
     publish the exact same game across both PC and app stores,
-    eliminating porting headaches!
+    eliminating traditional porting headaches!
   </p>
   <img src="https://img.shields.io/badge/Desktop-Windows%20%2F%20macOS%20%2F%20Linux%20%2F%20Chromebook%20%2F%20Raspberry%20Pi-blue">
-  <img src="https://img.shields.io/badge/Mobile-iOS%20%2F%20Andoid%20%2F%20HarmonyOS%20NEXT-blue">
+  <img src="https://img.shields.io/badge/Mobile-iOS%20%2F%20Android%20%2F%20HarmonyOS%20NEXT-blue">
   <img src="https://img.shields.io/badge/Console-Switch%20%2F%20PS5%20%2F%20Xbox-blue">
   <img src="https://img.shields.io/badge/Web-Emscripten-blue">
   <img src="https://img.shields.io/badge/UNIX-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011-blue">
@@ -46,12 +46,12 @@
 - **Target:** Mobile-first VN engine that runs anywhere
 - **High-Performance:** Native, written in C
 - **Hybrid Scripting:** JIT VM with AOT fallback for App Store compliance
-- **Runs Everywhere:**
+- **Broad Platforms:**
     * **Desktop:** Windows, macOS, Linux, Chromebook, Raspberry Pi, *BSD, Solaris
     * **Mobile:** iOS, Android, HarmonyOS NEXT
     * **Web:** WebAssembly
-    * **Console:** Xbox GDK, PS5 and Switch via Unity Integration
-- **Users:** Professional creators, indie studios, enterprise companies.
+    * **Console:** Xbox GDK, PS5 and Switch via Unity Integration, devkit required
+- **Users:** Professional creators, indie studios, enterprise teams.
 
 To build and run:
 ```
@@ -67,8 +67,8 @@ suika3
 ## Introduction
 
 Suika3 is a production-grade visual novel engine specifically
-engineered for commercial mobile app development, maintained by the
-`Suika3 Community`, led by Awe Morris.
+engineered for commercial mobile app development, developed by Awe
+Morris with the Suika3 Community.
 
 Games made with Suika3 are powered by `NovelML 3.0` and `SuikaScript 3.0`.
 
@@ -107,15 +107,12 @@ Suika3 is engineered with modern techniques, and delivers:
   SuikaScript. Developers can implement custom tags simply by writing
   a SuikaScript function named `Tag_*()`.
 
-- **Reliable**: We do enterprise-grade Quality Assurance to deliver
+- **Reliable**: We do certain `Quality Assurance Process` to deliver
   reliable software.
 
 - **Mobile UI/UX:** The default UX is mobile-first with a hamburger
   menu. Desktop-style tiny buttons on message windows are not a
   primary target due to mobile usability and store review risks.
-
-- **Jot-and-Run**: A powerful markup language designed to bring your
-  stories to life in an instant.
 
 - **Battery-Friendly:** Idle CPU and GPU usages are around 1%, making
   it perfect for long-play on mobile devices.
@@ -164,7 +161,7 @@ Suika3 is engineered with modern techniques, and delivers:
 We are planning our first stable release `Suika3 26.07.0` on July 1 2026.
 
 The program has been already implemented, and currently we are working
-on sample games and documentation alongwith debugging to complete the
+on sample games and documentation along with debugging to complete the
 stable release.
 
 **Our current status is:**
@@ -802,15 +799,15 @@ Suika3 supports the following languages, and the translation is in progress.
 | Language               | Locale Code | Translation Type         | Scope of Translation             | Progress      |
 |------------------------|-------------|--------------------------|----------------------------------|---------------|
 | English                | `en-US`     | Original                 | UI / Docs / Samples              | Baseline      |
-| Spanish                | `es-ES`     | Machine Translation      | UI                               | Not Yet       |
-| French                 | `fr-FR`     | Machine Translation      | UI                               | Not Yet       |
-| Italian                | `it-IT`     | Machine Translation      | UI                               | Not Yet       |
-| German                 | `de-DE`     | Machine Translation      | UI                               | Not Yet       |
-| Greek                  | `el-GR`     | Machine Translation      | UI                               | Not Yet       |
-| Russian                | `ru-RU`     | Machine Translation      | UI                               | Not Yet       |
-| Simplified Chinese     | `zh-CN`     | Machine Translation      | UI                               | Not Yet       |
-| Traditional Chinese    | `zh-TW`     | Machine Translation      | UI                               | Not Yet       |
-| Japanese               | `ja-JP`     | Professional Translation | UI / Docs                        | Not Yet       |
+| Spanish                | `es-ES`     | Machine Translation      | UI                               | Done          |
+| French                 | `fr-FR`     | Machine Translation      | UI                               | Done          |
+| Italian                | `it-IT`     | Machine Translation      | UI                               | Done          |
+| German                 | `de-DE`     | Machine Translation      | UI                               | Done          |
+| Greek                  | `el-GR`     | Machine Translation      | UI                               | Done          |
+| Russian                | `ru-RU`     | Machine Translation      | UI                               | Done          |
+| Simplified Chinese     | `zh-CN`     | Machine Translation      | UI                               | Done          |
+| Traditional Chinese    | `zh-TW`     | Machine Translation      | UI                               | Done          |
+| Japanese               | `ja-JP`     | Native Translation       | UI / Docs                        | Done          |
 
 ### How to switch languages
 
@@ -1170,12 +1167,11 @@ use of the project.
 
 Because of this philosophy, Suika3 does not employ a formal governance
 structure. Instead, the project is guided by its lead maintainers in
-close collaboration with the community. We together with a community
-of contributors.
+close collaboration with the community.
 
 ### Lead Maintainers
 
-- Awe Morris (IEEE Member / IEEE Computer Society Member)
+- Awe Morris (IEEE Member, IEEE Computer Society Member)
 - Aitsuki
 
 ---
@@ -1507,7 +1503,8 @@ For Japanese and CJK games, Suika3 supports:
 * Vertical writing
 
 Note that Right-To-Left writing system is currently not implemented
-yet because of the lack of the speakers in the development team.
+yet because of the lack of the speakers in the development
+team. Please contact the developers if you can help implementing it.
 
 ### Where should I go if I'm in trouble?
 
