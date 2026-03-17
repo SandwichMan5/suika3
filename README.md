@@ -9,12 +9,12 @@ runtime for mobile app store compliance.
 <br clear="left">
 
 <p align="center">
-![License](https://img.shields.io/badge/License-ZLib-purple.svg)
-![Desktop](https://img.shields.io/badge/Desktop-Windows%20%2F%20macOS%20%2F%20Linux%20%2F%20Chromebook%20%2F%20Raspberry%20Pi-blue)
-![Mobile](https://img.shields.io/badge/Mobile-iOS%20%2F%20Andoid%20%2F%20HarmonyOS%20NEXT-blue)
-![Console](https://img.shields.io/badge/Console-Switch%20%2F%20PS5%20%2F%20Xbox-blue)
-![Web](https://img.shields.io/badge/Web-Emscripten-blue)
-![UNIX](https://img.shields.io/badge/UNIX-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011-blue)
+<img src="https://img.shields.io/badge/License-ZLib-purple.svg">
+<img src="(https://img.shields.io/badge/Desktop-Windows%20%2F%20macOS%20%2F%20Linux%20%2F%20Chromebook%20%2F%20Raspberry%20Pi-blue">
+<img src="https://img.shields.io/badge/Mobile-iOS%20%2F%20Andoid%20%2F%20HarmonyOS%20NEXT-blue">
+<img src="https://img.shields.io/badge/Console-Switch%20%2F%20PS5%20%2F%20Xbox-blue">
+<img src="https://img.shields.io/badge/Web-Emscripten-blue">
+<img src="https://img.shields.io/badge/UNIX-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011-blue">
 </p>
 
 <div align="center">
