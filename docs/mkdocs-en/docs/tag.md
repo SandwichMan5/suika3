@@ -253,7 +253,7 @@ Specify a filename to load an image onto a layer. Set to `none` to unload (hide)
 
 | Argument       | Description                               |
 |----------------|-------------------------------------------|
-| `bg`           | Background and Background-overlay layers. |
+| `bg`           | Background layer.                         |
 | `back          | Back-Center character.                    |
 | `left`         | Left character.                           |
 | `right`        | Right character.                          |
@@ -1233,52 +1233,58 @@ Here are the complete list of the layers:
 
 Animate Layer
 
-The `move` tag animates a specific layer over a set duration. 
+The `move` tag animates specific layers over a set duration.
 It is perfect for creating sliding effects, zooming in on characters, or rotating screen elements to add dynamic energy to your scenes.
 
 ### Basic Usage
 
 ```
 # Move the center character to a new position over 2.0 seconds
-[move name="chc" time="2.0" x="100" y="100"]
+[move time="2.0" center-x="150" center-y="100"]
 
 # Relative movement: Nudge the background 50px to the right
-[move name="bg" time="1.0" x="r50"]
+[move time="1.0" bg-x="r50"]
 
 # Gradually fade out a layer while rotating it
-[move name="chf" time="3.0" alpha="0" rotate="r360"]
+[move time="3.0" face-alpha="0" face-rotate="r360"]
 ```
 
 ### Arguments
 
-| Argument     | Omissible     | Description                               | Notes                                      |
-|--------------|---------------|-------------------------------------------|--------------------------------------------|
-| `name`       | No            | The target layer to animate.              | See the "Moveable Layers" table below.     |
-| `time`       | No            | The duration of the animation in seconds. | Supports decimal values (e.g., `0.5`).     |
-| `async`      | Yes (`false`) | If `true`, do non-blocking animation.     |                                            |
-| `x`          | Yes           | Target X and Y positions.                 | Supports `r` prefix for relative movement. |
-| `y`          | Yes           | Target X and Y positions.                 | Supports `r` prefix for relative movement. |
-| `alpha`      | Yes           | Target opacity level (0-255).             | Supports `r` prefix for relative changes.  |
-| `scale-x`    | Yes           | Target X-axis scaling factor.             | Supports `r` prefix (e.g., `r0.5`).        |
-| `scale-y`    | Yes           | Target Y-axis scaling factor.             | Supports `r` prefix.                       |
-| `rotate`     | Yes           | Target rotation in degrees.               | Supports `r` prefix (e.g., `r-45`).        |
-| `dim`        | Yes           | Target dimming status.                    | Set to `true` or `false`.                  |
+**Common:**
+| Argument         | Omissible     | Description                               | Notes                                      |
+|------------------|---------------|-------------------------------------------|--------------------------------------------|
+| `name`           | No            | The target layer to animate.              | See the "Moveable Layers" table below.     |
+| `time`           | No            | The duration of the animation in seconds. | Supports decimal values (e.g., `0.5`).     |
+| `async`          | Yes (`false`) | If `true`, do non-blocking animation.     |                                            |
+| `accel`          | Yes (`normal`)| Acceleration type.                        | One of                                     |
+| (layer)-(suffix) | Yes           |                                           |                                            |
 
-### Moveable Layers (`name`)
+**(layer):**
+| Argument       | Description                               |
+|----------------|-------------------------------------------|
+| `bg`           | Background layer.                         |
+| `bg2`          | Background 2.                             |
+| `back          | Back-Center character.                    |
+| `left`         | Left character.                           |
+| `right`        | Right character.                          |
+| `center`       | Center character.                         |
+| `left-center`  | Left-Center character.                    |
+| `right-center` | Intermediate character.                   |
+| `face`         | Face character.                           |
 
-The `move` tag can be used on these primary layers:
-
-|Layer Name       |Description                            |
-|-----------------|---------------------------------------|
-|bg               |Background Image                       |
-|bg2              |Background Image 2                     |
-|chb              |Center-Back Character                  |
-|chl              |Left Character                         |
-|chlc             |Left-Center Character                  |
-|chr              |Right Character                        |
-|chrc             |Right-Center Character                 |
-|chc              |Center Character                       |
-|chf              |Face Character                         |
+**(suffix):**
+| Suffix   | Omissible     | Description                | Notes                                                         |
+|----------|---------------|----------------------------|---------------------------------------------------------------|
+| `x`      | Yes (`0`)     | X position.                | Supports absolute (e.g., `100`) or relative (e.g., `r50`).    |
+| `y`      | Yes (`0`)     | Y position.                | Supports absolute (e.g., `100`) or relative (e.g., `r-50`).   |
+| `a`      | Yes (`255`)   | Alpha value. (opacity)     | `0` (transparent) to `255` (opaque).                          |
+| `sx`     | Yes (`1.0`)   | X scaling factor.          | `1.0` is original size. Supports `r` prefix.                  |
+| `sy`     | Yes (`1.0`)   | Y scaling factor.          | `1.0` is original size. Supports `r` prefix.                  |
+| `cx`     | Yes (`0`)     | X center for rotation.     | Pivot point for the rotation effect.                          |
+| `cy`     | Yes (`0`)     | Y center for rotation.     | Pivot point for the rotation effect.                          |
+| `rotate` | Yes (`0`)     | Rotation in degrees.       | Positive for clockwise. Supports `r` prefix.                  |
+| `dim`    | Yes (`false`) | Dimming status.            | If `true`, the layer is rendered 50% darker.                  |
 
 ### Tips
 

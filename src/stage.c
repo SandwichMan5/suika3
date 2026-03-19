@@ -1796,8 +1796,9 @@ render_layer(
 		return;
 	}
 
-	/* If dim. */
+	/* Otherwise 2D. */
 	if (layer >= S3_LAYER_CHB && layer <= S3_LAYER_CHC && layer_dim[layer]) {
+		/* Dim blending. */
 		pf_render_texture_dim(layer_x[layer],
 				      layer_y[layer],
 				      (int)((float)src_width * layer_scale_x[layer]),
@@ -1809,6 +1810,7 @@ render_layer(
 				      layer_image[layer]->height,
 				      layer_alpha[layer]);
 	} else if (layer_blend[layer] == S3_BLEND_ALPHA) {
+		/* Normal alpha blending. */
 		pf_render_texture(layer_x[layer],
 				  layer_y[layer],
 				  (int)((float)src_width * layer_scale_x[layer]),
@@ -1820,6 +1822,7 @@ render_layer(
 				  layer_image[layer]->height,
 				  layer_alpha[layer]);
 	} else if (layer_blend[layer] == S3_BLEND_ADD) {
+		/* Add blending. */
 		pf_render_texture_add(layer_x[layer],
 				      layer_y[layer],
 				      (int)((float)src_width * layer_scale_x[layer]),
@@ -1831,9 +1834,10 @@ render_layer(
 				      layer_image[layer]->height,
 				      layer_alpha[layer]);
 	} else if (layer_blend[layer] == S3_BLEND_SUB) {
+		/* Sub blending. */
 		pf_render_texture_sub(layer_x[layer],
 				      layer_y[layer],
-				      (int)((float)src_width * layer_scale_x[layer]),
+				      (int)((float)layer_image[layer]->width * layer_scale_x[layer]),
 				      (int)((float)layer_image[layer]->height * layer_scale_y[layer]),
 				      layer_image[layer]->tex_id,
 				      src_x,
@@ -2594,7 +2598,9 @@ s3_show_skipmode_banner(
  * GUI Rendering
  */
 
-/* Render an image. */
+/*
+ * Render an image.
+ */
 void
 s3_render_image(
 	int dst_left,
@@ -2606,22 +2612,55 @@ s3_render_image(
 	int src_top,
 	int src_width,
 	int src_height,
-	int alpha)
+	int alpha,
+	int blend)
 {
-	pf_render_texture(
-		dst_left,
-		dst_top,
-		dst_width,
-		dst_height,
-		image->tex_id,
-		src_left,
-		src_top,
-		src_width,
-		src_height,
-		alpha);
+	switch (blend) {
+	case S3_BLEND_ALPHA:
+		pf_render_texture(
+			dst_left,
+			dst_top,
+			dst_width,
+			dst_height,
+			image->tex_id,
+			src_left,
+			src_top,
+			src_width,
+			src_height,
+			alpha);
+		break;
+	case S3_BLEND_ADD:
+		pf_render_texture_add(
+			dst_left,
+			dst_top,
+			dst_width,
+			dst_height,
+			image->tex_id,
+			src_left,
+			src_top,
+			src_width,
+			src_height,
+			alpha);
+		break;
+	case S3_BLEND_SUB:
+		pf_render_texture_sub(
+			dst_left,
+			dst_top,
+			dst_width,
+			dst_height,
+			image->tex_id,
+			src_left,
+			src_top,
+			src_width,
+			src_height,
+			alpha);
+		break;
+	}		
 }
 
-/* Render a image with free transform. */
+/*
+ * Render a image with free transform.
+ */
 void
 s3_render_image_3d(
 	float x1,
@@ -2637,22 +2676,71 @@ s3_render_image_3d(
 	int src_top,
 	int src_width,
 	int src_height,
-	int alpha)
+	int alpha,
+	int blend)
 {
-	pf_render_texture_3d(x1,
-			     y1,
-			     x2,
-			     y2,
-			     x3,
-			     y3,
-			     x4,
-			     y4,
-			     image->tex_id,
-			     src_left,
-			     src_top,
-			     src_width,
-			     src_height,
-			     alpha);
+	switch (blend) {
+	case S3_BLEND_ALPHA:
+		pf_render_texture_3d(
+			x1,
+			y1,
+			x2,
+			y2,
+			x3,
+			y3,
+			x4,
+			y4,
+			image->tex_id,
+			src_left,
+			src_top,
+			src_width,
+			src_height,
+			alpha);
+		break;
+	case S3_BLEND_ADD:
+		pf_render_texture_3d_add(
+			x1,
+			y1,
+			x2,
+			y2,
+			x3,
+			y3,
+			x4,
+			y4,
+			image->tex_id,
+			src_left,
+			src_top,
+			src_width,
+			src_height,
+			alpha);
+		break;
+	case S3_BLEND_SUB:
+		pf_render_texture_3d_sub(
+			x1,
+			y1,
+			x2,
+			y2,
+			x3,
+			y3,
+			x4,
+			y4,
+			image->tex_id,
+			src_left,
+			src_top,
+			src_width,
+			src_height,
+			alpha);
+		break;
+	}
+}
+
+/*
+ * Get the save-new image
+ */
+struct s3_image *
+s3i_get_savenew_image(void)
+{
+	return savenew_image;
 }
 
 /*

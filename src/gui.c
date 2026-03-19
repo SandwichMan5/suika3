@@ -39,6 +39,8 @@
 #include "gui.h"
 #include "text.h"
 #include "conf.h"
+#include "stage.h"
+#include "image.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -178,8 +180,8 @@ struct gui_button {
 	int clear_r, clear_g, clear_b;
 
 	/* Anime */
-	char *idle_anime;
-	char *hover_anime;
+	char *anime_idle;
+	char *anime_hover;
 
 	/*
 	 * Runtime information.
@@ -414,6 +416,7 @@ static void draw_var_button(int index);
 static void draw_var_value(int index);
 static void process_char(int index);
 static void truncate_variable(const char *var);
+static void render_image_helper(struct s3_image *img, int bid);
 static void play_se(const char *file);
 static void play_sys_se(const char *file);
 static void speak(const char *text);
@@ -456,10 +459,10 @@ s3i_cleanup_gui(void)
 			free(button[i].file);
 		if (button[i].msg != NULL)
 			free(button[i].msg);
-		if (button[i].idle_anime != NULL)
-			free(button[i].idle_anime);
-		if (button[i].hover_anime != NULL)
-			free(button[i].hover_anime);
+		if (button[i].anime_idle != NULL)
+			free(button[i].anime_idle);
+		if (button[i].anime_hover != NULL)
+			free(button[i].anime_hover);
 		if (button[i].clickse != NULL)
 			free(button[i].clickse);
 		if (button[i].pointse != NULL)
@@ -612,17 +615,18 @@ s3_start_gui(void)
 	/* Copy positions to stage layers */
 	for (i = 0; i < S3_BUTTON_LAYERS; i++) {
 		if (button[i].bid != -1) {
-			s3_set_layer_position(S3_LAYER_GUI_BTN1 + button[i].bid, button[i].x, button[i].y);
-			s3_set_layer_scale(S3_LAYER_GUI_BTN1 + button[i].bid, 1.0f, 1.0f);
-			s3_set_layer_center(S3_LAYER_GUI_BTN1 + button[i].bid, 0, 0);
-			s3_set_layer_rotate(S3_LAYER_GUI_BTN1 + button[i].bid, 0);
+			int layer = S3_LAYER_GUI_BTN1 + button[i].bid - 1;
+			s3_set_layer_position(layer, button[i].x, button[i].y);
+			s3_set_layer_scale(layer, 1.0f, 1.0f);
+			s3_set_layer_center(layer, 0, 0);
+			s3_set_layer_rotate(layer, 0);
 		}
 	}
 
 	/* Start the idle animations. */
 	for (i = 0; i < S3_BUTTON_LAYERS; i++) {
-		if (button[i].idle_anime != NULL)
-			s3_load_anime_from_file(button[i].idle_anime, NULL, button[i].rt.used_layers);
+		if (button[i].anime_idle != NULL)
+			s3_load_anime_from_file(button[i].anime_idle, NULL, button[i].rt.used_layers);
 	}
 
 	/* Hide the sysbtn. */
@@ -970,18 +974,18 @@ static void process_input(void)
 
 	/* If the pointed button is changed. */
 	if (prev_pointed_index != pointed_index && prev_pointed_index != -1) {
-		if (button[prev_pointed_index].idle_anime != NULL &&
-		    button[prev_pointed_index].hover_anime != NULL) {
+		if (button[prev_pointed_index].anime_idle != NULL &&
+		    button[prev_pointed_index].anime_hover != NULL) {
 			for (i = 0; i < S3_STAGE_LAYERS; i++) {
 				if (button[pointed_index].rt.used_layers[i])
 					s3_clear_layer_anime_sequence(i);
 			}
-			s3_load_anime_from_file(button[prev_pointed_index].idle_anime, NULL, button[pointed_index].rt.used_layers);
+			s3_load_anime_from_file(button[prev_pointed_index].anime_idle, NULL, button[pointed_index].rt.used_layers);
 		}
 	}
 	if (prev_pointed_index != pointed_index && pointed_index != -1) {
-		if (button[pointed_index].hover_anime != NULL)
-			s3_load_anime_from_file(button[pointed_index].hover_anime, NULL, button[pointed_index].rt.used_layers);
+		if (button[pointed_index].anime_hover != NULL)
+			s3_load_anime_from_file(button[pointed_index].anime_hover, NULL, button[pointed_index].rt.used_layers);
 	}
 
 	/* If a button is chosen, exit. */
@@ -1807,7 +1811,8 @@ process_button_render_slider(
 					0,
 					b->width,
 					b->height,
-					cur_alpha);
+					cur_alpha,
+					S3_BLEND_ALPHA);
 		}
 	}
 
@@ -1825,7 +1830,8 @@ process_button_render_slider(
 					0,
 					b->width,
 					b->height,
-					cur_alpha);
+					cur_alpha,
+					S3_BLEND_ALPHA);
 		}
 	}
 
@@ -1848,7 +1854,8 @@ process_button_render_slider(
 					0,
 					b->height,
 					b->height,
-					cur_alpha);
+					cur_alpha,
+					S3_BLEND_ALPHA);
 		}
 	}
 }
@@ -1875,7 +1882,8 @@ process_button_render_slider_vertical(
 					0,
 					b->width,
 					b->height,
-					cur_alpha);
+					cur_alpha,
+					S3_BLEND_ALPHA);
 		}
 	}
 
@@ -1893,7 +1901,8 @@ process_button_render_slider_vertical(
 					0,
 					b->width,
 					b->height,
-					cur_alpha);
+					cur_alpha,
+					S3_BLEND_ALPHA);
 		}
 	}
 
@@ -1915,7 +1924,8 @@ process_button_render_slider_vertical(
 				0,
 				b->width,
 				b->width,
-				cur_alpha);
+				cur_alpha,
+				S3_BLEND_ALPHA);
 	}
 }
 
@@ -1928,16 +1938,7 @@ process_button_render_preview(
 
 	b = &button[index];
 
-	s3_render_image(b->x,
-			b->y,
-			b->width,
-			b->height,
-			b->rt.img_canvas,
-			0,
-			0,
-			b->width,
-			b->height,
-			cur_alpha);
+	render_image_helper(b->rt.img_canvas, b->bid);
 }
 
 /* Render a generic button. */
@@ -1953,51 +1954,13 @@ process_button_render_generic(
 		return;
 
 	if (index != pointed_index) {
-		if (b->rt.img_idle != NULL) {
-			int x, y, cx, cy;
-			float sx, sy, rot;
-			x = s3_get_layer_x(S3_LAYER_GUI_BTN1 + b->bid);
-			y = s3_get_layer_y(S3_LAYER_GUI_BTN1 + b->bid);
-			sx = s3_get_layer_scale_x(S3_LAYER_GUI_BTN1 + b->bid);
-			sy = s3_get_layer_scale_y(S3_LAYER_GUI_BTN1 + b->bid);
-			cx = s3_get_layer_center_x(S3_LAYER_GUI_BTN1 + b->bid);
-			cy = s3_get_layer_center_y(S3_LAYER_GUI_BTN1 + b->bid);
-			rot = s3_get_layer_rotate(S3_LAYER_GUI_BTN1 + b->bid);
-			s3_render_image(x,
-					y,
-					b->width,
-					b->height,
-					b->rt.img_idle,
-					0,
-					0,
-					b->width,
-					b->height,
-					cur_alpha);
-		}
+		if (b->rt.img_idle != NULL)
+			render_image_helper(b->rt.img_idle, b->bid);
 	} else {
 		struct s3_image *img;
 		img = b->rt.img_hover != NULL ? b->rt.img_hover : b->rt.img_idle;
-		if (img != NULL) {
-			int x, y, cx, cy;
-			float sx, sy, rot;
-			x = s3_get_layer_x(S3_LAYER_GUI_BTN1 + b->bid);
-			y = s3_get_layer_y(S3_LAYER_GUI_BTN1 + b->bid);
-			sx = s3_get_layer_scale_x(S3_LAYER_GUI_BTN1 + b->bid);
-			sy = s3_get_layer_scale_y(S3_LAYER_GUI_BTN1 + b->bid);
-			cx = s3_get_layer_center_x(S3_LAYER_GUI_BTN1 + b->bid);
-			cy = s3_get_layer_center_y(S3_LAYER_GUI_BTN1 + b->bid);
-			rot = s3_get_layer_rotate(S3_LAYER_GUI_BTN1 + b->bid);
-			s3_render_image(x,
-					y,
-					b->width,
-					b->height,
-					img,
-					0,
-					0,
-					b->width,
-					b->height,
-					cur_alpha);
-		}
+		if (img != NULL)
+			render_image_helper(img, b->bid);
 	}
 }
 
@@ -2011,17 +1974,7 @@ process_button_render_var(
 	b = &button[index];
 	assert(b->type == TYPE_NAMEVAR);
 
-	/* Draw on the screen. */
-	s3_render_image(button[index].x,
-			button[index].y,
-			button[index].width,
-			button[index].height,
-			button[index].rt.img_canvas,
-			0,
-			0,
-			button[index].width,
-			button[index].height,
-			cur_alpha);
+	render_image_helper(b->rt.img_canvas, b->bid);
 }
 
 /*
@@ -2288,57 +2241,31 @@ process_button_render_save(
 	int index)
 {
 	struct gui_button *b;
+	int save_index;
 
 	b = &button[index];
 
 	if (index != pointed_index) {
-		if (b->rt.img_idle != NULL) {
-			s3_render_image(b->x,
-					b->y,
-					b->width,
-					b->height,
-					b->rt.img_idle,
-					b->x,
-					b->y,
-					b->width,
-					b->height,
-					cur_alpha);
-		}
+		if (b->rt.img_idle != NULL)
+			render_image_helper(b->rt.img_idle, b->bid);
 	} else {
 		struct s3_image *img;
 		img = b->rt.img_hover != NULL ? b->rt.img_hover : b->rt.img_idle;
-		if (img != NULL) {
-			s3_render_image(b->x,
-					b->y,
-					b->width,
-					b->height,
-					img,
-					b->x,
-					b->y,
-					b->width,
-					b->height,
-					cur_alpha);
-		}
+		if (img != NULL)
+			render_image_helper(img, b->bid);
 	}
 
 	/* Render the thumbnail and text. */
-	s3_render_image(b->x,
-			b->y,
-			b->width,
-			b->height,
-			b->rt.img_canvas,
-			0,
-			0,
-			b->width,
-			b->height,
-			cur_alpha);
+	render_image_helper(b->rt.img_canvas, b->bid);
 
 	/* Render the NEW image. */
-#if 0
+	save_index = save_page * save_slots + b->index;
 	if (b->rt.is_new_enabled &&
-	    get_latest_save_index() == save_page * save_slots + b->index)
-		render_savenew(b->new_x, b->new_y, cur_alpha);
-#endif
+	    save_index == s3_get_latest_save_index()) {
+		struct s3_image *img = s3i_get_savenew_image();
+		if (img != NULL)
+			render_image_helper(img, b->bid);
+	}
 }
 
 static void
@@ -2419,44 +2346,15 @@ process_button_render_history(
 	if (!b->rt.is_disabled && index == pointed_index) {
 		struct s3_image *img;
 		img = b->rt.img_hover != NULL ? b->rt.img_hover : b->rt.img_idle;
-		if (img != NULL) {
-			s3_render_image(b->x,
-					b->y,
-					b->width,
-					b->height,
-					img,
-					b->x,
-					b->y,
-					b->width,
-					b->height,
-					cur_alpha);
-		}
+		if (img != NULL)
+			render_image_helper(img, b->bid);
 	} else {
-		if (b->rt.img_idle != NULL) {
-			s3_render_image(b->x,
-					b->y,
-					b->width,
-					b->height,
-					b->rt.img_idle,
-					b->x,
-					b->y,
-					b->width,
-					b->height,
-					cur_alpha);
-		}
+		if (b->rt.img_idle != NULL)
+			render_image_helper(b->rt.img_idle, b->bid);
 	}
 
 	/* Render the text. */
-	s3_render_image(b->x,
-			b->y,
-			b->width,
-			b->height,
-			b->rt.img_canvas,
-			0,
-			0,
-			b->width,
-			b->height,
-			cur_alpha);
+	render_image_helper(b->rt.img_canvas, b->bid);
 }
 
 /* Render all history slots. */
@@ -3161,6 +3059,149 @@ truncate_variable(
 }
 
 /*
+ * Render a button image.
+ */
+static void
+render_image_helper(
+	struct s3_image *img,
+	int bid)
+{
+	int x, y, cx, cy, blend, alpha, layer;
+	float sx, sy, rot;
+
+	assert(bid >= 1 && bid <= S3_BUTTON_LAYERS);
+	if (bid < 1 || bid > S3_BUTTON_LAYERS)
+		return;
+
+	/* Get the layer index. (ID 1 = S3_LAYER_GUI_BTN1) */
+	layer = S3_LAYER_GUI_BTN1 + bid - 1;
+
+	/* Get the layer parameter. (They are updated by the anime system.) */
+	x = s3_get_layer_x(layer);
+	y = s3_get_layer_y(layer);
+	sx = s3_get_layer_scale_x(layer);
+	sy = s3_get_layer_scale_y(layer);
+	cx = s3_get_layer_center_x(layer);
+	cy = s3_get_layer_center_y(layer);
+	rot = s3_get_layer_rotate(layer);
+	blend = s3_get_layer_blend(layer);
+	alpha = (int)(((float)s3_get_layer_alpha(layer) / 255.0f) * (cur_alpha / 255.0f) * 255.0f);
+
+	/* If 3D. */
+	if (rot != 0 ||
+	    sx != 1.0f ||
+	    sy != 1.0f) {
+		float x1 = 0;
+		float y1 = 0;
+		float x2 = (float)img->width - 1.0f;
+		float y2 = 0;
+		float x3 = 0;
+		float y3 = (float)img->height - 1.0f;;
+		float x4 = (float)img->width - 1.0f;
+		float y4 = (float)img->height - 1.0f;
+		float center_x = (float)cx;
+		float center_y = (float)cy;
+		float rad = (float)rot;
+
+		/* 1. Shift for the centering. */
+		x1 -= center_x;
+		y1 -= center_y;
+		x2 -= center_x;
+		y2 -= center_y;
+		x3 -= center_x;
+		y3 -= center_y;
+		x4 -= center_x;
+		y4 -= center_y;
+
+		/* 2. Scale. */
+		x1 *= sx;
+		y1 *= sy;
+		x2 *= sx;
+		y2 *= sy;
+		x3 *= sx;
+		y3 *= sy;
+		x4 *= sx;
+		y4 *= sy;
+
+		/* 3. Rotate. */
+		if (rad != 0) {
+			float tmp_x, tmp_y;
+
+			tmp_x = x1;
+			tmp_y = y1;
+			x1 = tmp_x * cosf(rad) - tmp_y * sinf(rad);
+			y1 = tmp_x * sinf(rad) + tmp_y * cosf(rad);
+
+			tmp_x = x2;
+			tmp_y = y2;
+			x2 = tmp_x * cosf(rad) - tmp_y * sinf(rad);
+			y2 = tmp_x * sinf(rad) + tmp_y * cosf(rad);
+
+			tmp_x = x3;
+			tmp_y = y3;
+			x3 = tmp_x * cosf(rad) - tmp_y * sinf(rad);
+			y3 = tmp_x * sinf(rad) + tmp_y * cosf(rad);
+
+			tmp_x = x4;
+			tmp_y = y4;
+			x4 = tmp_x * cosf(rad) - tmp_y * sinf(rad);
+			y4 = tmp_x * sinf(rad) + tmp_y * cosf(rad);
+		}
+
+		/* 4. Shift again for the centering. */
+		x1 += cx;
+		y1 += cy;
+		x2 += cx;
+		y2 += cy;
+		x3 += cx;
+		y3 += cy;
+		x4 += cx;
+		y4 += cy;
+
+		/* 5. Shift for the layer position. */
+		x1 += (float)x;
+		y1 += (float)y;
+		x2 += (float)x;
+		y2 += (float)y;
+		x3 += (float)x;
+		y3 += (float)y;
+		x4 += (float)x;
+		y4 += (float)y;
+
+		/* Render. */
+		s3_render_image_3d(x1,
+				   y1,
+				   x2,
+				   y2,
+				   x3,
+				   y3,
+				   x4,
+				   y4,
+				   img,
+				   0,
+				   0,
+				   img->width,
+				   img->height,
+				   alpha,
+				   blend);
+		return;
+	}
+
+	/* Otherwise 2D. */
+	s3_render_image(x,
+			y,
+			(int)((float)img->width * sx),
+			(int)((float)img->height * sy),
+			img,
+			0,
+			0,
+			img->width,
+			img->height,
+			alpha,
+			blend);
+}
+
+/*
  * Sound Effect Playback and Text-to-Speech
  */
 
@@ -3587,7 +3628,7 @@ get_unused_bid(void)
 {
 	int i, j;
 
-	for (i = 0; i < S3_BUTTON_LAYERS; i++)
+	for (i = 1; i < S3_BUTTON_LAYERS; i++)
 		if (is_bid_unused(i))
 			return i;
 
@@ -3599,7 +3640,7 @@ is_bid_unused(int bid)
 {
 	int i;
 
-	for (i = 0; i < S3_BUTTON_LAYERS; i++)
+	for (i = 1; i < S3_BUTTON_LAYERS; i++)
 		if (button[i].bid == bid)
 			return false;
 
@@ -3628,6 +3669,10 @@ set_button_key_value(
 	/* id */
 	if (strcmp("id", key) == 0) {
 		int bid = atoi(val);
+		if (bid < 1)
+			bid = 1;
+		if (bid > S3_BUTTON_LAYERS)
+			bid = S3_BUTTON_LAYERS;
 		if (bid != b->bid) {
 			if (is_bid_unused(bid)) {
 				b->bid = bid;
@@ -3996,20 +4041,20 @@ set_button_key_value(
 		return true;
 	}
 
-	/* idle-anime */
-	if (strcmp("idle-anime", key) == 0) {
-		b->idle_anime = strdup(val);
-		if (b->idle_anime == NULL) {
+	/* anime-idle */
+	if (strcmp("anime-idle", key) == 0) {
+		b->anime_idle = strdup(val);
+		if (b->anime_idle == NULL) {
 			s3_log_out_of_memory();
 			return false;
 		}
 		return true;
 	}
 
-	/* hover-anime */
-	if (strcmp("hover-anime", key) == 0) {
-		b->hover_anime = strdup(val);
-		if (b->hover_anime == NULL) {
+	/* anime-hover */
+	if (strcmp("anime-hover", key) == 0) {
+		b->anime_hover = strdup(val);
+		if (b->anime_hover == NULL) {
 			s3_log_out_of_memory();
 			return false;
 		}

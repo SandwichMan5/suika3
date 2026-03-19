@@ -89,6 +89,12 @@ bool
 s3i_setup_banners(void);
 
 /*
+ * Get the save-new image
+ */
+struct s3_image *
+s3i_get_savenew_image(void);
+
+/*
  * Starts the Kirakira effect.
  */
 void

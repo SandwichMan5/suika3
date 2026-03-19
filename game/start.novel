@@ -1,8 +1,16 @@
-# Show a background image.
+[text text="Click to start..."]
+
 [bg file="bg/school.png" time="0.5"]
 
-# Show a character image.
 [ch center="ch/midori-happy.png" time="0.5" fade="normal"]
 
-# Show a question text.
-[text name="Midori" text="Now preparing for the first release!"]
+[text name="Midori" text="Let me introduce our new Active Hamburger menu for mobile!"]
+
+[move time="1.0" center-x="r-250" accel="deaccel"]
+
+[text name="Midori" text="The hamburger menu appears for a short time when you tap the screen."]
+[text name="Midori" text="A menu is shown when the hamburger menu is clicked."]
+
+[move time="1.0" center-x="r250" accel="deaccel"]
+
+[text name="Midori" text="We are mobile native!"]

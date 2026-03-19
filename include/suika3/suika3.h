@@ -1718,7 +1718,8 @@ s3_render_image(
 	int src_top,
 	int src_width,
 	int src_height,
-	int alpha);
+	int alpha,
+	int blend);
 
 /*
  * Render a image with free transform.
@@ -1738,7 +1739,8 @@ s3_render_image_3d(
 	int src_top,
 	int src_width,
 	int src_height,
-	int alpha);
+	int alpha,
+	int blend);
 
 
 /*

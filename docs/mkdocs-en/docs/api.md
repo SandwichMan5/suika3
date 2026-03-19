@@ -2725,6 +2725,15 @@ This API is useful for effects.
 | srcWidth  | No           | Integer | Source width.                              |
 | srcHeight | No           | Integer | Source height.                             |
 | alpha     | No           | Integer | Alpha value. (`0`-`255`)                   |
+| blend     | No           | Integer | Blend type.                                |
+
+### Blend Types
+
+| Name                 | Description       |
+|----------------------|-------------------|
+| Suika.BLEND_ALPHA    | Alpha blending.   |
+| Suika.BLEND_ADD      | Add blending.     |
+| Suika.BLEND_SUB      | Sub blending.     |
 
 ### Return
 

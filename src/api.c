@@ -964,6 +964,10 @@ static struct const_int_item const_int_item[] = {
 	{"FONT_COUNT",			S3_FONT_COUNT},
 	{"EMOJI_COUNT",			S3_EMOJI_COUNT},
 
+	/* Blend */
+	{"BLEND_ALPHA",			S3_BLEND_ALPHA},
+	{"BLEND_ADD",			S3_BLEND_ADD},	{"BLEND_SUB",			S3_BLEND_SUB},
+
 	/* Call Stack */
 	{"CALL_STACK_MAX",		S3_CALL_STACK_MAX},
 
@@ -5400,6 +5404,7 @@ Suika_renderImage(void *p)
 	int src_width;
 	int src_height;
 	int alpha;
+	int blend;
 	struct s3_image *img;
 	bool ret;
 
@@ -5426,6 +5431,8 @@ Suika_renderImage(void *p)
 			break;
 		if (!pf_get_call_arg_int("alpha", &alpha))
 			break;
+		if (!pf_get_call_arg_int("blend", &blend))
+			break;
 
 		img = s3i_int_to_image(image);
 		s3_render_image(
@@ -5438,7 +5445,8 @@ Suika_renderImage(void *p)
 				src_top,
 				src_width,
 				src_height,
-				alpha);
+				alpha,
+				blend);
 
 		/* Set the return value. */
 		if (!pf_set_return_int(1))
@@ -5457,6 +5465,7 @@ Suika_renderImage3d(void *p)
 	int src_left, src_top, src_width, src_height;
 	int image;
 	int alpha;
+	int blend;
 	struct s3_image *img;
 	bool ret;
 
@@ -5491,6 +5500,8 @@ Suika_renderImage3d(void *p)
 			break;
 		if (!pf_get_call_arg_int("alpha", &alpha))
 			break;
+		if (!pf_get_call_arg_int("beldn", &blend))
+			break;
 
 		img = s3i_int_to_image(image);
 		s3_render_image_3d(
@@ -5500,7 +5511,8 @@ Suika_renderImage3d(void *p)
 				   src_top,
 				   src_width,
 				   src_height,
-				   alpha);
+				   alpha,
+				   blend);
 
 		/* Set the return value. */
 		if (!pf_set_return_int(1))
