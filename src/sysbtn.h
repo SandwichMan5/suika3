@@ -52,4 +52,10 @@ s3i_init_sysbtn(void);
 void
 s3i_cleanup_sysbtn(void);
 
+/*
+ * Get the alpha value of the system button.
+ */
+int
+s3i_get_sysbtn_alpha(void);
+
 #endif

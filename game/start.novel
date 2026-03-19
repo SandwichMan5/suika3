@@ -2,7 +2,7 @@
 [bg file="bg/school.png" time="0.5"]
 
 # Show a character image.
-[ch center="ch/midori-positive.png" time="0.5" fade="normal"]
+[ch center="ch/midori-happy.png" time="0.5" fade="normal"]
 
 # Show a question text.
-[text name="Midori" text="Now preparing for the first release!."]
+[text name="Midori" text="Now preparing for the first release!"]

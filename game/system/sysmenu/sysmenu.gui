@@ -1,0 +1,80 @@
+#
+# System Menu GUI
+#
+
+# Basic settings for this GUI.
+global {
+    # Fading-in time in seconds.
+    fadein: 0.1;
+
+    # Fading-out time in seconds.
+    fadeout: 0.2;
+
+    # Cancel on click on margin.
+    clickcancel: yes;
+
+    # Cancel on ESC key.
+    escapecancel: yes;
+
+    # Sound effect on cancel.
+    cancelse: system/sysmenu/click.ogg;
+}
+
+BASE {
+    type: noaction;
+    x: 738;
+    y: 15;
+    image-idle: system/sysmenu/base.png;
+}
+
+SAVE {
+    type: gui;
+    file: system/save/save.gui;
+    x: 750;
+    y: 25;
+    image-idle: system/sysmenu/save-idle.png;
+    image-hover: system/sysmenu/save-hover.png;
+}
+
+LOAD {
+    type: gui;
+    file: system/load/load.gui;
+    x: 835;
+    y: 25;
+    image-idle: system/sysmenu/load-idle.png;
+    image-hover: system/sysmenu/load-hover.png;
+}
+
+AUTO {
+    type: auto;
+    x: 918;
+    y: 25;
+    image-idle: system/sysmenu/auto-idle.png;
+    image-hover: system/sysmenu/auto-hover.png;
+}
+
+SKIP {
+    type: skip;
+    x: 1006;
+    y: 25;
+    image-idle: system/sysmenu/skip-idle.png;
+    image-hover: system/sysmenu/skip-hover.png;
+}
+
+LOG {
+    type: gui;
+    file: system/history/history.gui;
+    x: 1095;
+    y: 25;
+    image-idle: system/sysmenu/log-idle.png;
+    image-hover: system/sysmenu/log-hover.png;
+}
+
+CONFIG {
+    type: gui;
+    file: system/config/config.gui;
+    x: 1182;
+    y: 25;
+    image-idle: system/sysmenu/config-idle.png;
+    image-hover: system/sysmenu/config-hover.png;
+}

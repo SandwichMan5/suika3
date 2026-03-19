@@ -320,9 +320,6 @@ static int calc_frame_chars_by_lap(void);
 static void set_click(void);
 static bool check_stop_click_animation(void);
 
-/* sysbtn */
-static void render_sysbtn_extended(void);
-
 /* dimming */
 static void blit_dimming(void);
 
@@ -1682,8 +1679,6 @@ frame_sysbtn(void)
 		return false;
 	}
 #endif
-
-	s3_update_sysbtn_state();
 
 	/* Accept key operations */
 	if (s3_is_space_key_pressed()) {

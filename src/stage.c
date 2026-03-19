@@ -1563,7 +1563,9 @@ s3_render_stage(void)
 		s3i_run_gui_render();
 
 	/* Render the sysbtn. */
+	s3_update_sysbtn_state();
 	if (s3_is_sysbtn_visible()) {
+		int alpha = s3i_get_sysbtn_alpha();
 		if (!s3_is_sysbtn_pointed()) {
 			pf_render_texture(conf_sysbtn_x,
 					  conf_sysbtn_y,
@@ -1574,7 +1576,7 @@ s3_render_stage(void)
 					  0,
 					  sysbtn_idle_image->width,
 					  sysbtn_idle_image->height,
-					  255);
+					  alpha);
 		} else {
 			pf_render_texture(conf_sysbtn_x,
 					  conf_sysbtn_y,
@@ -1585,7 +1587,7 @@ s3_render_stage(void)
 					  0,
 					  sysbtn_hover_image->width,
 					  sysbtn_hover_image->height,
-					  255);
+					  alpha);
 		}
 	}
 }
