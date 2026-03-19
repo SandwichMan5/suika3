@@ -914,7 +914,8 @@ s3_set_call_argument(
 	assert(index < S3_CALL_ARGS);
 
 	FREE(call_arg[index]);
-	STRDUP(call_arg[index], val);
+	if (val != NULL)
+		STRDUP(call_arg[index], val);
 
 	return true;
 }

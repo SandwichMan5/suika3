@@ -427,6 +427,7 @@ static bool load_base_image(const char *file);
 static bool load_idle_image(const char *file);
 static bool load_hover_image(const char *file);
 static bool load_active_image(const char *file);
+static void set_gui_call_arg(int bid);
 
 /*
  * Initialize the GUI subsystem.
@@ -595,7 +596,7 @@ s3_load_gui_file(
 void
 s3_start_gui(void)
 {
-	int i;
+	int i, j;
 
 	assert(!is_gui_running);
 
@@ -625,8 +626,13 @@ s3_start_gui(void)
 
 	/* Start the idle animations. */
 	for (i = 0; i < S3_BUTTON_LAYERS; i++) {
-		if (button[i].anime_idle != NULL)
+		if (button[i].anime_idle != NULL) {
+			/* Set "gui%d" to "$0".  */
+			set_gui_call_arg(button[i].bid);
+
+			/* Load an anime. */
 			s3_load_anime_from_file(button[i].anime_idle, NULL, button[i].rt.used_layers);
+		}
 	}
 
 	/* Hide the sysbtn. */
@@ -980,12 +986,22 @@ static void process_input(void)
 				if (button[pointed_index].rt.used_layers[i])
 					s3_clear_layer_anime_sequence(i);
 			}
+
+			/* Set "gui%d" to "$0".  */
+			set_gui_call_arg(button[prev_pointed_index].bid);
+
+			/* Load the anime. */
 			s3_load_anime_from_file(button[prev_pointed_index].anime_idle, NULL, button[pointed_index].rt.used_layers);
 		}
 	}
 	if (prev_pointed_index != pointed_index && pointed_index != -1) {
-		if (button[pointed_index].anime_hover != NULL)
+		if (button[pointed_index].anime_hover != NULL) {
+			/* Set "gui%d" to "$0".  */
+			set_gui_call_arg(button[pointed_index].bid);
+
+			/* Load the anime. */
 			s3_load_anime_from_file(button[pointed_index].anime_hover, NULL, button[pointed_index].rt.used_layers);
+		}
 	}
 
 	/* If a button is chosen, exit. */
@@ -4113,4 +4129,19 @@ get_type_for_name(
 	/* If not found. */
 	s3_log_error(S3_TR("Unknown button type name \"%s\" in GUI file \"%s\" line %d."), name, file, line);
 	return TYPE_INVALID;
+}
+
+static void
+set_gui_call_arg(
+	int bid)
+{
+	char layer[32];
+	int i;
+
+	snprintf(layer, sizeof(layer), "gui%d", bid);
+
+	s3_set_call_argument(0, layer);
+
+	for (i = 1; i < S3_CALL_ARGS; i++)
+		s3_set_call_argument(i, NULL);
 }

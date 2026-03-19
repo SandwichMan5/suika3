@@ -712,6 +712,13 @@ on_key_value(
 	struct sequence *s;
 	int top;
 
+	/* Expand the argument such as "$1". */
+	if (strlen(val) > 0 && val[0] == '$') {
+		int arg_index = atoi(&val[1]);
+		if (arg_index >= 0 && arg_index < S3_CALL_ARGS)
+			val = s3_get_call_argument(arg_index);
+	}
+
 	/* Layer must be specified first. */
 	if (strcmp(key, "layer") == 0) {
 		/* Get the layer. */

@@ -410,13 +410,11 @@ init(void)
 				center_x = (float)atof(s);
 			}
 
-			s3_add_anime_sequence_property_i("from-center-x", s3_get_layer_center_x(LAYER_INDEX));
-			s3_add_anime_sequence_property_i("to-center-x", center_x);
+			s3_add_anime_sequence_property_i("center-x", center_x);
 		} else {
 			int center_x;
 			center_x = s3_get_layer_center_x(LAYER_INDEX);
-			s3_add_anime_sequence_property_i("from-center-x", center_x);
-			s3_add_anime_sequence_property_i("to-center-x", center_x);
+			s3_add_anime_sequence_property_i("center-x", center_x);
 		}
 
 		/* Has a center-y value argument? */
@@ -435,13 +433,11 @@ init(void)
 				center_y = (float)atof(s);
 			}
 
-			s3_add_anime_sequence_property_i("from-center-y", s3_get_layer_center_y(LAYER_INDEX));
-			s3_add_anime_sequence_property_i("to-center-y", center_y);
+			s3_add_anime_sequence_property_i("center-y", center_y);
 		} else {
 			int center_y;
 			center_y = s3_get_layer_center_y(LAYER_INDEX);
-			s3_add_anime_sequence_property_i("from-center-y", center_y);
-			s3_add_anime_sequence_property_i("to-center-y", center_y);
+			s3_add_anime_sequence_property_i("center-y", center_y);
 		}
 
 		/* Has a rotate value argument? */
