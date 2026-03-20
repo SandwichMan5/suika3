@@ -4,7 +4,7 @@ android {
     namespace 'io.noctvm.playfield.engineandroid'
     compileSdk 35
     defaultConfig {
-        applicationId "io.noctvm.playfield.engineandroid"
+        applicationId "vn.suika3.android"
         minSdkVersion 32
         versionCode 1
         versionName "1.0.0"
