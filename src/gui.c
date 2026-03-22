@@ -155,9 +155,6 @@ struct gui_button {
 	char *clickse;
 	char *pointse;
 
-	/* TYPE_SAVE/TYPE_LOAD */
-	int margin, new_x, new_y;
-
 	/* TYPE_LABEL */
 	char *label;
 
@@ -182,6 +179,22 @@ struct gui_button {
 	/* Anime */
 	char *anime_idle;
 	char *anime_hover;
+
+	/* TYPE_SAVE, TYPE_LOAD */
+	int thumb_x;
+	int thumb_y;
+	int date_x;
+	int date_y;
+	int chapter_x;
+	int chapter_y;
+	int msg_x;
+	int msg_y;
+	int new_x;
+	int new_y;
+
+	/* TYPE_HISTORY */
+	int history_x;
+	int history_y;
 
 	/*
 	 * Runtime information.
@@ -1693,6 +1706,7 @@ process_button_click(
 		update_save_buttons();
 		break;
 	case TYPE_SAVE:
+		s3_draw_stage_to_thumb();
 		process_save(index);
 		update_save_buttons();
 		break;
@@ -2029,10 +2043,12 @@ update_save_buttons(void)
 
 		save_index = base + button[i].index;
 
-		if (s3_get_save_timestamp(save_index) != 0)
-			button[i].rt.is_disabled = false;
-		else
-			button[i].rt.is_disabled = true;
+		if (button[i].type == TYPE_LOAD) {
+			if (s3_get_save_timestamp(save_index) != 0)
+				button[i].rt.is_disabled = false;
+			else
+				button[i].rt.is_disabled = true;
+		}
 
 		draw_save_button(i);
 	}
@@ -2078,17 +2094,17 @@ draw_save_button(
 	if (thumb != NULL) {
 		s3_draw_image_copy(
 			b->rt.img_canvas,
-			b->margin,
-			b->margin,
+			b->thumb_x,
+			b->thumb_y,
 			thumb,
-			conf_save_thumb_width,
-			conf_save_thumb_height,
+			s3_get_image_width(thumb),
+			s3_get_image_height(thumb),
 			0,
 			0);
 	}
 
 	/* Draw the date and time. */
-	if (s3_get_save_timestamp(save_index) != 0) {
+	if (s3_get_save_timestamp(save_index) == 0) {
 		snprintf(text, sizeof(text), "[%02d] NO DATA", save_index);
 	} else {
 		timeptr = localtime(&save_time);
@@ -2097,16 +2113,17 @@ draw_save_button(
 			 timeptr);
 	}
 	width = draw_save_text_item(button_index,
-				    conf_save_thumb_width + b->margin * 2,
-				    b->margin, text, false);
+				    b->date_x,
+				    b->date_y,
+				    text,
+				    false);
 
 	/* Draw the chapter title. */
 	chapter = s3_get_save_chapter_name(save_index);
 	if (chapter != NULL) {
 		draw_save_text_item(button_index,
-				    conf_save_thumb_width +
-				    b->margin * 2 + width,
-				    b->margin,
+				    b->chapter_x,
+				    b->chapter_y,
 				    chapter,
 				    false);
 	}
@@ -2115,8 +2132,8 @@ draw_save_button(
 	msg = s3_get_save_last_message(save_index);
 	if (msg) {
 		draw_save_text_item(button_index,
-				    conf_save_thumb_width + b->margin * 2,
-				    b->margin + conf_msgbox_margin_line,
+				    b->msg_x,
+				    b->msg_y,
 				    msg,
 				    true);
 	}
@@ -2150,7 +2167,7 @@ draw_save_text_item(
 				      (uint32_t)conf_gui_save_font_outline_g,
 				      (uint32_t)conf_gui_save_font_outline_b);
 
-	/* Render the text. */
+	/* Draw the text. */
 	context = s3_create_drawmsg(
 		b->rt.img_canvas,
 		text,
@@ -2163,8 +2180,8 @@ draw_save_text_item(
 		y,
 		b->width,
 		b->height,
-		x,		/* left_margin */
-		b->margin,	/* right_margin */
+		0,		/* left_margin */
+		0,		/* right_margin */
 		0,		/* top_margin */
 		0,		/* bottom_margin */
 		multiline ? conf_msgbox_margin_line : 0,
@@ -2473,11 +2490,11 @@ draw_history_text_item(
 
 	/* Calculate the pen position. */
 	if (!conf_gui_history_font_tategaki) {
-		pen_x = b->margin;
-		pen_y = b->margin;
+		pen_x = b->history_x;
+		pen_y = b->history_y;
 	} else {
-		pen_x = b->width - b->margin - conf_gui_history_font_size;
-		pen_y = b->margin;
+		pen_x = b->history_x - conf_gui_history_font_size;
+		pen_y = b->history_y;
 	}
 
 	/* Render. */
@@ -2493,10 +2510,10 @@ draw_history_text_item(
 		pen_y,
 		b->width,	/* area_width */
 		b->height,	/* area_height */
-		b->margin,	/* left_margin */
-		b->margin,	/* right_margin */
-		b->margin,	/* top_margin */
-		b->margin,	/* bottom_margin */
+		0,		/* left_margin */
+		0,		/* right_margin */
+		0,		/* top_margin */
+		0,		/* bottom_margin */
 		conf_gui_history_margin_line,
 		conf_msgbox_margin_char,
 		color,
@@ -3779,12 +3796,6 @@ set_button_key_value(
 		return true;
 	}
 
-	/* margin */
-	if (strcmp("margin", key) == 0) {
-		b->margin = atoi(val);
-		return true;
-	}
-
 	/* label */
 	if (strcmp("label", key) == 0) {
 		b->label = strdup(val);
@@ -4043,6 +4054,62 @@ set_button_key_value(
 		return true;
 	}
 
+	/* date-x */
+	if (strcmp("date-x", key) == 0) {
+		b->date_x = atoi(val);
+		b->rt.is_new_enabled = true;
+		return true;
+	}
+
+	/* date-y */
+	if (strcmp("date-y", key) == 0) {
+		b->date_y = atoi(val);
+		b->rt.is_new_enabled = true;
+		return true;
+	}
+
+	/* thumb-x */
+	if (strcmp("thumb-x", key) == 0) {
+		b->thumb_x = atoi(val);
+		b->rt.is_new_enabled = true;
+		return true;
+	}
+
+	/* thumb-y */
+	if (strcmp("thumb-y", key) == 0) {
+		b->thumb_y = atoi(val);
+		b->rt.is_new_enabled = true;
+		return true;
+	}
+
+	/* chapter-x */
+	if (strcmp("chapter-x", key) == 0) {
+		b->chapter_x = atoi(val);
+		b->rt.is_new_enabled = true;
+		return true;
+	}
+
+	/* chapter-y */
+	if (strcmp("chapter-y", key) == 0) {
+		b->chapter_y = atoi(val);
+		b->rt.is_new_enabled = true;
+		return true;
+	}
+
+	/* msg-x */
+	if (strcmp("msg-x", key) == 0) {
+		b->msg_x = atoi(val);
+		b->rt.is_new_enabled = true;
+		return true;
+	}
+
+	/* msg-y */
+	if (strcmp("msg-y", key) == 0) {
+		b->msg_y = atoi(val);
+		b->rt.is_new_enabled = true;
+		return true;
+	}
+
 	/* new-x */
 	if (strcmp("new-x", key) == 0) {
 		b->new_x = atoi(val);
@@ -4056,6 +4123,7 @@ set_button_key_value(
 		b->rt.is_new_enabled = true;
 		return true;
 	}
+
 
 	/* anime-idle */
 	if (strcmp("anime-idle", key) == 0) {

@@ -1070,33 +1070,54 @@ const char *
 s3_get_config_key(
 	int index)
 {
-	int i, save_key_count;
-
-	save_key_count = 0;
-	for (i = 0; i < RULE_TBL_SIZE; i++) {
-		if (!rule_tbl[i].save)
-			continue;
-		if (save_key_count == index)
-			return rule_tbl[i].key;
-		save_key_count++;
-	}
-	return NULL;
+	return rule_tbl[index].key;
 }
 
 /*
- * Check if config key is stored to global save data.
+ * Check if a config key is stored to global save data.
  */
 bool
-s3_is_global_config(
+s3_is_global_save_config(
 	const char *key)
 {
 	int i;
 
 	for (i = 0; i < RULE_TBL_SIZE; i++) {
-		if (strcmp(rule_tbl[i].key, key) == 0)
-			return rule_tbl[i].global;
+		if (strcmp(rule_tbl[i].key, key) == 0) {
+			/* Found the key. */
+			if (rule_tbl[i].save && rule_tbl[i].global) {
+				/* Save && Global. */
+				return true;
+			}
+			return false;
+		}
 	}
 
+	/* Not found. */
+	return false;
+}
+
+/*
+ * Check if a config is stored to local save data.
+ */
+int
+s3_is_local_save_config(
+	const char *key)
+{
+	int i;
+
+	for (i = 0; i < RULE_TBL_SIZE; i++) {
+		if (strcmp(rule_tbl[i].key, key) == 0) {
+			/* Found the key. */
+			if (rule_tbl[i].save && !rule_tbl[i].global) {
+				/* Save && Global. */
+				return true;
+			}
+			return false;
+		}
+	}
+
+	/* Not found. */
 	return false;
 }
 

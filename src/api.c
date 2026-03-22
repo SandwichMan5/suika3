@@ -62,7 +62,8 @@ static bool Suika_print(void *p);
 static bool Suika_setConfig(void *p);
 static bool Suika_getConfigCount(void *p);
 static bool Suika_getConfigKey(void *p);
-static bool Suika_isGlobalConfig(void *p);
+static bool Suika_isGlobalSaveConfig(void *p);
+static bool Suika_isLocalSaveConfig(void *p);
 static bool Suika_getConfigType(void *p);
 static bool Suika_getStringConfig(void *p);
 static bool Suika_getBoolConfig(void *p);
@@ -435,7 +436,8 @@ static struct api_func api_func[] = {
 	{"setConfig",			Suika_setConfig,		1, dict_param},
 	{"getConfigCount",		Suika_getConfigCount,		0, NULL},
 	{"getConfigKey",		Suika_getConfigKey,		1, dict_param},
-	{"isGlobalConfig",		Suika_isGlobalConfig,		1, dict_param},
+	{"isGlobalSaveConfig",		Suika_isGlobalSaveConfig,	1, dict_param},
+	{"isLocalSaveConfig",		Suika_isLocalSaveConfig,	1, dict_param},
 	{"getConfigType",		Suika_getConfigType,		1, dict_param},
 	{"getBoolConfig",		Suika_getBoolConfig,		1, dict_param},
 	{"getIntConfig",		Suika_getIntConfig,		1, dict_param},
@@ -1313,11 +1315,11 @@ Suika_getConfigKey(
 }
 
 static bool
-Suika_isGlobalConfig(
-		     void *p)
+Suika_isGlobalSaveConfig(
+	void *p)
 {
 	char *key;
-	bool is_global;
+	bool is_global_save;
 	bool ret;
 
 	key = NULL;
@@ -1327,11 +1329,42 @@ Suika_isGlobalConfig(
 		if (!pf_get_call_arg_string("key", &key))
 			break;
 
-		/* Check if the config is global. */
-		is_global = s3_is_global_config(key);
+		/* Check if the config is saved-global. */
+		is_global_save = s3_is_global_save_config(key);
 
 		/* Set the return value. */
-		if (!pf_set_return_int(is_global ? 1 : 0))
+		if (!pf_set_return_int(is_global_save ? 1 : 0))
+			break;
+
+		ret = true;
+	} while (0);
+
+	if (key != NULL)
+		free(key);
+
+	return ret;
+}
+
+static bool
+Suika_isLocalSaveConfig(
+	void *p)
+{
+	char *key;
+	bool is_local_save;
+	bool ret;
+
+	key = NULL;
+	ret = false;
+	do {
+		/* Get the argument. */
+		if (!pf_get_call_arg_string("key", &key))
+			break;
+
+		/* Check if the config is saved-local. */
+		is_local_save = s3_is_local_save_config(key);
+
+		/* Set the return value. */
+		if (!pf_set_return_int(is_local_save ? 1 : 0))
 			break;
 
 		ret = true;

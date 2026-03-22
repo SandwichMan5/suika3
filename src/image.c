@@ -460,7 +460,9 @@ s3_draw_image_glyph(
 	pf_notify_texture_update(dst->tex_id);
 }
 
-/* Draw an emoji image to an image. */
+/*
+ * Draw an emoji image to an image.
+ */
 void
 s3_draw_image_emoji(
 	struct s3_image *dst,
@@ -486,7 +488,9 @@ s3_draw_image_emoji(
 	pf_notify_texture_update(dst->tex_id);
 }
 
-/* Draw an image with scaling. */
+/*
+ * Draw an image with scaling.
+ */
 void
 s3_draw_image_scale(
 	struct s3_image *dst,
@@ -505,6 +509,110 @@ s3_draw_image_scale(
 		src->tex_id);
 	pf_notify_texture_update(dst->tex_id);
 }
+
+/*
+ * Draw an image on an image. (3D)
+ */
+void
+s3_draw_image_3d_alpha(
+	struct s3_image *dst_image,
+	float x1,
+	float y1,
+	float x2,
+	float y2,
+	float x3,
+	float y3,
+	float x4,
+	float y4,
+	struct s3_image *src_image,
+	int src_left,
+	int src_top,
+	int src_width,
+	int src_height,
+	int alpha)
+{
+	hal_draw_image_3d_add(
+		dst_image,
+		x1,
+		y1,
+		x2,
+		y2,
+		x3,
+		y3,
+		x4,
+		y4,
+		src_image,
+		src_left,
+		src_top,
+		src_width,
+		src_height,
+		alpha);
+		
+}
+
+/*
+ * Draw an image on an image. (3D)
+ */
+void
+hal_draw_image_3d_add(
+	struct hal_image *dst_image,
+	float x1,
+	float y1,
+	float x2,
+	float y2,
+	float x3,
+	float y3,
+	float x4,
+	float y4,
+	struct hal_image *src_image,
+	int src_left,
+	int src_top,
+	int src_width,
+	int src_height,
+	int alpha);
+
+/*
+ * Draw an image on an image. (3D)
+ */
+void
+hal_draw_image_3d_sub(
+	struct hal_image *dst_image,
+	float x1,
+	float y1,
+	float x2,
+	float y2,
+	float x3,
+	float y3,
+	float x4,
+	float y4,
+	struct hal_image *src_image,
+	int src_left,
+	int src_top,
+	int src_width,
+	int src_height,
+	int alpha);
+
+/*
+ * Draw an image on an image. (3D)
+ */
+void
+hal_draw_image_3d_dim(
+	struct hal_image *dst_image,
+	float x1,
+	float y1,
+	float x2,
+	float y2,
+	float x3,
+	float y3,
+	float x4,
+	float y4,
+	struct hal_image *src_image,
+	int src_left,
+	int src_top,
+	int src_width,
+	int src_height,
+	int alpha);
+
 
 /*
  * Make a pixel value.

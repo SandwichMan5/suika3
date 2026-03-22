@@ -112,6 +112,7 @@ static char sbuf[1024];
  */
 static bool load_basic_save_info_all(void);
 static bool load_basic_save_info(int index);
+static bool copy_thumb(int index);
 static bool open_write_stream(void);
 static bool write_u32(uint32_t val);
 static bool write_u64(uint64_t val);
@@ -198,7 +199,7 @@ s3_execute_save_global(void)
 		if (!open_write_stream())
 			break;
 
-		/* セーブデータのバージョンを書き出す */
+		/* Write the save data versoin. */
 		if (!write_u32(SAVE_VER))
 			break;
 		
@@ -255,10 +256,11 @@ s3_execute_save_global(void)
 			break;
 		for (i = 0; i < count; i++) {
 			const char *key = s3_get_config_key(i);
-			if (!s3_is_global_config(key))
-				continue;
-			if (!write_string(s3_get_config_as_string(key)))
-				break;
+			if (s3_is_global_save_config(key)) {
+				const char *val = s3_get_config_as_string(key);
+				if (!write_string(val))
+					break;
+			}
 		}
 
 		/* Close the stream. */
@@ -268,8 +270,10 @@ s3_execute_save_global(void)
 		success = true;
 	} while (0);
 
-	if (!success)
+	if (!success) {
+		close_write_stream(GLOBAL_SAVE_FILE);
 		return false;
+	}
 
 	return true;
 }
@@ -425,7 +429,9 @@ s3_execute_save_local(
 			break;
 
 		/* Write the thumbnail. */
-		if (!write_data(s3_get_image_pixels(s3_get_thumb_image()),
+		if (!copy_thumb(index))
+			break;
+		if (!write_data(s3_get_image_pixels(save_thumb[index]),
 				(size_t)(conf_save_thumb_width * conf_save_thumb_height * 4)))
 			break;
 
@@ -536,10 +542,10 @@ s3_execute_save_local(
 			break;
 		for (i = 0; i < count; i++) {
 			const char *key = s3_get_config_key(i);
-			if (s3_is_global_config(key))
-				continue;
-			if (!write_string(s3_get_config_as_string(key)))
-				break;
+			if (s3_is_local_save_config(key)) {
+				if (!write_string(s3_get_config_as_string(key)))
+					break;
+			}
 		}
 		if (i != count)
 			break;	/* Error. */
@@ -1034,6 +1040,37 @@ load_basic_save_info(
 	return true;
 }
 
+static bool
+copy_thumb(
+	int index)
+{
+	struct s3_image *src, *dst;
+	int w, h;
+
+	src = s3_get_thumb_image();
+	if (src == NULL)
+		return false;
+
+	w = s3_get_image_width(src);
+	h = s3_get_image_height(src);
+
+	dst = s3_create_image(w, h);
+	if (dst == NULL)
+		return false;
+
+	memcpy(s3_get_image_pixels(dst),
+	       s3_get_image_pixels(src),
+	       w * 4 * h);
+
+	if (save_thumb[index] != NULL) {
+		s3_destroy_image(save_thumb[index]);
+		save_thumb[index] = NULL;
+	}
+	save_thumb[index] = dst;
+	return true;
+}
+
+
 /*
  * Helpers
  */
@@ -1065,7 +1102,7 @@ static bool
 write_u32(
 	uint32_t val)
 {
-	if (resize_buffer(4))
+	if (!resize_buffer(4))
 		return false;
 
 	stream_buf[stream_buf_pos + 0] = (uint8_t)(val & 0xff);
@@ -1083,7 +1120,7 @@ static bool
 write_u64(
 	  uint64_t val)
 {
-	if (resize_buffer(8))
+	if (!resize_buffer(4))
 		return false;
 
 	stream_buf[stream_buf_pos + 0] = (uint8_t)(val & 0xff);
@@ -1107,7 +1144,7 @@ write_f32(
 {
 	uint32_t v;
 
-	if (resize_buffer(4))
+	if (!resize_buffer(4))
 		return false;
 
 	v = *(uint32_t *)&val;
@@ -1132,10 +1169,10 @@ write_string(
 		val = "";
 
 	len = strlen(val) + 1;
-	if (resize_buffer(len))
+	if (!resize_buffer(len))
 		return false;
 
-	for (i = 0; i < len; len++)
+	for (i = 0; i < len; i++)
 		stream_buf[stream_buf_pos++] = val[i];
 
 	stream_buf_pos += len;
@@ -1149,7 +1186,7 @@ write_data(
 	const void *data,
 	size_t size)
 {
-	if (resize_buffer(size))
+	if (!resize_buffer(size))
 		return false;
 
 	memcpy(stream_buf, data, size);

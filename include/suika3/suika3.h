@@ -451,10 +451,17 @@ s3_get_config_key(
 	int index);
 
 /*
- * Check if config key is stored to global save data.
+ * Check if a config key is stored to global save data.
  */
 bool
-s3_is_global_config(
+s3_is_global_save_config(
+	const char *key);
+
+/*
+ * Check if a config is stored to local save data.
+ */
+int
+s3_is_local_save_config(
 	const char *key);
 
 /*

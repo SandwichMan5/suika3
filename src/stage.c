@@ -1858,29 +1858,181 @@ render_layer(
 void
 s3_draw_stage_to_thumb(void)
 {
+	float root_scale_x, root_scale_y;
+	float x1, y1, x2, y2, x3, y3, x4, y4, cx, cy, rad;
 	int i;
 
+	root_scale_x = (float)conf_save_thumb_width / (float)conf_game_width;
+	root_scale_y = (float)conf_save_thumb_height / (float)conf_game_height;
+
 	for (i = 0; i < S3_STAGE_LAYERS; i++) {
-		if (i == S3_LAYER_MSGBOX)
-			if (!is_msgbox_visible)
-				continue;
-		if (i== S3_LAYER_NAMEBOX)
-			if (!is_namebox_visible || !conf_namebox_enable)
-				continue;
-		if (i == S3_LAYER_AUTO)
-			continue;
-		if (i == S3_LAYER_SKIP)
-			continue;
+		/* Cannot draw if no image.*/
 		if (layer_image[i] == NULL)
 			continue;
+
+		/* Skip drawing if alpha = 0. */
 		if (layer_alpha[i] == 0)
 			continue;
-		s3_draw_image_scale(thumb_image,
-				    conf_game_width,
-				    conf_game_height,
-				    layer_x[i],
-				    layer_y[i],
-				    layer_image[i]);
+
+		/* Exclude special layers. */
+		if (i == S3_LAYER_BG_FO ||
+		    i == S3_LAYER_CHB_EYE ||
+		    i == S3_LAYER_CHB_LIP ||
+		    i == S3_LAYER_CHB_FO ||
+		    i == S3_LAYER_CHL_EYE ||
+		    i == S3_LAYER_CHL_LIP ||
+		    i == S3_LAYER_CHL_FO ||
+		    i == S3_LAYER_CHLC_EYE ||
+		    i == S3_LAYER_CHLC_LIP ||
+		    i == S3_LAYER_CHLC_FO ||
+		    i == S3_LAYER_CHC_EYE ||
+		    i == S3_LAYER_CHC_LIP ||
+		    i == S3_LAYER_CHC_FO ||
+		    i == S3_LAYER_CHRC_EYE ||
+		    i == S3_LAYER_CHRC_LIP ||
+		    i == S3_LAYER_CHRC_FO ||
+		    i == S3_LAYER_CHR_EYE ||
+		    i == S3_LAYER_CHR_LIP ||
+		    i == S3_LAYER_CHR_FO ||
+		    i == S3_LAYER_CHF_EYE ||
+		    i == S3_LAYER_CHF_LIP ||
+		    i == S3_LAYER_CHF_FO ||
+		    i == S3_LAYER_CHOOSE1_HOVER ||
+		    i == S3_LAYER_CHOOSE2_HOVER ||
+		    i == S3_LAYER_CHOOSE3_HOVER ||
+		    i == S3_LAYER_CHOOSE4_HOVER ||
+		    i == S3_LAYER_CHOOSE5_HOVER ||
+		    i == S3_LAYER_CHOOSE6_HOVER ||
+		    i == S3_LAYER_CHOOSE7_HOVER ||
+		    i == S3_LAYER_CHOOSE8_HOVER ||
+		    i == S3_LAYER_CLICK ||
+		    i == S3_LAYER_AUTO ||
+		    i == S3_LAYER_SKIP ||
+		    i >= S3_LAYER_GUI_BTN1 && i <= S3_LAYER_GUI_BTN32)
+			continue;
+
+		/* Do not draw the message box if not visible. */
+		if (i == S3_LAYER_MSGBOX && !is_msgbox_visible)
+			continue;
+
+		/* Do not draw the name box if not visible. */
+		if (i== S3_LAYER_NAMEBOX && (!is_namebox_visible || !conf_namebox_enable))
+			continue;
+
+		x1 = 0;
+		y1 = 0;
+		x2 = (float)layer_image[i]->width * root_scale_x - 1.0f;
+		y2 = 0;
+		x3 = 0;
+		y3 = (float)layer_image[i]->height * root_scale_y - 1.0f;
+		x4 = (float)layer_image[i]->width * root_scale_x - 1.0f;
+		y4 = (float)layer_image[i]->height * root_scale_y - 1.0f;
+		cx = (float)layer_center_x[i] * root_scale_x;
+		cy = (float)layer_center_y[i] * root_scale_y;
+		rad = (float)layer_rotate[i];
+
+		/* 1. Shift for the centering. */
+		x1 -= cx;
+		y1 -= cy;
+		x2 -= cx;
+		y2 -= cy;
+		x3 -= cx;
+		y3 -= cy;
+		x4 -= cx;
+		y4 -= cy;
+
+		/* 2. Scale. */
+		x1 *= layer_scale_x[i];
+		y1 *= layer_scale_y[i];
+		x2 *= layer_scale_x[i];
+		y2 *= layer_scale_y[i];
+		x3 *= layer_scale_x[i];
+		y3 *= layer_scale_y[i];
+		x4 *= layer_scale_x[i];
+		y4 *= layer_scale_y[i];
+
+		/* 3. Rotate. */
+		if (rad != 0) {
+			float tmp_x, tmp_y;
+
+			tmp_x = x1;
+			tmp_y = y1;
+			x1 = tmp_x * cosf(rad) - tmp_y * sinf(rad);
+			y1 = tmp_x * sinf(rad) + tmp_y * cosf(rad);
+
+			tmp_x = x2;
+			tmp_y = y2;
+			x2 = tmp_x * cosf(rad) - tmp_y * sinf(rad);
+			y2 = tmp_x * sinf(rad) + tmp_y * cosf(rad);
+
+			tmp_x = x3;
+			tmp_y = y3;
+			x3 = tmp_x * cosf(rad) - tmp_y * sinf(rad);
+			y3 = tmp_x * sinf(rad) + tmp_y * cosf(rad);
+
+			tmp_x = x4;
+			tmp_y = y4;
+			x4 = tmp_x * cosf(rad) - tmp_y * sinf(rad);
+			y4 = tmp_x * sinf(rad) + tmp_y * cosf(rad);
+		}
+
+		/* 4. Shift again for the centering. */
+		x1 += cx;
+		y1 += cy;
+		x2 += cx;
+		y2 += cy;
+		x3 += cx;
+		y3 += cy;
+		x4 += cx;
+		y4 += cy;
+
+		/* 5. Shift for the layer position. */
+		x1 += (float)layer_x[i] * root_scale_x;
+		y1 += (float)layer_y[i] * root_scale_y;
+		x2 += (float)layer_x[i] * root_scale_x;
+		y2 += (float)layer_y[i] * root_scale_y;
+		x3 += (float)layer_x[i] * root_scale_x;
+		y3 += (float)layer_y[i] * root_scale_y;
+		x4 += (float)layer_x[i] * root_scale_x;
+		y4 += (float)layer_y[i] * root_scale_y;
+
+		if (layer_dim[i]) {
+			pf_draw_image_3d_dim(thumb_image->tex_id,
+					     x1, y1, x2, y2, x3, y3, x4, y4,
+					     layer_image[i]->tex_id,
+					     0,
+					     0,
+					     layer_image[i]->width,
+					     layer_image[i]->height,
+					     layer_alpha[i]);
+		} else if (layer_blend == S3_BLEND_NORMAL) {
+			pf_draw_image_3d_alpha(thumb_image->tex_id,
+					       x1, y1, x2, y2, x3, y3, x4, y4,
+					       layer_image[i]->tex_id,
+					       0,
+					       0,
+					       layer_image[i]->width,
+					       layer_image[i]->height,
+					       layer_alpha[i]);
+		} else if (layer_blend == S3_BLEND_ADD) {
+			pf_draw_image_3d_add(thumb_image->tex_id,
+					     x1, y1, x2, y2, x3, y3, x4, y4,
+					     layer_image[i]->tex_id,
+					     0,
+					     0,
+					     layer_image[i]->width,
+					     layer_image[i]->height,
+					     layer_alpha[i]);
+		} else if (layer_blend == S3_BLEND_SUB) {
+			pf_draw_image_3d_sub(thumb_image->tex_id,
+					     x1, y1, x2, y2, x3, y3, x4, y4,
+					     layer_image[i]->tex_id,
+					     0,
+					     0,
+					     layer_image[i]->width,
+					     layer_image[i]->height,
+					     layer_alpha[i]);
+		}
 	}
 }
 

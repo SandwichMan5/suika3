@@ -874,7 +874,14 @@ s3_read_call_stack(
 	char **file,
 	int *index)
 {
-	*file = strdup(stack_file[stack_pointer]);
+	const char *f;
+
+	if (stack_file[stack_pointer] == NULL)
+		f = "";
+	else
+		f = stack_file[stack_pointer];
+
+	*file = strdup(f);
 	if (*file == NULL) {
 		s3_log_out_of_memory();
 		return false;

@@ -10,7 +10,8 @@ Suika3 API Reference
     * [Suika.setConfig()](#suikasetconfig)
     * [Suika.getConfigCount()](#suikagetconfigcount)
     * [Suika.getConfigKey()](#suikagetconfigkey)
-    * [Suika.isGlobalConfig()](#suikaisglobalconfig)
+    * [Suika.isGlobalSaveConfig()](#suikaisglobalsaveconfig)
+    * [Suika.isLocalSaveConfig()](#suikaislocalsaveconfig)
     * [Suika.getConfigType()](#suikagetconfigtype)
     * [Suika.getStringConfig()](#suikagetstringconfig)
     * [Suika.getBoolConfig()](#suikagetboolconfig)
@@ -388,9 +389,23 @@ String that represents a key of the config at the specified index.
 
 ---
 
-## Suika.isConfigGlobal()
+## Suika.isGlobalSaveConfig()
 
-Check if config key is stored to global save data.
+Check if a config key is stored to global save data.
+
+| Parameter | Type   | Description                                |
+|-----------|--------|--------------------------------------------|
+| key       | String | Key name.                                  |
+
+### Return
+
+Boolean that represents whether the config is global-saved or not.
+
+---
+
+## Suika.isLocalSaveConfig()
+
+Check if a config key is stored to local save data.
 
 ### Parameters (Dictionary)
 
@@ -400,7 +415,7 @@ Check if config key is stored to global save data.
 
 ### Return
 
-Boolean that represents whether the config is global or not.
+Boolean that represents whether the config is local-saved or not.
 
 ---
 
