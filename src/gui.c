@@ -1706,9 +1706,7 @@ process_button_click(
 		update_save_buttons();
 		break;
 	case TYPE_SAVE:
-		s3_draw_stage_to_thumb();
 		process_save(index);
-		update_save_buttons();
 		break;
 	case TYPE_LOAD:
 		process_load(index);
@@ -2092,15 +2090,17 @@ draw_save_button(
 	/* Draw the thumbnail. */
 	thumb = s3_get_save_thumbnail(save_index);
 	if (thumb != NULL) {
-		s3_draw_image_copy(
+		s3_draw_image(
 			b->rt.img_canvas,
 			b->thumb_x,
 			b->thumb_y,
 			thumb,
+			0,
+			0,
 			s3_get_image_width(thumb),
 			s3_get_image_height(thumb),
-			0,
-			0);
+			255,
+			S3_BLEND_ALPHA);
 	}
 
 	/* Draw the date and time. */
@@ -2130,7 +2130,7 @@ draw_save_button(
 
 	/* Draw the last message. */
 	msg = s3_get_save_last_message(save_index);
-	if (msg) {
+	if (msg != NULL) {
 		draw_save_text_item(button_index,
 				    b->msg_x,
 				    b->msg_y,
@@ -2228,6 +2228,9 @@ process_save(
 	if (!is_sys_gui && !did_save)
 		did_save = true;
 
+	/* Make a thumnail. */
+	s3_draw_stage_to_thumb();
+
 	/* Execute a save. */
 	s3_execute_save_local(data_index);
 
@@ -2240,6 +2243,9 @@ process_save(
 	 * dialog button immediately after saving.
 	 */
 	is_saved_in_this_frame = true;
+
+	/* Update the button image. */
+	draw_save_button(button_index);
 }
 
 /* Perform a load operation. */

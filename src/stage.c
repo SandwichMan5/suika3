@@ -1921,12 +1921,12 @@ s3_draw_stage_to_thumb(void)
 
 		x1 = 0;
 		y1 = 0;
-		x2 = (float)layer_image[i]->width * root_scale_x - 1.0f;
+		x2 = (float)layer_image[i]->width * root_scale_x;
 		y2 = 0;
 		x3 = 0;
-		y3 = (float)layer_image[i]->height * root_scale_y - 1.0f;
-		x4 = (float)layer_image[i]->width * root_scale_x - 1.0f;
-		y4 = (float)layer_image[i]->height * root_scale_y - 1.0f;
+		y3 = (float)layer_image[i]->height * root_scale_y;
+		x4 = (float)layer_image[i]->width * root_scale_x;
+		y4 = (float)layer_image[i]->height * root_scale_y;
 		cx = (float)layer_center_x[i] * root_scale_x;
 		cy = (float)layer_center_y[i] * root_scale_y;
 		rad = (float)layer_rotate[i];
@@ -1997,41 +1997,48 @@ s3_draw_stage_to_thumb(void)
 		y4 += (float)layer_y[i] * root_scale_y;
 
 		if (layer_dim[i]) {
-			pf_draw_texture_3d_dim(thumb_image->tex_id,
-					     x1, y1, x2, y2, x3, y3, x4, y4,
-					     layer_image[i]->tex_id,
-					     0,
-					     0,
-					     layer_image[i]->width,
-					     layer_image[i]->height,
-					     layer_alpha[i]);
-		} else if (layer_blend[i] == S3_BLEND_ALPHA) {
-			pf_draw_texture_3d_alpha(thumb_image->tex_id,
-					       x1, y1, x2, y2, x3, y3, x4, y4,
-					       layer_image[i]->tex_id,
-					       0,
-					       0,
-					       layer_image[i]->width,
-					       layer_image[i]->height,
-					       layer_alpha[i]);
-		} else if (layer_blend[i] == S3_BLEND_ADD) {
-			pf_draw_texture_3d_add(thumb_image->tex_id,
-					     x1, y1, x2, y2, x3, y3, x4, y4,
-					     layer_image[i]->tex_id,
-					     0,
-					     0,
-					     layer_image[i]->width,
-					     layer_image[i]->height,
-					     layer_alpha[i]);
-		} else if (layer_blend[i] == S3_BLEND_SUB) {
-			pf_draw_texture_3d_sub(thumb_image->tex_id,
-					     x1, y1, x2, y2, x3, y3, x4, y4,
-					     layer_image[i]->tex_id,
-					     0,
-					     0,
-					     layer_image[i]->width,
-					     layer_image[i]->height,
-					     layer_alpha[i]);
+			pf_draw_texture_3d(thumb_image->tex_id,
+					   x1, y1, x2, y2, x3, y3, x4, y4,
+					   layer_image[i]->tex_id,
+					   0,
+					   0,
+					   layer_image[i]->width,
+					   layer_image[i]->height,
+					   layer_alpha[i],
+					   S3_BLEND_DIM);
+		} else {
+			int blend;
+
+			switch (layer_blend[i]) {
+			case S3_BLEND_COPY:
+			case S3_BLEND_ALPHA:
+			case S3_BLEND_GLYPH:
+			case S3_BLEND_EMOJI:
+				blend = PF_BLEND_ALPHA;
+				break;
+			case S3_BLEND_ADD:
+				blend = PF_BLEND_ADD;
+				break;
+			case S3_BLEND_SUB:
+				blend = PF_BLEND_SUB;
+				break;
+			case S3_BLEND_DIM:
+				blend = PF_BLEND_DIM;
+				break;
+			default:
+				blend = PF_BLEND_ALPHA;
+				break;
+			}
+
+			pf_draw_texture_3d(thumb_image->tex_id,
+					   x1, y1, x2, y2, x3, y3, x4, y4,
+					   layer_image[i]->tex_id,
+					   0,
+					   0,
+					   layer_image[i]->width,
+					   layer_image[i]->height,
+					   layer_alpha[i],
+					   blend);
 		}
 	}
 }
@@ -2491,14 +2498,16 @@ s3_fill_namebox(void)
 	if (namebox_image == NULL)
 		return;
 
-	s3_draw_image_copy(layer_image[S3_LAYER_NAMEBOX],
-			   0,
-			   0,
-			   namebox_image,
-			   layer_image[S3_LAYER_NAMEBOX]->width,
-			   layer_image[S3_LAYER_NAMEBOX]->height,
-			   0,
-			   0);
+	s3_draw_image(layer_image[S3_LAYER_NAMEBOX],
+		      0,
+		      0,
+		      namebox_image,
+		      0,
+		      0,
+		      layer_image[S3_LAYER_NAMEBOX]->width,
+		      layer_image[S3_LAYER_NAMEBOX]->height,
+		      255,
+		      S3_BLEND_COPY);
 }
 
 /*
@@ -2540,14 +2549,16 @@ s3_fill_msgbox(void)
 	if (msgbox_image == NULL)
 		return;
 
-	s3_draw_image_copy(layer_image[S3_LAYER_MSGBOX],
-			   0,
-			   0,
-			   msgbox_image,
-			   layer_image[S3_LAYER_MSGBOX]->width,
-			   layer_image[S3_LAYER_MSGBOX]->height,
-			   0,
-			   0);
+	s3_draw_image(layer_image[S3_LAYER_MSGBOX],
+		      0,
+		      0,
+		      msgbox_image,
+		      0,
+		      0,
+		      layer_image[S3_LAYER_MSGBOX]->width,
+		      layer_image[S3_LAYER_MSGBOX]->height,
+		      255,
+		      S3_BLEND_COPY);
 }
 
 /*
@@ -2653,14 +2664,16 @@ s3_fill_choosebox_idle_image(
 	if (choose_idle_image[index] == NULL)
 		return;
 
-	s3_draw_image_copy(layer_image[S3_LAYER_CHOOSE1_IDLE + index * 2],
-			   0,
-			   0,
-			   choose_idle_image[index],
-			   choose_idle_image[index]->width,
-			   choose_idle_image[index]->height,
-			   0,
-			   0);
+	s3_draw_image(layer_image[S3_LAYER_CHOOSE1_IDLE + index * 2],
+		      0,
+		      0,
+		      choose_idle_image[index],
+		      0,
+		      0,
+		      choose_idle_image[index]->width,
+		      choose_idle_image[index]->height,
+		      255,
+		      S3_BLEND_COPY);
 }
 
 /*
@@ -2673,14 +2686,16 @@ s3_fill_choosebox_hover_image(
 	if (choose_hover_image[index] == NULL)
 		return;
 
-	s3_draw_image_copy(layer_image[S3_LAYER_CHOOSE1_HOVER + index * 2],
-			   0,
-			   0,
-			   choose_hover_image[index],
-			   choose_hover_image[index]->width,
-			   choose_hover_image[index]->height,
-			   0,
-			   0);
+	s3_draw_image(layer_image[S3_LAYER_CHOOSE1_HOVER + index * 2],
+		      0,
+		      0,
+		      choose_hover_image[index],
+		      0,
+		      0,
+		      choose_hover_image[index]->width,
+		      choose_hover_image[index]->height,
+		      255,
+		      S3_BLEND_COPY);
 }
 
 /*

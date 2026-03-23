@@ -1173,7 +1173,7 @@ write_string(
 		return false;
 
 	for (i = 0; i < len; i++)
-		stream_buf[stream_buf_pos++] = val[i];
+		stream_buf[stream_buf_pos + i] = val[i];
 
 	stream_buf_pos += len;
 
@@ -1189,7 +1189,7 @@ write_data(
 	if (!resize_buffer(size))
 		return false;
 
-	memcpy(stream_buf, data, size);
+	memcpy(stream_buf + stream_buf_pos, data, size);
 
 	stream_buf_pos += size;
 
@@ -1247,7 +1247,7 @@ open_read_stream(
 	...)
 {
 	char fname[128];
-	size_t size;
+	size_t size, ret_size;
 	va_list ap;
 
 	assert(stream_buf == NULL);
@@ -1265,6 +1265,11 @@ open_read_stream(
 		s3_log_out_of_memory();
 		return false;
 	}
+
+	if (!s3_read_save_data(fname, stream_buf, size, &ret_size))
+		return false;
+	if (ret_size != size)
+		return false;
 
 	stream_buf_alloc_size = size;
 	stream_buf_pos = 0;
@@ -1347,8 +1352,10 @@ read_string(
 
 		val[i++] = stream_buf[stream_buf_pos];
 
-		if (stream_buf[stream_buf_pos] == '\0')
+		if (stream_buf[stream_buf_pos] == '\0') {
+			stream_buf_pos++;
 			break;
+		}
 
 		stream_buf_pos++;
 	}
@@ -1365,7 +1372,7 @@ read_data(
 	if (stream_buf_pos + size > stream_buf_alloc_size)
 		return false;
 
-	memcpy(data, stream_buf, size);
+	memcpy(data, stream_buf + stream_buf_pos, size);
 
 	stream_buf_pos += size;
 

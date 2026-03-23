@@ -489,15 +489,16 @@ s3_draw_glyph(
 
 	/* Draw the cached glyph on the destination image. */
 	ofs_y = base_font_size - font_size;
-	s3_draw_image_glyph(img,
-			    x,
-			    y + ofs_y,
-			    last_image->width,
-			    last_image->height,
-			    last_image,
-			    0,
-			    0,
-			    255);
+	s3_draw_image(img,
+		      x,
+		      y + ofs_y,
+		      last_image,
+		      0,
+		      0,
+		      last_image->width,
+		      last_image->height,
+		      255,
+		      S3_BLEND_GLYPH);
 
 	/* Set the width and height for return. */
 	*ret_w = last_image->width;
@@ -2123,15 +2124,16 @@ draw_emoji(
 		}
 	}
 
-	s3_draw_image_emoji(context->image,
-			    context->pen_x,
-			    context->pen_y,
-			    emoji_image[i]->width,
-			    emoji_image[i]->height,
-			    emoji_image[i],
-			    0,
-			    0,
-			    255);
+	s3_draw_image(context->image,
+		      context->pen_x,
+		      context->pen_y,
+		      emoji_image[i],
+		      0,
+		      0,
+		      emoji_image[i]->width,
+		      emoji_image[i]->height,
+		      255,
+		      S3_BLEND_EMOJI);
 
 	if (!context->use_tategaki)
 		*w += context->char_margin;

@@ -258,19 +258,31 @@ s3_load_glyph_image(
 	}
 
 	/* Get a texture. */
-	if (!pf_create_text_texture_outline(font_type,
+	if (outline_width == 0) {
+		if (!pf_create_text_texture(font_type,
 					    mbs,
 					    size,
 					    color,
-					    outline_width,
-					    outline_color,
 					    &img->tex_id,
 					    &img->width,
 					    &img->height)) {
-		free(img);
-		return NULL;
+			free(img);
+			return NULL;
+		}
+	} else {
+		if (!pf_create_text_texture_outline(font_type,
+						    mbs,
+						    size,
+						    color,
+						    outline_width,
+						    outline_color,
+						    &img->tex_id,
+						    &img->width,
+						    &img->height)) {
+			free(img);
+			return NULL;
+		}
 	}
-
 	return img;
 }
 
@@ -310,20 +322,37 @@ s3_draw_image(
 	int alpha,
 	int blend)
 {
+	int pf_blend;
+
 	switch (blend) {
 	case S3_BLEND_COPY:
-		pf_draw_texture_copy(
-			dst->tex_id,
-			dst_left,
-			dst_top,
-			src->tex_id,
-			src_left,
-			src_top,
-			src_width,
-			src_height);
+		pf_blend = PF_BLEND_COPY;
 		break;
 	case S3_BLEND_ALPHA:
-		pf_draw_texture_alpha(
+		pf_blend = PF_BLEND_ALPHA;
+		break;
+	case S3_BLEND_ADD:
+		pf_blend = PF_BLEND_ADD;
+		break;
+	case S3_BLEND_SUB:
+		pf_blend = PF_BLEND_SUB;
+		break;
+	case S3_BLEND_DIM:
+		pf_blend = PF_BLEND_DIM;
+		break;
+	case S3_BLEND_GLYPH:
+		pf_blend = PF_BLEND_GLYPH;
+		break;
+	case S3_BLEND_EMOJI:
+		pf_blend = PF_BLEND_EMOJI;
+		break;
+	default:
+		pf_blend = -1;
+		break;
+	}
+
+	if (pf_blend != -1) {
+		pf_draw_texture(
 			dst->tex_id,
 			dst_left,
 			dst_top,
@@ -332,284 +361,84 @@ s3_draw_image(
 			src_top,
 			src_width,
 			src_height,
-			alpha)
-		break;
-		
-
-	pf_notify_texture_update(dst->tex_id);
-}
-
-/*
- * Draw an image to an image with alpha blending.
- */
-void
-s3_draw_image_alpha(
-	struct s3_image *dst,
-	int dst_left,
-	int dst_top,
-	struct s3_image *src,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha)
-{
-	pf_draw_texture_alpha(
-		dst->tex_id,
-		dst_left,
-		dst_top,
-		src->tex_id,
-		src_left,
-		src_top,
-		src_width,
-		src_height,
-		alpha);
-	pf_notify_texture_update(dst->tex_id);
-}
-
-/*
- * Draw an image to an image with add blending.
- */
-void
-s3_draw_image_add(
-	struct s3_image *dst,
-	int dst_left,
-	int dst_top,
-	struct s3_image *src,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha)
-{
-	pf_draw_texture_add(
-		dst->tex_id,
-		dst_left,
-		dst_top,
-		src->tex_id,
-		src_left,
-		src_top,
-		src_width,
-		src_height,
-		alpha);
-	pf_notify_texture_update(dst->tex_id);
-}
-
-/*
- * Draw an image to an image with sub blending.
- */
-void
-s3_draw_image_sub(
-	struct s3_image *dst,
-	int dst_left,
-	int dst_top,
-	struct s3_image *src,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha)
-{
-	pf_draw_texture_sub(
-		dst->tex_id,
-		dst_left,
-		dst_top,
-		src->tex_id,
-		src_left,
-		src_top,
-		src_width,
-		src_height,
-		alpha);
-	pf_notify_texture_update(dst->tex_id);
-}
-
-/*
- * Draw an image to an image with sub blending.
- */
-void
-s3_draw_image_dim(
-	struct s3_image *dst,
-	int dst_left,
-	int dst_top,
-	struct s3_image *src,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha)
-{
-	pf_draw_texture_dim(
-		dst->tex_id,
-		dst_left,
-		dst_top,
-		src->tex_id,
-		src_left,
-		src_top,
-		src_width,
-		src_height,
-		alpha);
-	pf_notify_texture_update(dst->tex_id);
-}
-
-/*
- * Draw a glyph image to an image.
- */
-void
-s3_draw_image_glyph(
-	struct s3_image *dst,
-	int dst_left,
-	int dst_top,
-	struct s3_image *src,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha)
-{
-	pf_draw_texture_glyph(
-		dst->tex_id,
-		dst_left,
-		dst_top,
-		src->tex_id,
-		src_left,
-		src_top,
-		src_width,
-		src_height,
-		alpha);
-	pf_notify_texture_update(dst->tex_id);
-}
-
-/*
- * Draw an emoji image to an image.
- */
-void
-s3_draw_image_emoji(
-	struct s3_image *dst,
-	int dst_left,
-	int dst_top,
-	struct s3_image *src,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha)
-{
-	pf_draw_texture_emoji(
-		dst->tex_id,
-		dst_left,
-		dst_top,
-		src->tex_id,
-		src_left,
-		src_top,
-		src_width,
-		src_height,
-		alpha);
-	pf_notify_texture_update(dst->tex_id);
+			alpha,
+			pf_blend);
+		pf_notify_texture_update(dst->tex_id);
+	}
 }
 
 /*
  * Draw an image on an image. (3D)
  */
 void
-s3_draw_image_3d_alpha(
+s3_draw_image_3d(
 	struct s3_image *dst_image,
-	float x1,
-	float y1,
-	float x2,
-	float y2,
-	float x3,
-	float y3,
-	float x4,
-	float y4,
+	int x1,
+	int y1,
+	int x2,
+	int y2,
+	int x3,
+	int y3,
+	int x4,
+	int y4,
 	struct s3_image *src_image,
 	int src_left,
 	int src_top,
 	int src_width,
 	int src_height,
-	int alpha)
+	int alpha,
+	int blend)
 {
-	pf_draw_texture_3d_add(
-		dst_image->tex_id,
-		x1,
-		y1,
-		x2,
-		y2,
-		x3,
-		y3,
-		x4,
-		y4,
-		src_image->tex_id,
-		src_left,
-		src_top,
-		src_width,
-		src_height,
-		alpha);
-		
+	int pf_blend;
+
+	switch (blend) {
+	case S3_BLEND_COPY:
+		pf_blend = PF_BLEND_COPY;
+		break;
+	case S3_BLEND_ALPHA:
+		pf_blend = PF_BLEND_ALPHA;
+		break;
+	case S3_BLEND_ADD:
+		pf_blend = PF_BLEND_ADD;
+		break;
+	case S3_BLEND_SUB:
+		pf_blend = PF_BLEND_SUB;
+		break;
+	case S3_BLEND_DIM:
+		pf_blend = PF_BLEND_DIM;
+		break;
+	case S3_BLEND_GLYPH:
+		pf_blend = PF_BLEND_GLYPH;
+		break;
+	case S3_BLEND_EMOJI:
+		pf_blend = PF_BLEND_EMOJI;
+		break;
+	default:
+		pf_blend = -1;
+		break;
+	}
+
+	if (pf_blend != -1) {
+		pf_draw_texture_3d(
+			dst_image->tex_id,
+			x1,
+			y1,
+			x2,
+			y2,
+			x3,
+			y3,
+			x4,
+			y4,
+			src_image->tex_id,
+			src_left,
+			src_top,
+			src_width,
+			src_height,
+			alpha,
+			pf_blend);
+		pf_notify_texture_update(dst_image->tex_id);
+	}
 }
-
-/*
- * Draw an image on an image. (3D)
- */
-void
-hal_draw_image_3d_add(
-	struct hal_image *dst_image,
-	float x1,
-	float y1,
-	float x2,
-	float y2,
-	float x3,
-	float y3,
-	float x4,
-	float y4,
-	struct hal_image *src_image,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha);
-
-/*
- * Draw an image on an image. (3D)
- */
-void
-hal_draw_image_3d_sub(
-	struct hal_image *dst_image,
-	float x1,
-	float y1,
-	float x2,
-	float y2,
-	float x3,
-	float y3,
-	float x4,
-	float y4,
-	struct hal_image *src_image,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha);
-
-/*
- * Draw an image on an image. (3D)
- */
-void
-hal_draw_image_3d_dim(
-	struct hal_image *dst_image,
-	float x1,
-	float y1,
-	float x2,
-	float y2,
-	float x3,
-	float y3,
-	float x4,
-	float y4,
-	struct hal_image *src_image,
-	int src_left,
-	int src_top,
-	int src_width,
-	int src_height,
-	int alpha);
-
 
 /*
  * Make a pixel value.

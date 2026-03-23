@@ -3183,84 +3183,16 @@ Suika_drawImage(void *p)
 		if (dst_img == NULL)
 			break;
 
-		switch (blend) {
-		case S3_BLEND_COPY:
-			s3_draw_image_copy(dst_img,
-					   dst_left,
-					   dst_top,
-					   src_img,
-					   src_left,
-					   src_top,
-					   src_width,
-					   src_height);
-			break;
-		case S3_BLEND_ALPHA:
-			s3_draw_image_alpha(dst_img,
-					    dst_left,
-					    dst_top,
-					    src_img,
-					    src_left,
-					    src_top,
-					    src_width,
-					    src_height,
-					    alpha);
-			break;
-		case S3_BLEND_ADD:
-			s3_draw_image_add(dst_img,
-					  dst_left,
-					  dst_top,
-					  src_img,
-					  src_left,
-					  src_top,
-					  src_width,
-					  src_height,
-					  alpha);
-			break;
-		case S3_BLEND_SUB:
-			s3_draw_image_sub(dst_img,
-					  dst_left,
-					  dst_top,
-					  src_img,
-					  src_left,
-					  src_top,
-					  src_width,
-					  src_height,
-					  alpha);
-			break;
-		case S3_BLEND_DIM:
-			s3_draw_image_dim(dst_img,
-					  dst_left,
-					  dst_top,
-					  src_img,
-					  src_left,
-					  src_top,
-					  src_width,
-					  src_height,
-					  alpha);
-			break;
-		case S3_BLEND_GLYPH:
-			s3_draw_image_glyph(dst_img,
-					    dst_left,
-					    dst_top,
-					    src_img,
-					    src_left,
-					    src_top,
-					    src_width,
-					    src_height,
-					    alpha);
-			break;
-		case S3_BLEND_EMOJI:
-			s3_draw_image_emoji(dst_img,
-					    dst_left,
-					    dst_top,
-					    src_img,
-					    src_left,
-					    src_top,
-					    src_width,
-					    src_height,
-					    alpha);
-			break;
-		}
+		s3_draw_image(dst_img,
+			      dst_left,
+			      dst_top,
+			      src_img,
+			      src_left,
+			      src_top,
+			      src_width,
+			      src_height,
+			      255,
+			      blend);
 
 		/* Set the return value. */
 		if (!pf_set_return_int(1))
@@ -3327,81 +3259,22 @@ Suika_drawImage3D(
 		if (dst_img == NULL)
 			break;
 
-		switch (blend) {
-		case S3_BLEND_COPY:
-		case S3_BLEND_GLYPH:
-		case S3_BLEND_EMOJI:
-			/* Not supported. */
-			/* Fall-thru */
-		case S3_BLEND_ALPHA:
-			s3_draw_image_3d_alpha(dst_img,
-					       x1,
-					       y1,
-					       x2,
-					       y2,
-					       x3,
-					       y3,
-					       x4,
-					       y4,
-					       src_img,
-					       src_left,
-					       src_top,
-					       src_width,
-					       src_height,
-					       alpha);
-			break;
-		case S3_BLEND_ADD:
-			s3_draw_image_3d_add(dst_img,
-					     x1,
-					     y1,
-					     x2,
-					     y2,
-					     x3,
-					     y3,
-					     x4,
-					     y4,
-					     src_img,
-					     src_left,
-					     src_top,
-					     src_width,
-					     src_height,
-					     alpha);
-			break;
-		case S3_BLEND_SUB:
-			s3_draw_image_3d_sub(dst_img,
-					     x1,
-					     y1,
-					     x2,
-					     y2,
-					     x3,
-					     y3,
-					     x4,
-					     y4,
-					     src_img,
-					     src_left,
-					     src_top,
-					     src_width,
-					     src_height,
-					     alpha);
-			break;
-		case S3_BLEND_DIM:
-			s3_draw_image_3d_dim(dst_img,
-					     x1,
-					     y1,
-					     x2,
-					     y2,
-					     x3,
-					     y3,
-					     x4,
-					     y4,
-					     src_img,
-					     src_left,
-					     src_top,
-					     src_width,
-					     src_height,
-					     alpha);
-			break;
-		}
+		s3_draw_image_3d(dst_img,
+				 x1,
+				 y1,
+				 x2,
+				 y2,
+				 x3,
+				 y3,
+				 x4,
+				 y4,
+				 src_img,
+				 src_left,
+				 src_top,
+				 src_width,
+				 src_height,
+				 alpha,
+				 blend);
 
 		/* Set the return value. */
 		if (!pf_set_return_int(1))
