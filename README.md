@@ -39,7 +39,7 @@
 <div align="center">
   <a href="https://noctvm.io/test/">
     Click to play on the browser!<br>
-    <img src="https://github.com/suika3-community/suika3/blob/main/docs/img/screenshot-20260317.webp" alt="Suika3 Screenshot"><br>
+    <img src="https://github.com/suika3-community/suika3/blob/main/docs/img/screenshot-20260325.webp" alt="Suika3 Screenshot"><br>
   </a>
 </div>
 
