@@ -147,7 +147,7 @@ s3_set_seen_flags(int flag)
 
 	index = s3_get_tag_index();
 	if (index < SEEN_COUNT)
-		seen_flag[index] = flag;
+		seen_flag[index] = (uint8_t)flag;
 }
 
 /* Get a hash string from a tag file name. */

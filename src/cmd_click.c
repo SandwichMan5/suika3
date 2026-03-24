@@ -52,6 +52,8 @@ bool
 s3i_tag_click(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* Perform initialization on the first invocation. */
 	if (!s3_is_in_command_repetition()) {
 		/* Hide the message and name boxes. */

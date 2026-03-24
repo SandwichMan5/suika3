@@ -184,6 +184,8 @@ bool
 s3i_tag_move(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* Is the first frame? */
 	if (!s3_is_in_command_repetition()) {
 		/* Initialize a multiple frame execution. */
@@ -211,7 +213,7 @@ static bool
 init(void)
 {
 	const char *s;
-	int i;
+	uint32_t i;
 	int accel;
 
 	/* Get the animation time. */
@@ -235,7 +237,6 @@ init(void)
 		const char *CENTER_Y_ARG = params[i].center_y_arg;
 		const char *ROTATE_ARG = params[i].rotate_arg;
 		const char *DIM_ARG = params[i].dim_arg;
-		bool is_file_specified;
 
 		/* If no arguments specified for this layer. */
 		if (!s3_check_tag_arg(X_ARG) &&
@@ -404,10 +405,10 @@ init(void)
 			if (*s == 'r') {
 				/* Relative. */
 				center_x = s3_get_layer_center_x(LAYER_INDEX);
-				center_x += (float)atof(s + 1);
+				center_x += atoi(s + 1);
 			} else {
 				/* number: Set the value as is. */
-				center_x = (float)atof(s);
+				center_x = atoi(s);
 			}
 
 			s3_add_anime_sequence_property_i("center-x", center_x);
@@ -427,10 +428,10 @@ init(void)
 			if (*s == 'r') {
 				/* Relative. */
 				center_y = s3_get_layer_center_y(LAYER_INDEX);
-				center_y += (float)atof(s + 1);
+				center_y += atoi(s + 1);
 			} else {
 				/* number: Set the value as is. */
-				center_y = (float)atof(s);
+				center_y = atoi(s);
 			}
 
 			s3_add_anime_sequence_property_i("center-y", center_y);
@@ -456,8 +457,8 @@ init(void)
 				rotate = (float)atof(s);
 			}
 
-			s3_add_anime_sequence_property_i("from-rotate", s3_get_layer_rotate(LAYER_INDEX));
-			s3_add_anime_sequence_property_i("to-rotate", rotate);
+			s3_add_anime_sequence_property_f("from-rotate", s3_get_layer_rotate(LAYER_INDEX));
+			s3_add_anime_sequence_property_f("to-rotate", rotate);
 		} else {
 			float rotate;
 			rotate = s3_get_layer_rotate(LAYER_INDEX);
@@ -505,7 +506,7 @@ static void
 process_frame(void)
 {
 	float lap;
-	int i;
+	uint32_t i;
 
 	/* Get the lap time. */
 	lap = (float)s3_get_lap_timer_millisec(&sw) / 1000.0f;
@@ -581,8 +582,6 @@ process_frame(void)
 /* Cleanup. */
 static bool cleanup(void)
 {
-	int i;
-
 	/* Move to the next tag. */
 	if (!s3_move_to_next_tag())
 		return false;

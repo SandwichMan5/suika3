@@ -84,7 +84,7 @@ s3i_init_vars(void)
 void
 s3i_cleanup_vars(void)
 {
-	int i;
+	uint32_t i;
 
 	for (i = 0; i < alloc_size; i++) {
 		if (tbl[i].key != NULL)
@@ -148,13 +148,13 @@ s3_set_variable_string(
 	uint32_t i;
 
 	hash = string_hash(name);
-	len = strlen(name);
+	len = (uint32_t)strlen(name);
 
 	/* Search for the key to replace the value. */
-	index = hash & (alloc_size - 1);
+	index = hash & ((uint32_t)alloc_size - 1);
 	for (i = index;
-	     i != ((index - 1 + alloc_size) & (alloc_size - 1));
-	     i = (i + 1) & (alloc_size - 1)) {
+	     i != ((index - 1 + (uint32_t)alloc_size) & ((uint32_t)alloc_size - 1));
+	     i = (i + 1) & ((uint32_t)alloc_size - 1)) {
 		if (tbl[i].key == NULL)
 			break;
 		if (tbl[i].len == len &&
@@ -181,10 +181,10 @@ s3_set_variable_string(
 	}
 
 	/* Append. */
-	index = hash & (alloc_size - 1);
+	index = hash & ((uint32_t)alloc_size - 1);
 	for (i = index;
-	     i != ((index - 1 + alloc_size) & (alloc_size - 1));
-	     i = (i + 1) & (alloc_size - 1)) {
+	     i != ((index - 1 + (uint32_t)alloc_size) & ((uint32_t)alloc_size - 1));
+	     i = (i + 1) & ((uint32_t)alloc_size - 1)) {
 		if (tbl[i].key == NULL) {
 			/* Make a key value. */
 			tbl[i].key = strdup(name);
@@ -215,7 +215,7 @@ expand_table(void)
 {
 	struct item *new_tbl;
 	size_t i, old_size, new_size;
-	int index, j;
+	uint32_t index, j;
 
 	old_size = alloc_size;
 	new_size = old_size * 2;
@@ -232,10 +232,10 @@ expand_table(void)
 		if (tbl[i].key == NULL)
 			continue;
 
-		index = tbl[i].hash & (new_size - 1);
+		index = tbl[i].hash & ((uint32_t)new_size - 1);
 		for (j = index;
-		     j != ((index - 1 + new_size) & (new_size - 1));
-		     j = (j + 1) & (new_size - 1)) {
+		     j != ((index - 1 + (uint32_t)new_size) & ((uint32_t)new_size - 1));
+		     j = (j + 1) & ((uint32_t)new_size - 1)) {
 			if (new_tbl[i].key == NULL) {
 				/* Copy the key and values. */
 				new_tbl[j].key = tbl[i].key;
@@ -268,13 +268,13 @@ s3_unset_variable(
 	uint32_t i;
 
 	hash = string_hash(name);
-	len = strlen(name);
+	len = (uint32_t)strlen(name);
 
 	/* Search for the key. */
-	index = hash & (alloc_size - 1);
+	index = hash & ((uint32_t)alloc_size - 1);
 	for (i = index;
-	     i != ((index - 1 + alloc_size) & (alloc_size - 1));
-	     i = (i + 1) & (alloc_size - 1)) {
+	     i != ((index - 1 + (uint32_t)alloc_size) & ((uint32_t)alloc_size - 1));
+	     i = (i + 1) & ((uint32_t)alloc_size - 1)) {
 		if (tbl[i].key == NULL)
 			break;
 		if (tbl[i].len == len &&
@@ -309,20 +309,20 @@ s3_make_variable_global(
 	uint32_t i;
 
 	hash = string_hash(name);
-	len = strlen(name);
+	len = (uint32_t)strlen(name);
 
 	/* Search for the key. */
-	index = hash & (alloc_size - 1);
+	index = hash & ((uint32_t)alloc_size - 1);
 	for (i = index;
-	     i != ((index - 1 + alloc_size) & (alloc_size - 1));
-	     i = (i + 1) & (alloc_size - 1)) {
+	     i != ((index - 1 + (uint32_t)alloc_size) & ((uint32_t)alloc_size - 1));
+	     i = (i + 1) & ((uint32_t)alloc_size - 1)) {
 		if (tbl[i].key == NULL)
 			break;
 		if (tbl[i].len == len &&
 		    tbl[i].hash == hash &&
 		    strcmp(tbl[i].value, name) == 0) {
-			/* Found, make it global. */
-			tbl[i].is_global = true;
+			/* Found, make it global or not. */
+			tbl[i].is_global = is_global;
 			return true;
 		}
 	}
@@ -381,13 +381,13 @@ s3_get_variable_string(
 	uint32_t i;
 
 	hash = string_hash(name);
-	len = strlen(name);
+	len = (uint32_t)strlen(name);
 
 	/* Search for the key. */
-	index = hash & (alloc_size - 1);
+	index = hash & ((uint32_t)alloc_size - 1);
 	for (i = index;
-	     i != ((index - 1 + alloc_size) & (alloc_size - 1));
-	     i = (i + 1) & (alloc_size - 1)) {
+	     i != ((index - 1 + (uint32_t)alloc_size) & ((uint32_t)alloc_size - 1));
+	     i = (i + 1) & ((uint32_t)alloc_size - 1)) {
 		if (tbl[i].key == NULL)
 			break;
 		if (tbl[i].len == len &&
@@ -407,7 +407,7 @@ s3_get_variable_string(
 int
 s3_get_variable_count(void)
 {
-	return used_size;
+	return (int)used_size;
 }
 
 /*
@@ -417,7 +417,8 @@ const char *
 s3_get_variable_name(
 	int index)
 {
-	int i, valid_count;
+	uint32_t i;
+	int valid_count;
 
 	valid_count = 0;
 	for (i = 0; i < alloc_size; i++) {
@@ -444,13 +445,13 @@ s3_check_variable_exists(
 	uint32_t i;
 
 	hash = string_hash(name);
-	len = strlen(name);
+	len = (uint32_t)strlen(name);
 
 	/* Search for the key. */
-	index = hash & (alloc_size - 1);
+	index = hash & ((uint32_t)alloc_size - 1);
 	for (i = index;
-	     i != ((index - 1 + alloc_size) & (alloc_size - 1));
-	     i = (i + 1) & (alloc_size - 1)) {
+	     i != ((index - 1 + (uint32_t)alloc_size) & ((uint32_t)alloc_size - 1));
+	     i = (i + 1) & ((uint32_t)alloc_size - 1)) {
 		if (tbl[i].key == NULL)
 			break;
 		if (tbl[i].len == len &&
@@ -477,13 +478,13 @@ s3_is_global_variable(
 	uint32_t i;
 
 	hash = string_hash(name);
-	len = strlen(name);
+	len = (uint32_t)strlen(name);
 
 	/* Search for the key. */
-	index = hash & (alloc_size - 1);
+	index = hash & ((uint32_t)alloc_size - 1);
 	for (i = index;
-	     i != ((index - 1 + alloc_size) & (alloc_size - 1));
-	     i = (i + 1) & (alloc_size - 1)) {
+	     i != ((index - 1 + (uint32_t)alloc_size) & ((uint32_t)alloc_size - 1));
+	     i = (i + 1) & ((uint32_t)alloc_size - 1)) {
 		if (tbl[i].key == NULL)
 			break;
 		if (tbl[i].len == len &&
@@ -503,7 +504,7 @@ s3_is_global_variable(
 void
 s3_unset_local_variables(void)
 {
-	int i;
+	uint32_t i;
 
 	/* Search for the key. */
 	for (i = 0; i < alloc_size; i++) {

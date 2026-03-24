@@ -120,9 +120,12 @@ s3i_tag_layer(
 	const char *name;
 	const char *file;
 	int x, y, alpha;
-	float scale_x, scale_y, center_x, center_y, rotate;
+	float scale_x, scale_y, rotate;
+	int center_x, center_y;
 	int layer;
 	struct s3_image *img;
+
+	UNUSED_PARAMETER(p);
 
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();

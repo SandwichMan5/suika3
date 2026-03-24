@@ -52,6 +52,8 @@ bool
 s3i_tag_gui(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* Initialize for the first frame. */
 	if (!s3_is_in_command_repetition()) {
 		/* Initialize. */

@@ -94,9 +94,6 @@ static char *save_message[S3_ALL_SAVE_SLOTS];
 /* Thumbnail of the save data. */
 static struct s3_image *save_thumb[S3_ALL_SAVE_SLOTS];
 
-/* Timestamp of the quick save data. */
-static uint64_t quick_save_time;
-
 /*
  * Temporary Buffers
  */
@@ -205,7 +202,7 @@ s3_execute_save_global(void)
 		
 		/* Write the global variables. */
 		count = s3_get_variable_count();
-		if (!write_u32(count))
+		if (!write_u32((uint32_t)count))
 			break;
 		for (i = 0; i < count; i++) {
 			const char *name = s3_get_variable_name(i);
@@ -252,7 +249,7 @@ s3_execute_save_global(void)
 
 		/* Write the global config. */
 		count = s3_get_config_count();
-		if (!write_u32(count))
+		if (!write_u32((uint32_t)count))
 			break;
 		for (i = 0; i < count; i++) {
 			const char *key = s3_get_config_key(i);
@@ -285,7 +282,7 @@ s3_execute_load_global(void)
 	uint32_t ver;
 	float f;
 	int i;
-	uint32_t count;
+	int count;
 	bool success;
 	char key[128];
 
@@ -304,7 +301,7 @@ s3_execute_load_global(void)
 		}
 		
 		/* Read the global variables. */
-		if (!read_u32(&count))
+		if (!read_u32((uint32_t *)&count))
 			break;
 		for (i = 0; i < count; i++) {
 			if (!read_string((char *)&key[0], sizeof(key)))
@@ -353,7 +350,7 @@ s3_execute_load_global(void)
 		s3_set_auto_speed(f);
 
 		/* Read the global config. */
-		if (!read_u32(&count))
+		if (!read_u32((uint32_t *)&count))
 			break;
 		for (i = 0; i < count; i++) {
 			if (!read_string(key, sizeof(key)))
@@ -440,9 +437,9 @@ s3_execute_save_local(
 			break;
 
 		/* Write the tag index. */
-		if (!write_u32(s3_get_tag_index()))
+		if (!write_u32((uint32_t)s3_get_tag_index()))
 			break;
-		if (!write_u32(s3_get_last_english_tag_index()))
+		if (!write_u32((uint32_t)s3_get_last_english_tag_index()))
 			break;
 
 		/* Write the gosub return index. */
@@ -452,7 +449,7 @@ s3_execute_save_local(
 			s3_read_call_stack(i, &file, &index);
 			if (!write_string(file))
 				break;
-			if (!write_u32(index))
+			if (!write_u32((uint32_t)index))
 				break;
 			free(file);
 		}
@@ -472,21 +469,21 @@ s3_execute_save_local(
 			    i == S3_LAYER_TEXT4) {
 				if (!write_string(s3_get_layer_file_name(i)))
 					break;
-				if (!write_u32(s3_get_layer_x(i)))
+				if (!write_u32((uint32_t)s3_get_layer_x(i)))
 					break;
-				if (!write_u32(s3_get_layer_y(i)))
+				if (!write_u32((uint32_t)s3_get_layer_y(i)))
 					break;
-				if (!write_u32(s3_get_layer_alpha(i)))
+				if (!write_u32((uint32_t)s3_get_layer_alpha(i)))
 					break;
 				if (!write_f32(s3_get_layer_scale_x(i)))
 					break;
 				if (!write_f32(s3_get_layer_scale_y(i)))
 					break;
-				if (!write_u32(s3_get_layer_center_x(i)))
+				if (!write_u32((uint32_t)s3_get_layer_center_x(i)))
 					break;
-				if (!write_u32(s3_get_layer_center_y(i)))
+				if (!write_u32((uint32_t)s3_get_layer_center_y(i)))
 					break;
-				if (!write_f32(s3_get_layer_rotate(i)))
+				if (!write_f32((uint32_t)s3_get_layer_rotate(i)))
 					break;
 				if (i >= S3_LAYER_TEXT1 && i <= S3_LAYER_TEXT8) {
 					if (!write_string(s3_get_layer_text(i)))
@@ -517,7 +514,7 @@ s3_execute_save_local(
 
 		/* Write the variables. */
 		count = s3_get_variable_count();
-		if (!write_u32(count))
+		if (!write_u32((uint32_t)count))
 			break;
 		for (i = 0; i < count; i++) {
 			const char *name = s3_get_variable_name(i);
@@ -538,7 +535,7 @@ s3_execute_save_local(
 
 		/* Write the non-global config. */
 		count = s3_get_config_count();
-		if (!write_u32(count))
+		if (!write_u32((uint32_t)count))
 			break;
 		for (i = 0; i < count; i++) {
 			const char *key = s3_get_config_key(i);
@@ -588,7 +585,7 @@ s3_execute_load_local(
 	char key[128];
 	uint64_t timestamp;
 	uint32_t ver, u;
-	int i;
+	uint32_t i;
 	uint32_t x, y, count;
 	float f, sx, sy, rot;
 	struct s3_image *img;
@@ -662,7 +659,7 @@ s3_execute_load_local(
 		/* Read the tag index. */
 		if (!read_u32(&u))
 			break;
-		if (!s3_move_to_tag_index(u))
+		if (!s3_move_to_tag_index((int)u))
 			break;
 
 		/* Read the gosub return index. */
@@ -671,7 +668,7 @@ s3_execute_load_local(
 				break;
 			if (!read_u32(&u))
 				break;
-			if (!s3_write_call_stack(i, sbuf, u))
+			if (!s3_write_call_stack((int)i, sbuf, (int)u))
 				break;
 		}
 
@@ -695,9 +692,9 @@ s3_execute_load_local(
 					img = s3_create_image_from_file(sbuf);
 					if (img == NULL)
 						break;
-					if (!s3_set_layer_file_name(i, sbuf))
+					if (!s3_set_layer_file_name((int)i, sbuf))
 						break;
-					s3_set_layer_image(i, img);
+					s3_set_layer_image((int)i, img);
 				}
 
 				/* Read the position. */
@@ -705,37 +702,37 @@ s3_execute_load_local(
 					break;
 				if (!read_u32(&y))
 					break;
-				s3_set_layer_position(i, x, y);
+				s3_set_layer_position((int)i, (int)x, (int)y);
 
 				/* Read the alpha. */
 				if (!read_u32(&u))
 					break;
-				s3_set_layer_alpha(i, u);
+				s3_set_layer_alpha((int)i, (int)u);
 
 				/* Read the scale. */
 				if (!read_f32(&sx))
 					break;
 				if (!read_f32(&sy))
 					break;
-				s3_set_layer_scale(i, sx, sy);
+				s3_set_layer_scale((int)i, sx, sy);
 
 				/* Read the center. */
 				if (!read_u32(&x))
 					break;
 				if (!read_u32(&y))
 					break;
-				s3_set_layer_center(i, x, y);
+				s3_set_layer_center((int)i, (int)x, (int)y);
 
 				/* Read the center. */
 				if (!read_f32(&rot))
 					break;
-				s3_set_layer_rotate(i, rot);
+				s3_set_layer_rotate((int)i, rot);
 
 				/* Read the text. */
 				if (i >= S3_LAYER_TEXT1 && i <= S3_LAYER_TEXT8) {
 					if (!read_string(sbuf, sizeof(sbuf)))
 						break;
-					if (!s3_set_layer_text(i, sbuf))
+					if (!s3_set_layer_text((int)i, sbuf))
 						break;
 				}
 			}
@@ -746,11 +743,11 @@ s3_execute_load_local(
 
 		/* Start the eyes and lips animes. */
 		for (i = 0; i < S3_CH_ALL_LAYERS; i++) {
-			int layer = s3_chpos_to_layer(i);
+			int layer = s3_chpos_to_layer((int)i);
 			const char *fname = s3_get_layer_file_name(layer);
-			if (!s3_load_eye_image_if_exists(i, fname))
+			if (!s3_load_eye_image_if_exists((int)i, fname))
 				break;
-			if (!s3_load_lip_image_if_exists(i, fname))
+			if (!s3_load_lip_image_if_exists((int)i, fname))
 				break;
 		}
 		if (i != S3_CH_ALL_LAYERS)
@@ -774,11 +771,11 @@ s3_execute_load_local(
 		for (i = 0; i < S3_MIXER_TRACKS; i++) {
 			if (!read_f32(&f))
 				break;
-			s3_set_mixer_volume(i, f, 0);
+			s3_set_mixer_volume((int)i, f, 0);
 
 			if (!read_string(sbuf, sizeof(sbuf)))
 				break;
-			s3_set_mixer_input_file(i, sbuf, true);
+			s3_set_mixer_input_file((int)i, sbuf, true);
 		}
 		if (i != S3_MIXER_TRACKS)
 			break;	/* Error. */
@@ -866,6 +863,9 @@ void
 s3_delete_local_save(
 	int index)
 {
+	UNUSED_PARAMETER(index);
+
+	/* TODO */
 }
 
 /*
@@ -1060,7 +1060,7 @@ copy_thumb(
 
 	memcpy(s3_get_image_pixels(dst),
 	       s3_get_image_pixels(src),
-	       w * 4 * h);
+	       (size_t)(w * 4 * h));
 
 	if (save_thumb[index] != NULL) {
 		s3_destroy_image(save_thumb[index]);
@@ -1079,7 +1079,7 @@ copy_thumb(
 static bool
 open_write_stream(void)
 {
-	const int START_SIZE = 1 * 1024 * 1024; /* 1 MB */
+	const uint32_t START_SIZE = 1 * 1024 * 1024; /* 1 MB */
 
 	assert(stream_buf == NULL);
 	if (stream_buf != NULL)
@@ -1173,7 +1173,7 @@ write_string(
 		return false;
 
 	for (i = 0; i < len; i++)
-		stream_buf[stream_buf_pos + i] = val[i];
+		stream_buf[stream_buf_pos + i] = (uint8_t)val[i];
 
 	stream_buf_pos += len;
 
@@ -1350,7 +1350,7 @@ read_string(
 		if (stream_buf_pos + 1 > stream_buf_alloc_size)
 			return false;
 
-		val[i++] = stream_buf[stream_buf_pos];
+		val[i++] = (char)stream_buf[stream_buf_pos];
 
 		if (stream_buf[stream_buf_pos] == '\0') {
 			stream_buf_pos++;

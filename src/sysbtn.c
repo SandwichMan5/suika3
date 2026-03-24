@@ -69,7 +69,7 @@ static int last_mouse_pos_x;
 static int last_mouse_pos_y;
 static int state;
 static uint64_t sw;
-static float alpha;
+static int alpha;
 
 enum State {
 	ST_OUT,
@@ -235,8 +235,6 @@ s3_update_sysbtn_state(void)
 		if (mouse_pos_x - last_mouse_pos_x > MOUSE_DELTA ||
 		    mouse_pos_y - last_mouse_pos_y > MOUSE_DELTA) {
 			/* Fade in. */
-			float progress;
-			uint64_t lap;
 			state = ST_APPEAR;
 			s3_reset_lap_timer(&sw);
 			alpha = 255;

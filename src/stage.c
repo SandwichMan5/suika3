@@ -224,7 +224,6 @@ static bool setup_kirakira(void);
 static bool setup_savenew(void);
 static bool setup_thumb(void);
 static void restore_text_layers(void);
-static bool create_fade_layer_images(void);
 static void destroy_layer(int layer);
 static void render_layer(int layer);
 
@@ -661,13 +660,13 @@ restore_text_layers(void)
 
 	/* Load the default colors. */
 	color = s3_make_pixel(0xff,
-			      conf_msgbox_font_r,
-			      conf_msgbox_font_g,
-			      conf_msgbox_font_b);
+			      (uint32_t)conf_msgbox_font_r,
+			      (uint32_t)conf_msgbox_font_g,
+			      (uint32_t)conf_msgbox_font_b);
 	outline_color = s3_make_pixel(0xff,
-				      conf_msgbox_font_outline_r,
-				      conf_msgbox_font_outline_g,
-				      conf_msgbox_font_outline_b);
+				      (uint32_t)conf_msgbox_font_outline_r,
+				      (uint32_t)conf_msgbox_font_outline_g,
+				      (uint32_t)conf_msgbox_font_outline_b);
 
 	for (i = S3_LAYER_TEXT1; i <= S3_LAYER_TEXT8; i++) {
 		if (layer_text[i] == NULL)
@@ -1908,7 +1907,7 @@ s3_draw_stage_to_thumb(void)
 		    i == S3_LAYER_CLICK ||
 		    i == S3_LAYER_AUTO ||
 		    i == S3_LAYER_SKIP ||
-		    i >= S3_LAYER_GUI_BTN1 && i <= S3_LAYER_GUI_BTN32)
+		    (i >= S3_LAYER_GUI_BTN1 && i <= S3_LAYER_GUI_BTN32))
 			continue;
 
 		/* Do not draw the message box if not visible. */
@@ -2313,7 +2312,7 @@ s3_finish_fade(void)
 		S3_LAYER_CHF_LIP
 	};
 
-	int i;
+	uint32_t i;
 
 	assert(stage_mode == STAGE_MODE_FADE);
 

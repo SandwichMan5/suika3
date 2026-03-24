@@ -219,7 +219,7 @@ s3_get_image_height(
 struct s3_image *
 s3_load_glyph_image(
 	int font_type,
-	int codepoint,
+	uint32_t codepoint,
 	int size,
 	hal_pixel_t color,
 	int outline_width,
@@ -227,6 +227,10 @@ s3_load_glyph_image(
 {
 	struct s3_image *img;
 	char mbs[6];
+
+	assert(font_type >= 0 && font_type < S3_FONT_COUNT);
+	assert(size > 0);
+	assert(outline_width >= 0);
 
 	/* Create an struct s3_image. */
 	img = alloc_image();
@@ -421,14 +425,14 @@ s3_draw_image_3d(
 	if (pf_blend != -1) {
 		pf_draw_texture_3d(
 			dst_image->tex_id,
-			x1,
-			y1,
-			x2,
-			y2,
-			x3,
-			y3,
-			x4,
-			y4,
+			(float)x1,
+			(float)y1,
+			(float)x2,
+			(float)y2,
+			(float)x3,
+			(float)y3,
+			(float)x4,
+			(float)y4,
 			src_image->tex_id,
 			src_left,
 			src_top,
@@ -445,12 +449,16 @@ s3_draw_image_3d(
  */
 s3_pixel_t
 s3_make_pixel(
-	int a,
-	int r,
-	int g,
-	int b)
+	uint32_t a,
+	uint32_t r,
+	uint32_t g,
+	uint32_t b)
 {
-	return hal_make_pixel(a, r, g, b);
+	return hal_make_pixel(
+		(uint32_t)a,
+		(uint32_t)r,
+		(uint32_t)g,
+		(uint32_t)b);
 }
 
 /*

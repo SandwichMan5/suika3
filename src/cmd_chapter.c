@@ -51,6 +51,8 @@ s3i_tag_chapter(
 {
 	const char *name;
 
+	UNUSED_PARAMETER(p);
+
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();
 

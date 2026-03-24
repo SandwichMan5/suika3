@@ -401,9 +401,7 @@ static bool process_button_click(int index);
 static void process_button_render(int index);
 static void process_button_render_slider(int index);
 static void process_button_render_slider_vertical(int index);
-static void process_button_render_activatable(int index);
 static void process_button_render_generic(int index);
-static void process_button_render_gallery(int index);
 static void process_button_render_var(int index);
 static void process_button_render_preview(int index);
 static void process_button_render_save(int button_index);
@@ -443,13 +441,7 @@ static void render_image_helper(struct s3_image *img, int bid);
 static void play_se(const char *file);
 static void play_sys_se(const char *file);
 static void speak(const char *text);
-static bool run_wms(const char *file);
 static bool load_gui_file(const char *file);
-static void destroy_gui_images(void);
-static bool load_base_image(const char *file);
-static bool load_idle_image(const char *file);
-static bool load_hover_image(const char *file);
-static bool load_active_image(const char *file);
 static void set_gui_call_arg(int bid);
 
 /*
@@ -619,7 +611,7 @@ s3_load_gui_file(
 void
 s3_start_gui(void)
 {
-	int i, j;
+	int i;
 
 	assert(!is_gui_running);
 
@@ -2021,7 +2013,6 @@ process_button_render_var(
 static bool
 init_save_buttons(void)
 {
-	struct s3_image *img_hover;
 	int i;
 
 	for (i = 0; i < S3_BUTTON_LAYERS; i++) {
@@ -2084,7 +2075,6 @@ draw_save_button(
 	const char *chapter, *msg;
 	time_t save_time;
 	int save_index;
-	int width;
 
 	assert(button[button_index].rt.img_canvas_idle != NULL);
 	assert(button[button_index].rt.img_canvas_hover != NULL);
@@ -2095,7 +2085,7 @@ draw_save_button(
 	save_index = save_slots * save_page + b->index;
 
 	/* Get the save time. */
-	save_time = s3_get_save_timestamp(save_index);
+	save_time = (time_t)s3_get_save_timestamp(save_index);
 
 	/* Clear the canvas images. */
 	if (b->rt.img_canvas_idle != NULL) {
@@ -2157,20 +2147,20 @@ draw_save_button(
 	/* Draw the index. */
 	snprintf(text, sizeof(text), "%02d", save_index);
 	if (b->rt.img_canvas_idle != NULL) {
-		width = draw_save_text_item(b->rt.img_canvas_idle,
-					    button_index,
-					    b->index_x,
-					    b->index_y,
-					    text,
-					    SAVE_TEXT_INDEX);
+		draw_save_text_item(b->rt.img_canvas_idle,
+				    button_index,
+				    b->index_x,
+				    b->index_y,
+				    text,
+				    SAVE_TEXT_INDEX);
 	}
 	if (b->rt.img_canvas_hover != NULL) {
-		width = draw_save_text_item(b->rt.img_canvas_hover,
-					    button_index,
-					    b->index_x,
-					    b->index_y,
-					    text,
-					    SAVE_TEXT_INDEX);
+		draw_save_text_item(b->rt.img_canvas_hover,
+				    button_index,
+				    b->index_x,
+				    b->index_y,
+				    text,
+				    SAVE_TEXT_INDEX);
 	}
 
 	/* Draw the date. */
@@ -2181,20 +2171,20 @@ draw_save_button(
 		strftime(text, sizeof(text), "%y/%m/%d %H:%M", timeptr);
 	}
 	if (b->rt.img_canvas_idle != NULL) {
-		width = draw_save_text_item(b->rt.img_canvas_idle,
-					    button_index,
-					    b->date_x,
-					    b->date_y,
-					    text,
-					    SAVE_TEXT_DATE);
+		draw_save_text_item(b->rt.img_canvas_idle,
+				    button_index,
+				    b->date_x,
+				    b->date_y,
+				    text,
+				    SAVE_TEXT_DATE);
 	}
 	if (b->rt.img_canvas_hover != NULL) {
-		width = draw_save_text_item(b->rt.img_canvas_hover,
-					    button_index,
-					    b->date_x,
-					    b->date_y,
-					    text,
-					    SAVE_TEXT_DATE);
+		draw_save_text_item(b->rt.img_canvas_hover,
+				    button_index,
+				    b->date_x,
+				    b->date_y,
+				    text,
+				    SAVE_TEXT_DATE);
 	}
 	
 	/* Draw the chapter title. */
@@ -2280,6 +2270,7 @@ draw_save_text_item(
 		cfg_ruby = conf_gui_save_index_font_ruby;
 		cfg_tategaki = conf_gui_save_index_font_tategaki;
 		cfg_margin_char = conf_gui_save_index_margin_char;
+		cfg_margin_line = 0;
 		multiline = false;
 		break;
 	case SAVE_TEXT_DATE:
@@ -2295,6 +2286,7 @@ draw_save_text_item(
 		cfg_ruby = conf_gui_save_date_font_ruby;
 		cfg_tategaki = conf_gui_save_date_font_tategaki;
 		cfg_margin_char = conf_gui_save_date_margin_char;
+		cfg_margin_line = 0;
 		multiline = false;
 		break;
 	case SAVE_TEXT_CHAPTER:
@@ -2310,6 +2302,7 @@ draw_save_text_item(
 		cfg_ruby = conf_gui_save_chapter_font_ruby;
 		cfg_tategaki = conf_gui_save_chapter_font_tategaki;
 		cfg_margin_char = conf_gui_save_chapter_margin_char;
+		cfg_margin_line = 0;
 		multiline = false;
 		break;
 	case SAVE_TEXT_MSG:
@@ -2324,8 +2317,8 @@ draw_save_text_item(
 		cfg_o_b = conf_gui_save_msg_font_outline_b;
 		cfg_ruby = conf_gui_save_msg_font_ruby;
 		cfg_tategaki = conf_gui_save_msg_font_tategaki;
-		cfg_margin_line = conf_gui_save_msg_margin_line;
 		cfg_margin_char = conf_gui_save_msg_margin_char;
+		cfg_margin_line = conf_gui_save_msg_margin_line;
 		multiline = conf_gui_save_msg_multiline;
 		break;
 	default:
@@ -2373,8 +2366,8 @@ draw_save_text_item(
 		0,		/* right_margin */
 		0,		/* top_margin */
 		0,		/* bottom_margin */
-		multiline ? conf_gui_save_msg_margin_line : 0,
-		conf_msgbox_margin_char,
+		multiline ? cfg_margin_line : 0,
+		cfg_margin_char,
 		color,
 		outline_color,
 		0,		/* bg_color */
@@ -2593,12 +2586,12 @@ draw_history_buttons(void)
 	for (i = 0; i < S3_BUTTON_LAYERS; i++) {
 		if (button[i].type != TYPE_HISTORY)
 			continue;
-		if (button[i].rt.img_canvas_idle = NULL) {
+		if (button[i].rt.img_canvas_idle == NULL) {
 			draw_history_button(button[i].rt.img_canvas_idle,
 					    button[i].rt.img_idle,
 					    i);
 		}
-		if (button[i].rt.img_canvas_hover = NULL) {
+		if (button[i].rt.img_canvas_hover == NULL) {
 			draw_history_button(button[i].rt.img_canvas_hover,
 					    button[i].rt.img_hover,
 					    i);
@@ -2684,13 +2677,13 @@ draw_history_text_item(
 
 	/* Determine the color. */
 	color = s3_make_pixel(0xff,
-			      conf_gui_history_font_r,
-			      conf_gui_history_font_g,
-			      conf_gui_history_font_b);
+			      (uint32_t)conf_gui_history_font_r,
+			      (uint32_t)conf_gui_history_font_g,
+			      (uint32_t)conf_gui_history_font_b);
 	outline_color = s3_make_pixel(0xff,
-				      conf_gui_history_font_outline_r,
-				      conf_gui_history_font_outline_g,
-				      conf_gui_history_font_outline_b);
+				      (uint32_t)conf_gui_history_font_outline_r,
+				      (uint32_t)conf_gui_history_font_outline_g,
+				      (uint32_t)conf_gui_history_font_outline_b);
 
 	/* Calculate the pen position. */
 	if (!conf_gui_history_font_tategaki) {
@@ -2927,13 +2920,13 @@ static void reset_preview_button(int index)
 	s3_notify_image_update(b->rt.img_canvas_idle);
 
 	color = s3_make_pixel(0xff,
-			      conf_msgbox_font_r,
-			      conf_msgbox_font_g,
-			      conf_msgbox_font_b);
+			      (uint32_t)conf_msgbox_font_r,
+			      (uint32_t)conf_msgbox_font_g,
+			      (uint32_t)conf_msgbox_font_b);
 	outline_color = s3_make_pixel(0xff,
-				      conf_msgbox_font_outline_r,
-				      conf_msgbox_font_outline_g,
-				      conf_msgbox_font_outline_b);
+				      (uint32_t)conf_msgbox_font_outline_r,
+				      (uint32_t)conf_msgbox_font_outline_g,
+				      (uint32_t)conf_msgbox_font_outline_b);
 
 	/* Calculate the pen position. */
 	if (!conf_gui_preview_font_tategaki) {
@@ -3165,13 +3158,13 @@ draw_var_value(
 
 	/* Get colors. */
 	color = s3_make_pixel(0xff,
-			      conf_msgbox_font_r,
-			      conf_msgbox_font_g,
-			      conf_msgbox_font_b);
+			      (uint32_t)conf_msgbox_font_r,
+			      (uint32_t)conf_msgbox_font_g,
+			      (uint32_t)conf_msgbox_font_b);
 	outline_color = s3_make_pixel(0xff,
-				      conf_msgbox_font_outline_r,
-				      conf_msgbox_font_outline_g,
-				      conf_msgbox_font_outline_b);
+				      (uint32_t)conf_msgbox_font_outline_r,
+				      (uint32_t)conf_msgbox_font_outline_g,
+				      (uint32_t)conf_msgbox_font_outline_b);
 
 	/* Get the string to draw. */
 	name = s3_get_variable_string(b->var);
@@ -3271,8 +3264,7 @@ truncate_variable(
 	uint32_t wc;
 	const char *val;
 	const char *s;
-	int last_len;
-	int copy_len;
+	size_t copy_len, last_len;
 	char buf[1024];
 
 	val = s3_get_variable_string(var);
@@ -3285,7 +3277,7 @@ truncate_variable(
 		if (len < 0)
 			return;
 		count++;
-		last_len = len;
+		last_len = (size_t)len;
 		s += len;
 	}
 
@@ -3329,7 +3321,11 @@ render_image_helper(
 	cy = s3_get_layer_center_y(layer);
 	rot = s3_get_layer_rotate(layer);
 	blend = s3_get_layer_blend(layer);
-	alpha = (int)(((float)s3_get_layer_alpha(layer) / 255.0f) * (cur_alpha / 255.0f) * 255.0f);
+	alpha = (int)(
+		  ((float)s3_get_layer_alpha(layer) / 255.0f) *
+		  ((float)cur_alpha / 255.0f) *
+		  255.0f
+		);
 
 	/* If 3D. */
 	if (rot != 0.0f ||
@@ -3393,14 +3389,14 @@ render_image_helper(
 		}
 
 		/* 4. Shift again for the centering. */
-		x1 += cx;
-		y1 += cy;
-		x2 += cx;
-		y2 += cy;
-		x3 += cx;
-		y3 += cy;
-		x4 += cx;
-		y4 += cy;
+		x1 += (float)cx;
+		y1 += (float)cy;
+		x2 += (float)cx;
+		y2 += (float)cy;
+		x3 += (float)cx;
+		y3 += (float)cy;
+		x4 += (float)cx;
+		y4 += (float)cy;
 
 		/* 5. Shift for the layer position. */
 		x1 += (float)x;
@@ -3870,7 +3866,7 @@ add_button(
 static int
 get_unused_bid(void)
 {
-	int i, j;
+	int i;
 
 	for (i = 1; i < S3_BUTTON_LAYERS; i++)
 		if (is_bid_unused(i))

@@ -51,7 +51,9 @@ s3i_tag_bgm(
 {
 	const char *file;
 	bool once;
-	bool loop, stop;
+	bool stop;
+
+	UNUSED_PARAMETER(p);
 
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();

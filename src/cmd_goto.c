@@ -50,7 +50,8 @@ s3i_tag_goto(
 	void *p)
 {
 	const char *label;
-	bool cond;
+
+	UNUSED_PARAMETER(p);
 
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();

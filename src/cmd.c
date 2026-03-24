@@ -111,8 +111,7 @@ static struct tag_func tag_func[] = {
 bool
 s3i_install_tag_funcs(void)
 {
-	const char *params[] = {"param"};
-	int i;
+	uint32_t i;
 
 	/* Register functions. */
 	for (i = 0; i < sizeof(tag_func) / sizeof(struct tag_func); i++) {

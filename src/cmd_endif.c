@@ -42,8 +42,6 @@
 #include <string.h>
 #include <assert.h>
 
-static const char *get_var_value(const char *var_name);
-
 /*
  * The "endif" tag implementation.
  */
@@ -51,6 +49,8 @@ bool
 s3i_tag_endif(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* Set the continue flag to run also the next tag. */
 	s3_set_vm_int("s3Continue", 0);
 

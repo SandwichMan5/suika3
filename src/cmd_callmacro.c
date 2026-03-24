@@ -54,6 +54,8 @@ s3i_tag_callmacro(
 	const char *name;
 	char *name_s;
 
+	UNUSED_PARAMETER(p);
+
 	/* Get the arguments. */
 	file = s3_get_tag_arg_string("file", true, NULL);
 	name = s3_get_tag_arg_string("name", false, NULL);

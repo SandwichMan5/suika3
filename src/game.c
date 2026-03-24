@@ -166,12 +166,6 @@ static int stack_index[S3_CALL_STACK_MAX];
 static const char *last_tag_name;
 
 /*
- * Forward declaration.
- */
-static bool dispatch_update(bool *should_continue);
-static bool dispatch_render(void);
-
-/*
  * Called before the game starts.
  */
 bool
@@ -876,17 +870,20 @@ s3_read_call_stack(
 {
 	const char *f;
 
-	if (stack_file[stack_pointer] == NULL)
+	assert(sp >= 0);
+	assert(sp < S3_CALL_STACK_MAX);
+
+	if (stack_file[sp] == NULL)
 		f = "";
 	else
-		f = stack_file[stack_pointer];
+		f = stack_file[sp];
 
 	*file = strdup(f);
 	if (*file == NULL) {
 		s3_log_out_of_memory();
 		return false;
 	}
-	*index = stack_index[stack_pointer];
+	*index = stack_index[sp];
 	return true;
 }
 
@@ -899,16 +896,17 @@ s3_write_call_stack(
 	const char *file,
 	int index)
 {
+	assert(sp >= 0);
 	assert(sp < S3_CALL_STACK_MAX);
 
-	if (stack_file[stack_pointer] != NULL)
-		free(stack_file[stack_pointer]);
-	stack_file[stack_pointer] = strdup(file);
-	if (stack_file[stack_pointer] == NULL) {
+	if (stack_file[sp] != NULL)
+		free(stack_file[sp]);
+	stack_file[sp] = strdup(file);
+	if (stack_file[sp] == NULL) {
 		s3_log_out_of_memory();
 		return false;
 	}
-	stack_index[stack_pointer] = index;
+	stack_index[sp] = index;
 
 	return true;
 }
@@ -1121,7 +1119,6 @@ s3_set_last_message(
 	if (is_append && last_message != NULL) {
 		char *new_text;
 		size_t new_len = 0;
-		size_t next_len = 0;
 
 		new_len = strlen(last_message) + strlen(msg);
 		new_text = malloc(new_len + 1);

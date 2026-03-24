@@ -51,6 +51,8 @@ s3i_tag_skip(
 {
 	bool is_enabled;
 
+	UNUSED_PARAMETER(p);
+
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();
 

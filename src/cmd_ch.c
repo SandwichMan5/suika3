@@ -168,7 +168,6 @@ static struct params params[] = {
 
 static uint64_t sw;
 static float span;
-static int fade_method;
 static bool change_chpos[S3_CH_BASIC_LAYERS];
 
 static bool init(void);
@@ -183,6 +182,8 @@ bool
 s3i_tag_ch(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* Is the first frame? */
 	if (!s3_is_in_command_repetition()) {
 		/* Initialize a multiple frame execution. */
@@ -458,10 +459,10 @@ init(void)
 			if (*s == 'r') {
 				/* Relative. */
 				desc[i].center_x = s3_get_layer_center_x(LAYER_INDEX);
-				desc[i].center_x += (float)atof(s + 1);
+				desc[i].center_x += atoi(s + 1);
 			} else {
 				/* number: Set the value as is. */
-				desc[i].center_x = (float)atof(s);
+				desc[i].center_x = atoi(s);
 			}
 		} else if (is_file_specified) {
 			/* If a file is specified and center-x is ommited. */
@@ -479,10 +480,10 @@ init(void)
 			if (*s == 'r') {
 				/* Relative. */
 				desc[i].center_y = s3_get_layer_center_y(LAYER_INDEX);
-				desc[i].center_y += (float)atof(s + 1);
+				desc[i].center_y += atoi(s + 1);
 			} else {
 				/* number: Set the value as is. */
-				desc[i].center_y = (float)atof(s);
+				desc[i].center_y = atoi(s);
 			}
 		} else if (is_file_specified) {
 			/* If a file is specified and center-y is ommited. */

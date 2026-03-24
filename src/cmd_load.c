@@ -54,6 +54,8 @@ s3i_tag_load(
 	char *file_save;
 	char *label_save;
 
+	UNUSED_PARAMETER(p);
+
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();
 

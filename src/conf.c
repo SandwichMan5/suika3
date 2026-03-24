@@ -985,8 +985,6 @@ static bool read_conf(void);
 static bool save_value(const char *k, const char *v);
 static bool check_conf(void);
 static bool apply_initial_values(void);
-static bool overwrite_config_game_locale(const char *val);
-static bool overwrite_config_font_ttf1(const char *val);
 
 /*
  * Initialize the config subsystem.
@@ -1374,7 +1372,6 @@ static bool read_conf(void)
 	char *line_ptr;
 	char *end_line_ptr;
 	int line;
-	bool eof;
 	char *k, *v;
 	size_t len;
 
@@ -1410,9 +1407,9 @@ static bool read_conf(void)
 			end_line_ptr++;
 		if (*end_line_ptr == '\n') {
 			*end_line_ptr = '\0';
-			eof = false;
+			/* eof = false; */
 		} else {
-			eof = true;
+			/* eof = true; */
 		}
 
 		/* Get a key name. */

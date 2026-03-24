@@ -137,6 +137,8 @@ bool
 s3i_tag_choose(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* For the first frame, do initialization. */
 	if (!s3_is_in_command_repetition()) {
 		/* Initialize. */
@@ -297,23 +299,23 @@ draw_text(
 	/* Decide the color to draw. */
 	if (is_idle) {
 		color = s3_make_pixel(255,
-				      conf_choose_font_idle_r,
-				      conf_choose_font_idle_g,
-				      conf_choose_font_idle_b);
+				      (uint32_t)conf_choose_font_idle_r,
+				      (uint32_t)conf_choose_font_idle_g,
+				      (uint32_t)conf_choose_font_idle_b);
 		outline_color = s3_make_pixel(255,
-					      conf_choose_font_idle_r,
-					      conf_choose_font_idle_g,
-					      conf_choose_font_idle_b);
+					      (uint32_t)conf_choose_font_idle_r,
+					      (uint32_t)conf_choose_font_idle_g,
+					      (uint32_t)conf_choose_font_idle_b);
 		outline_width = conf_choose_font_idle_outline_width;
 	} else {
 		color = s3_make_pixel(255,
-				      conf_choose_font_hover_r,
-				      conf_choose_font_hover_g,
-				      conf_choose_font_hover_b);
+				      (uint32_t)conf_choose_font_hover_r,
+				      (uint32_t)conf_choose_font_hover_g,
+				      (uint32_t)conf_choose_font_hover_b);
 		outline_color = s3_make_pixel(255,
-					      conf_choose_font_hover_r,
-					      conf_choose_font_hover_g,
-					      conf_choose_font_hover_b);
+					      (uint32_t)conf_choose_font_hover_r,
+					      (uint32_t)conf_choose_font_hover_g,
+					      (uint32_t)conf_choose_font_hover_b);
 		outline_width = conf_choose_font_hover_outline_width;
 	}
 
@@ -389,8 +391,6 @@ draw_text(
 static bool
 main_process(void)
 {
-	int i;
-
 	if (is_timed) {
 		if ((float)s3_get_lap_timer_millisec(&timer_sw) >= timer_span * 1000.0f) {
 			is_timer_fired = true;

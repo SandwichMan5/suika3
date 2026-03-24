@@ -340,6 +340,8 @@ s3i_tag_text(
 {
 	bool cont;
 
+	UNUSED_PARAMETER(p);
+
 	/* Initialization */
 	if (!s3_is_in_command_repetition()) {
 		if (!init(&cont))
@@ -1264,8 +1266,6 @@ check_play_voice(void)
 static bool
 play_voice(void)
 {
-	struct wave *w;
-
 	if (voice_file == NULL || strcmp(voice_file, "") == 0)
 		return true;
 
@@ -1518,37 +1518,6 @@ frame_auto_mode(void)
 
 	/* Not clicked and command not ended */
 	return false;
-}
-
-/* Process auto mode start action */
-static void
-action_auto_start(void)
-{
-	/* Play SE */
-	play_se(conf_automode_enter_se);
-
-	/* Start auto mode */
-	s3_start_auto_mode();
-
-	/* Show auto mode banner */
-	s3_show_automode_banner(true);
-
-	/* Message display and voice playback are incomplete */
-	is_auto_mode_wait = false;
-}
-
-/* Process skip mode start action */
-static void
-action_skip_start(void)
-{
-	/* Play SE */
-	play_se(conf_skipmode_enter_se);
-
-	/* Start skip mode */
-	s3_start_skip_mode();
-
-	/* Show skip mode banner */
-	s3_show_skipmode_banner(true);
 }
 
 /* Process auto play completion check */
@@ -2303,8 +2272,6 @@ static void
 play_se(
 	const char *file)
 {
-	struct wave *w;
-
 	if (file == NULL || strcmp(file, "") == 0)
 		return;
 

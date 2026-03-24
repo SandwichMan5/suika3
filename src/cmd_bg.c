@@ -57,6 +57,8 @@ bool
 s3i_tag_bg(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	if (!s3_is_in_command_repetition())
 		if (!init())
 			return false;

@@ -52,6 +52,8 @@ s3i_tag_set(
 	const char *name;
 	const char *value;
 
+	UNUSED_PARAMETER(p);
+
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();
 

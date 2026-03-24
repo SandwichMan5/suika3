@@ -416,10 +416,7 @@ s3_move_to_endif_tag(void)
 bool
 s3_move_to_endmacro_tag(void)
 {
-	int depth;
 	int i;
-
-	depth = 0;
 
 	for (i = cur_index + 1; i < tag_size; i++) {
 		if (strcmp(tag[i].tag_name, "endmacro") == 0) {
@@ -537,7 +534,6 @@ s3_get_tag_arg_bool(
 	int i, count;
 	const char *prop_name;
 	const char *prop_value;
-	int val;
 
 	count = s3_get_tag_property_count();
 

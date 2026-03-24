@@ -44,6 +44,8 @@ bool
 s3i_tag_label(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* Set the continue flag to run also the next tag. */
 	s3_set_vm_int("s3Continue", 0);
 

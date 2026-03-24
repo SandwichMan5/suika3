@@ -51,6 +51,8 @@ s3i_tag_else(
 {
 	const char *last_tag;
 
+	UNUSED_PARAMETER(p);
+
 	/* Set the continue flag to run also the next tag. */
 	s3_set_vm_int("s3Continue", 0);
 

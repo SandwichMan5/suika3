@@ -57,11 +57,11 @@ static struct s3_image *emoji_image[S3_EMOJI_COUNT];
  * Last codepoint and the cached image.
  */
 static int last_slot;
-static int last_codepoint;
+static uint32_t last_codepoint;
 static int last_size;
-static int last_color;
+static s3_pixel_t last_color;
 static int last_outline_width;
-static int last_outline_color;
+static s3_pixel_t last_outline_color;
 static struct s3_image *last_image;
 
 /*
@@ -77,7 +77,7 @@ struct s3_drawmsg *ctx_tbl[CONTEXT_MAX];
 /*
  * Forward declarations
  */
-static bool load_cached_glyph(int slot, int codepoint, int size,
+static bool load_cached_glyph(int slot, uint32_t codepoint, int size,
 			      hal_pixel_t color, int outline_width,
 			      hal_pixel_t outline_color);
 static bool isgraph_extended(const char **mbs, uint32_t *wc);
@@ -116,7 +116,7 @@ s3i_init_text(void)
 	}
 
 	last_slot = -1;
-	last_codepoint = -1;
+	last_codepoint = (uint32_t)-1;
 	last_size = -1;
 	last_color = 0;
 	last_outline_width = 0;
@@ -370,12 +370,16 @@ s3_get_string_height(int font_type, int font_size, const char *mbs)
 static bool
 load_cached_glyph(
 	int slot,
-	int codepoint,
+	uint32_t codepoint,
 	int size,
 	s3_pixel_t color,
 	int outline_width,
 	s3_pixel_t outline_color)
 {
+	assert(slot >= 0 && slot < S3_FONT_COUNT);
+	assert(size > 0);
+	assert(outline_width >= 0);
+
 	slot = translate_font_type(slot);
 
 	/* If cached. */
@@ -477,6 +481,8 @@ s3_draw_glyph(
 	bool is_dim)
 {
 	int ofs_y;
+
+	UNUSED_PARAMETER(is_dim);
 
 	/* Load a glyph to the cache slot. */
 	if (!load_cached_glyph(font_type,
@@ -2150,7 +2156,9 @@ bool
 s3_is_quoted_serif(
 	const char *msg)
 {
-	/* TODO */
+	UNUSED_PARAMETER(msg);
+
+	/* XXX: may be removed. */
 	return false;
 }
 

@@ -1044,7 +1044,7 @@ s3_get_image_height(
 struct s3_image *
 s3_load_glyph_image(
 	int slot,
-	int codepoint,
+	uint32_t codepoint,
 	int size,
 	s3_pixel_t color,
 	int outline_width,
@@ -1104,10 +1104,10 @@ s3_draw_image_3d(
  */
 s3_pixel_t
 s3_make_pixel(
-	int r,
-	int g,
-	int b,
-	int a);
+	uint32_t r,
+	uint32_t g,
+	uint32_t b,
+	uint32_t a);
 
 /*
  * Fill a rectangle on an image.
@@ -2738,7 +2738,7 @@ bool
 s3_install_api(
 	const char *name,
 	bool (*func)(void *),
-	int param_count,
+	uint32_t param_count,
 	const char **params);
 
 /*

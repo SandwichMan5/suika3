@@ -51,6 +51,8 @@ bool
 s3i_tag_wait(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* Perform initialization on the first invocation. */
 	if (!s3_is_in_command_repetition()) {
 		/* Get the arguments. */

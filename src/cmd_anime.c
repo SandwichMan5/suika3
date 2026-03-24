@@ -46,7 +46,6 @@ static bool is_async;
 static bool is_showsysbtn;
 static bool is_showmsgbox;
 static bool is_shownamebox;
-static int reg_index;
 static bool is_layer_used[S3_STAGE_LAYERS];
 static uint64_t sw;
 
@@ -61,6 +60,8 @@ bool
 s3i_tag_anime(
 	void *p)
 {
+	UNUSED_PARAMETER(p);
+
 	/* Is the first frame? */
 	if (!s3_is_in_command_repetition()) {
 		/* Initialize a multiple frame execution. */

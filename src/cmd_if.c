@@ -54,6 +54,8 @@ s3i_tag_if(
 	const char *rhs;
 	bool cond;
 
+	UNUSED_PARAMETER(p);
+
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();
 

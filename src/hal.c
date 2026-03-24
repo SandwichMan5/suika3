@@ -156,7 +156,7 @@ bool
 s3_install_api(
 	const char *name,
 	bool (*func)(void *),
-	int param_count,
+	uint32_t param_count,
 	const char **params)
 {
 	char full_name[256];
@@ -368,7 +368,6 @@ s3_call_vm_tag_function(
 	bool *tag_end)
 {
 	NoctEnv *env;
-	struct pfi_tag *t;
 	NoctValue dict;
 	int i;
 	int prop_count;
@@ -637,9 +636,9 @@ s3_log_tag_error(
 {
 	char buf[4096];
 	va_list ap;
-	int n;
+	uint32_t n;
 
-	n = snprintf(buf,
+	n = (uint32_t)snprintf(buf,
 		     sizeof(buf),
 		     S3_TR("File %s: Line %d: Tag %s: "),
 		     s3_get_tag_file(),

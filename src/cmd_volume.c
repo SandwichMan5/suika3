@@ -53,8 +53,18 @@ s3i_tag_volume(
 	float vol;
 	float span;
 
+	UNUSED_PARAMETER(p);
+
 	/* Update the tag values by variable values. */
 	s3_evaluate_tag();
+
+	track = s3_get_tag_arg_string("track", false, NULL);
+	if (track == NULL)
+		return false;
+	vol = s3_get_tag_arg_float("vol", false, -1.0f);
+	if (vol == -1.0f)
+		return false;
+	span = s3_get_tag_arg_float("span", true, 0.0f);
 
 	if (vol < 0)
 		vol = 0;

@@ -76,6 +76,16 @@ s3_add_history(
 	s3_pixel_t name_color,
 	s3_pixel_t name_outline_color)
 {
+	UNUSED_PARAMETER(name);
+	UNUSED_PARAMETER(msg);
+	UNUSED_PARAMETER(voice);
+	UNUSED_PARAMETER(body_color);
+	UNUSED_PARAMETER(body_outline_color);
+	UNUSED_PARAMETER(name_color);
+	UNUSED_PARAMETER(name_outline_color);
+
+	/* TODO */
+
 	return true;
 }
 
@@ -94,6 +104,8 @@ s3_get_history_count(void)
 const char *
 s3_get_history_name(int index)
 {
+	UNUSED_PARAMETER(index);
+
 	return "";
 }
 
@@ -103,6 +115,8 @@ s3_get_history_name(int index)
 const char *
 s3_get_history_message(int index)
 {
+	UNUSED_PARAMETER(index);
+
 	return "";
 }
 
@@ -112,5 +126,7 @@ s3_get_history_message(int index)
 const char *
 s3_get_history_voice(int index)
 {
+	UNUSED_PARAMETER(index);
+
 	return "";
 }
