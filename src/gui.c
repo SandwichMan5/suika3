@@ -1014,7 +1014,7 @@ static void process_input(void)
 			set_gui_call_arg(button[prev_pointed_index].bid);
 
 			/* Load the anime. */
-			s3_load_anime_from_file(button[prev_pointed_index].anime_idle, NULL, button[pointed_index].rt.used_layers);
+			s3_load_anime_from_file(button[prev_pointed_index].anime_idle, NULL, button[prev_pointed_index].rt.used_layers);
 		}
 	}
 	if (prev_pointed_index != pointed_index && pointed_index != -1) {
