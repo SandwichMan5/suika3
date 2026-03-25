@@ -53,6 +53,12 @@ void
 s3i_cleanup_sysbtn(void);
 
 /*
+ * Reset the sysbtn state.
+ */
+void
+s3i_idle_sysbtn(void);
+
+/*
  * Get the alpha value of the system button.
  */
 int

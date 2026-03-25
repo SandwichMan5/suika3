@@ -31,7 +31,7 @@
 [text name="Midori" voice="voice/004.ogg" text="Let's go to the station, Xiao!"]
 
 [ch left="ch/xiaoling/xiaoling-smile.png" time="1.0" fade="normal"]
-[wait time="0.5"]
+[wait time="0.5" showmsgbox="true"]
 
 [text name="Xiaoling" voice="voice/005.ogg" text="Okay, I'll grab my bag. Just a moment, Mido."]
 

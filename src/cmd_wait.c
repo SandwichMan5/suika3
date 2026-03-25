@@ -37,12 +37,12 @@
 
 #include <suika3/suika3.h>
 #include "conf.h"
+#include "sysbtn.h"
 
 static float span;
 static uint64_t sw;
-static bool show_sysbtn;
-static bool show_msgbox;
-static bool show_namebox;
+static bool hide_msgbox;
+static bool hide_namebox;
 
 /*
  * The "click" tag implementation.
@@ -57,17 +57,20 @@ s3i_tag_wait(
 	if (!s3_is_in_command_repetition()) {
 		/* Get the arguments. */
 		span = s3_get_tag_arg_float("time", false, 0);
-		show_sysbtn = s3_get_tag_arg_bool("showsysbtn", true, false);
-		show_msgbox = s3_get_tag_arg_bool("showmsgbox", true, false);
-		show_namebox = s3_get_tag_arg_bool("shownamebox", true, false);
+		hide_msgbox = s3_get_tag_arg_bool("hidemsgbox", true, false);
+		hide_namebox = s3_get_tag_arg_bool("hidenamebox", true, false);
 
 		/* Hide the message and name boxes. */
-		s3_show_sysbtn(show_sysbtn);
-		s3_show_msgbox(show_msgbox);
-		s3_show_namebox(show_namebox);
+		if (hide_msgbox)
+			s3_show_msgbox(false);
+		if (hide_namebox)
+			s3_show_namebox(false);
 
 		/* Start measuring elapsed time */
 		s3_reset_lap_timer(&sw);
+
+		/* Hide the sysbtn. */
+		s3i_idle_sysbtn();
 
 		/* Enter command repetition state */
 		s3_start_command_repetition();

@@ -37,6 +37,7 @@
 
 #include <suika3/suika3.h>
 #include "conf.h"
+#include "sysbtn.h"
 
 #include <string.h>
 
@@ -65,6 +66,9 @@ s3i_tag_click(
 			s3_stop_skip_mode();
 			s3_show_skipmode_banner(false);
 		}
+
+		/* Hide the sysbtn. */
+		s3i_idle_sysbtn();
 
 		/* Start measuring elapsed time */
 		s3_reset_lap_timer(&sw);

@@ -878,46 +878,6 @@ It is primarily used to organize large stories into multiple chapters or to tran
 
 ---
 
-## `wait`
-
-Wait for Time
-
-The `wait` tag pauses the NovelML execution for a specified duration.
-It is essential for controlling the pacing of visual transitions, creating dramatic pauses, or timing effects without requiring player input.
-
-### Basic Usage
-
-```
-# Pause for 1.5 seconds before the next command
-[wait time="1.5"]
-
-# Create a brief pause between character changes
-[ch center="chara01_surprised.png" time="0.5"]
-[wait time="1.0"]
-[text text="She couldn't believe her eyes."]
-```
-
-### Arguments
-
-| Argument | Omissible | Description                    | Notes                                  |
-|----------|-----------|--------------------------------|----------------------------------------|
-| `time`   | No        | The number of seconds to wait. | Supports decimal values (e.g., `0.5`). |
-
-### Tips
-
-**Non-interactive Pause**:
-* Unlike `[click]`, which waits for the player to act, `[wait]` continues automatically once the time is up. 
-* This is perfect for "auto-playing" segments or timed visual sequences.
-
-**Combining with Animations**:
-* If you use a `[ch]` or `[bg]` tag with a `time` argument, the engine moves to the next command immediately while the animation plays. 
-* Use `[wait]` after an animation if you want the script to stop until the animation is finished (or even longer for dramatic effect).
-
-**User Experience**:
-* Be careful not to make `[wait]` times too long (like more than 3 seconds) without a visual reason, or the player might think the game has frozen!
-
----
-
 ## `se`
 
 Play Sound Effect
@@ -1382,3 +1342,46 @@ It is ideal for opening cinematics, transitional cutscenes, or high-impact visua
 * Most video files include their own audio track.
 * Keep in mind that this audio will play alongside any `[bgm]` you have running.
 * You might want to stop the music with `[bgm file="none"]` before starting a video with sound!
+
+---
+
+## `wait`
+
+Wait for Time
+
+The `wait` tag pauses the NovelML execution for a specified duration.
+It is essential for controlling the pacing of visual transitions, creating dramatic pauses, or timing effects without requiring player input.
+
+### Basic Usage
+
+```
+# Pause for 1.5 seconds before the next command
+[wait time="1.5"]
+
+# Create a brief pause between character changes
+[ch center="chara01_surprised.png" time="0.5"]
+[wait time="1.0"]
+[text text="She couldn't believe her eyes."]
+```
+
+### Arguments
+
+| Argument      | Omissible     | Description                    | Notes                                  |
+|---------------|---------------|--------------------------------|----------------------------------------|
+| `time`        | No            | The number of seconds to wait. | Supports decimal values (e.g., `0.5`). |
+| `hidemsgbox`  | Yes (`false`) | Force hide the message box.    |                                        |
+| `hidenamebox` | Yes (`false`) | Force hide the name box.       |                                        |
+
+### Tips
+
+**Non-interactive Pause**:
+* Unlike `[click]`, which waits for the player to act, `[wait]` continues automatically once the time is up. 
+* This is perfect for "auto-playing" segments or timed visual sequences.
+
+**Combining with Animations**:
+* If you use a `[ch]` or `[bg]` tag with a `time` argument, the engine moves to the next command immediately while the animation plays. 
+* Use `[wait]` after an animation if you want the script to stop until the animation is finished (or even longer for dramatic effect).
+
+**User Experience**:
+* Be careful not to make `[wait]` times too long (like more than 3 seconds) without a visual reason, or the player might think the game has frozen!
+

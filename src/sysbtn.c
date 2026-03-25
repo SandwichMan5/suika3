@@ -112,6 +112,37 @@ s3i_cleanup_sysbtn(void)
 }
 
 /*
+ * Reset the sysbtn state.
+ */
+void
+s3i_idle_sysbtn(void)
+{
+	if (!s3_is_sysbtn_visible()) {
+		state = ST_OUT;
+		s3_reset_lap_timer(&sw);
+		alpha = 0;
+	} else {
+		switch (state) {
+		case ST_OUT:
+			/* Leave as is. (hidden) */
+			break;
+		case ST_FADE_OUT:
+			/* Leave as is. (fading out) */
+			break;
+		case ST_FADE_IN:
+		case ST_APPEAR:
+		case ST_HOVER:
+		case ST_GUI_WAIT:
+			/* Start fading out. */
+			state = ST_FADE_OUT;
+			s3_reset_lap_timer(&sw);
+			alpha = 0;
+			break;
+		}
+	}
+}
+
+/*
  * Show or hide the system button.
  */
 bool
