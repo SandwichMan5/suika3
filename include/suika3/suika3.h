@@ -191,7 +191,9 @@
 #define S3_LAYER_GUI_BTN30	(97)	/* GUI button 30 */
 #define S3_LAYER_GUI_BTN31	(98)	/* GUI button 31 */
 #define S3_LAYER_GUI_BTN32	(99)	/* GUI button 32 */
-#define S3_STAGE_LAYERS		(100)	/* Total layers */
+#define S3_LAYER_SYSBTN_IDLE	(100)	/* GUI button 32 */
+#define S3_LAYER_SYSBTN_HOVER	(101)	/* GUI button 32 */
+#define S3_STAGE_LAYERS		(102)	/* Total layers */
 
 /*
  * Number of the text layers.

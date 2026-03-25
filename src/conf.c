@@ -251,17 +251,23 @@ bool conf_sysbtn_enable;
 char *conf_sysbtn_idle;
 char *conf_sysbtn_hover;
 
+/* Anime */
+char *conf_sysbtn_anime_out;
+char *conf_sysbtn_anime_fadein;
+char *conf_sysbtn_anime_appear;
+char *conf_sysbtn_anime_hover;
+char *conf_sysbtn_anime_fadeout;
+
 /* Position */
 int conf_sysbtn_x;
 int conf_sysbtn_y;
+int conf_sysbtn_width;
+int conf_sysbtn_height;
 
 /* SE */
 char *conf_sysbtn_enter_se;
 char *conf_sysbtn_leave_se;
 char *conf_sysbtn_click_se;
-
-/* Misc. */
-bool conf_sysbtn_show_on_transition;
 
 /*
  * Auto Mode Settings
@@ -695,12 +701,18 @@ static struct rule {
 	{'b',	"sysbtn.enable",		&conf_sysbtn_enable,			MUST,	SAVE,	LOCAL},
 	{'s',	"sysbtn.idle",			&conf_sysbtn_idle,			MUST,	SAVE,	LOCAL},
 	{'s',	"sysbtn.hover",			&conf_sysbtn_hover,			MUST,	SAVE,	LOCAL},
+	{'s',	"sysbtn.anime.out",		&conf_sysbtn_anime_out,			MUST,	SAVE,	LOCAL},
+	{'s',	"sysbtn.anime.fadein",		&conf_sysbtn_anime_fadein,		MUST,	SAVE,	LOCAL},
+	{'s',	"sysbtn.anime.appear",		&conf_sysbtn_anime_appear,		MUST,	SAVE,	LOCAL},
+	{'s',	"sysbtn.anime.hover",		&conf_sysbtn_anime_hover,		MUST,	SAVE,	LOCAL},
+	{'s',	"sysbtn.anime.fadeout",		&conf_sysbtn_anime_fadeout,		MUST,	SAVE,	LOCAL},
 	{'i',	"sysbtn.x",			&conf_sysbtn_x,				MUST,	SAVE,	LOCAL},
 	{'i',	"sysbtn.y",			&conf_sysbtn_y,				MUST,	SAVE,	LOCAL},
+	{'i',	"sysbtn.width",			&conf_sysbtn_width,			MUST,	SAVE,	LOCAL},
+	{'i',	"sysbtn.height",		&conf_sysbtn_height,			MUST,	SAVE,	LOCAL},
 	{'s',	"sysbtn.enter_se",		&conf_sysbtn_enter_se,			OPTIONAL, SAVE,	LOCAL},
 	{'s',	"sysbtn.leave_se",		&conf_sysbtn_leave_se,			OPTIONAL, SAVE,	LOCAL},
 	{'s',	"sysbtn.click_se",		&conf_sysbtn_click_se,			OPTIONAL, SAVE,	LOCAL},
-	{'b',	"sysbtn.show_on_transition",	&conf_sysbtn_show_on_transition,	MUST,	SAVE,	LOCAL},
 
 	/* Auto Mode */
 	{'s',	"automode.image",		&conf_automode_image,			MUST,	SAVE,	LOCAL},

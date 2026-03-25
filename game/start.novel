@@ -8,7 +8,9 @@
 [bg file="bg/school.png" time="0.5"]
 
 [ch left="ch/xiaoling/xiaoling-smile.png" time="1.0" fade="normal"]
-[wait time="1.0"]
+
+[text name="Xiaoling" text="......"]
+
 [ch left="ch/xiaoling/xiaoling-normal.png" time="1.0" fade="normal"]
 
 [text name="Xiaoling" text="......"]

@@ -239,17 +239,23 @@ extern bool conf_sysbtn_enable;
 extern char *conf_sysbtn_idle;
 extern char *conf_sysbtn_hover;
 
+/* Anime */
+extern char *conf_sysbtn_anime_out;
+extern char *conf_sysbtn_anime_fadein;
+extern char *conf_sysbtn_anime_appear;
+extern char *conf_sysbtn_anime_hover;
+extern char *conf_sysbtn_anime_fadeout;
+
 /* Position */
 extern int conf_sysbtn_x;
 extern int conf_sysbtn_y;
+extern int conf_sysbtn_width;
+extern int conf_sysbtn_height;
 
 /* SE */
 extern char *conf_sysbtn_enter_se;
 extern char *conf_sysbtn_leave_se;
 extern char *conf_sysbtn_click_se;
-
-/* Misc. */
-extern bool conf_sysbtn_show_on_transition;
 
 /*
  * Auto Mode Settings

@@ -1496,10 +1496,13 @@ s3_layer_to_chpos(
 void
 s3_render_stage(void)
 {
-	int i, alpha;
+	int i;
 
 	/* Update an anime frame. */
 	s3_update_anime_frame();
+
+	/* Update the sysbtn state. */
+	s3_update_sysbtn_state();
 
 	/* Render stage layers. */
 	render_layer(S3_LAYER_BG);
@@ -1563,31 +1566,8 @@ s3_render_stage(void)
 		s3i_run_gui_render();
 
 	/* Render the sysbtn. */
-	s3_update_sysbtn_state();
-	alpha = s3i_get_sysbtn_alpha();
-	if (!s3_is_sysbtn_pointed()) {
-		pf_render_texture(conf_sysbtn_x,
-				  conf_sysbtn_y,
-				  sysbtn_idle_image->width,
-				  sysbtn_idle_image->height,
-				  sysbtn_idle_image->tex_id,
-				  0,
-				  0,
-				  sysbtn_idle_image->width,
-				  sysbtn_idle_image->height,
-				  alpha);
-	} else {
-		pf_render_texture(conf_sysbtn_x,
-				  conf_sysbtn_y,
-				  sysbtn_hover_image->width,
-				  sysbtn_hover_image->height,
-				  sysbtn_hover_image->tex_id,
-				  0,
-				  0,
-				  sysbtn_hover_image->width,
-				  sysbtn_hover_image->height,
-				  alpha);
-	}
+	render_layer(S3_LAYER_SYSBTN_IDLE);
+	render_layer(S3_LAYER_SYSBTN_HOVER);
 }
 
 /* Render a layer. */
@@ -1595,15 +1575,28 @@ static void
 render_layer(
 	int layer)
 {
-	struct s3_image *base_img;
+	struct s3_image *layer_img, *base_img;
 	int src_x, src_width;
 	int alpha;
 
 	assert(layer >= 0 && layer < S3_STAGE_LAYERS);
 
-	/* Don't render if no image. */
-	if (layer_image[layer] == NULL)
+	/* Get the layer image. */
+	switch (layer) {
+	case S3_LAYER_SYSBTN_IDLE:
+		layer_img = sysbtn_idle_image;
+		break;
+	case S3_LAYER_SYSBTN_HOVER:
+		layer_img = sysbtn_hover_image;
+		break;
+	default:
+		layer_img = layer_image[layer];
+		break;
+	}
+	if (layer_img == NULL) {
+		/* Don't render if no image. */
 		return;
+	}
 
 	/* Calculate the alpha value. */
 	alpha = layer_alpha[layer];
@@ -1643,7 +1636,7 @@ render_layer(
 		src_width = base_img->width;
 		src_x = src_width * layer_frame[layer];
 	} else {
-		src_width = layer_image[layer]->width;
+		src_width = layer_img->width;
 		src_x = 0;
 	}
 
@@ -1653,12 +1646,12 @@ render_layer(
 	    layer_scale_y[layer] != 1.0f) {
 		float x1 = 0;
 		float y1 = 0;
-		float x2 = (float)layer_image[layer]->width - 1.0f;
+		float x2 = (float)layer_img->width - 1.0f;
 		float y2 = 0;
 		float x3 = 0;
-		float y3 = (float)layer_image[layer]->height - 1.0f;;
-		float x4 = (float)layer_image[layer]->width - 1.0f;
-		float y4 = (float)layer_image[layer]->height - 1.0f;
+		float y3 = (float)layer_img->height - 1.0f;;
+		float x4 = (float)layer_img->width - 1.0f;
+		float y4 = (float)layer_img->height - 1.0f;
 		float center_x = (float)layer_center_x[layer];
 		float center_y = (float)layer_center_y[layer];
 		float rad = (float)layer_rotate[layer];
@@ -1738,11 +1731,11 @@ render_layer(
 						 y3,
 						 x4,
 						 y4,
-						 layer_image[layer]->tex_id,
+						 layer_img->tex_id,
 						 0,
 						 0,
-						 layer_image[layer]->width,
-						 layer_image[layer]->height,
+						 layer_img->width,
+						 layer_img->height,
 						 layer_alpha[layer]);
 		} else if (layer_blend[layer] == S3_BLEND_ALPHA) {
 			pf_render_texture_3d(x1,
@@ -1753,11 +1746,11 @@ render_layer(
 					     y3,
 					     x4,
 					     y4,
-					     layer_image[layer]->tex_id,
+					     layer_img->tex_id,
 					     0,
 					     0,
-					     layer_image[layer]->width,
-					     layer_image[layer]->height,
+					     layer_img->width,
+					     layer_img->height,
 					     layer_alpha[layer]);
 		} else if (layer_blend[layer] == S3_BLEND_ADD) {
 			pf_render_texture_3d_add(x1,
@@ -1768,11 +1761,11 @@ render_layer(
 						 y3,
 						 x4,
 						 y4,
-						 layer_image[layer]->tex_id,
+						 layer_img->tex_id,
 						 0,
 						 0,
-						 layer_image[layer]->width,
-						 layer_image[layer]->height,
+						 layer_img->width,
+						 layer_img->height,
 						 layer_alpha[layer]);
 		} else if (layer_blend[layer] == S3_BLEND_SUB) {
 			pf_render_texture_3d_sub(x1,
@@ -1783,11 +1776,11 @@ render_layer(
 						 y3,
 						 x4,
 						 y4,
-						 layer_image[layer]->tex_id,
+						 layer_img->tex_id,
 						 0,
 						 0,
-						 layer_image[layer]->width,
-						 layer_image[layer]->height,
+						 layer_img->width,
+						 layer_img->height,
 						 layer_alpha[layer]);
 		}
 		return;
@@ -1799,48 +1792,48 @@ render_layer(
 		pf_render_texture_dim(layer_x[layer],
 				      layer_y[layer],
 				      (int)((float)src_width * layer_scale_x[layer]),
-				      (int)((float)layer_image[layer]->height * layer_scale_y[layer]),
-				      layer_image[layer]->tex_id,
+				      (int)((float)layer_img->height * layer_scale_y[layer]),
+				      layer_img->tex_id,
 				      src_x,
 				      0,
 				      src_width,
-				      layer_image[layer]->height,
+				      layer_img->height,
 				      layer_alpha[layer]);
 	} else if (layer_blend[layer] == S3_BLEND_ALPHA) {
 		/* Normal alpha blending. */
 		pf_render_texture(layer_x[layer],
 				  layer_y[layer],
 				  (int)((float)src_width * layer_scale_x[layer]),
-				  (int)((float)layer_image[layer]->height * layer_scale_y[layer]),
-				  layer_image[layer]->tex_id,
+				  (int)((float)layer_img->height * layer_scale_y[layer]),
+				  layer_img->tex_id,
 				  src_x,
 				  0,
 				  src_width,
-				  layer_image[layer]->height,
+				  layer_img->height,
 				  layer_alpha[layer]);
 	} else if (layer_blend[layer] == S3_BLEND_ADD) {
 		/* Add blending. */
 		pf_render_texture_add(layer_x[layer],
 				      layer_y[layer],
 				      (int)((float)src_width * layer_scale_x[layer]),
-				      (int)((float)layer_image[layer]->height * layer_scale_y[layer]),
-				      layer_image[layer]->tex_id,
+				      (int)((float)layer_img->height * layer_scale_y[layer]),
+				      layer_img->tex_id,
 				      src_x,
 				      0,
 				      src_width,
-				      layer_image[layer]->height,
+				      layer_img->height,
 				      layer_alpha[layer]);
 	} else if (layer_blend[layer] == S3_BLEND_SUB) {
 		/* Sub blending. */
 		pf_render_texture_sub(layer_x[layer],
 				      layer_y[layer],
-				      (int)((float)layer_image[layer]->width * layer_scale_x[layer]),
-				      (int)((float)layer_image[layer]->height * layer_scale_y[layer]),
-				      layer_image[layer]->tex_id,
+				      (int)((float)layer_img->width * layer_scale_x[layer]),
+				      (int)((float)layer_img->height * layer_scale_y[layer]),
+				      layer_img->tex_id,
 				      src_x,
 				      0,
 				      src_width,
-				      layer_image[layer]->height,
+				      layer_img->height,
 				      layer_alpha[layer]);
 	}
 }

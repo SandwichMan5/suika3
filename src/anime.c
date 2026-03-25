@@ -214,6 +214,8 @@ static struct layer_name_map layer_name_map[] = {
 	{"gui30",		S3_LAYER_GUI_BTN30},
 	{"gui31",		S3_LAYER_GUI_BTN31},
 	{"gui32",		S3_LAYER_GUI_BTN31},
+	{"sysbtn-idle",		S3_LAYER_SYSBTN_IDLE},
+	{"sysbtn-hover",	S3_LAYER_SYSBTN_HOVER},
 };
 
 /*
