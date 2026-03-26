@@ -70,7 +70,7 @@ static bool Suika_getBoolConfig(void *p);
 static bool Suika_getIntConfig(void *p);
 static bool Suika_getFloatConfig(void *p);
 static bool Suika_getConfigAsString(void *p);
-static bool Suika_compareLocale(void *p);
+static bool Suika_getLocale(void *p);
 
 /* Input */
 static bool Suika_getMousePosX(void *p);
@@ -437,7 +437,7 @@ static struct api_func api_func[] = {
 	{"getFloatConfig",		Suika_getFloatConfig,		1, dict_param},
 	{"getStringConfig",		Suika_getStringConfig,		1, dict_param},
 	{"getConfigAsString",		Suika_getConfigAsString,	1, dict_param},
-	{"compareLocale",		Suika_compareLocale,		1, dict_param},
+	{"getLocale",			Suika_getLocale,		1, dict_param},
 
 	/* Input */
 	{"getMousePosX",		Suika_getMousePosX,		0, NULL},
@@ -1598,36 +1598,21 @@ Suika_getConfigAsString(
 }
 
 static bool
-Suika_compareLocale(
-		    void *p)
+Suika_getLocale(
+	void *p)
 {
-	char *locale;
-	bool val;
-	bool ret;
+	const char *val;
 
 	UNUSED_PARAMETER(p);
 
-	locale = NULL;
-	ret = false;
-	do {
-		/* Get the argument. */
-		if (!pf_get_call_arg_string("locale", &locale))
-			break;
+	/* Get the locale value. */
+	val = s3_get_locale();
 
-		/* Get the config value. */
-		val = s3_compare_locale(locale);
+	/* Set the return value. */
+	if (!pf_set_return_string(val))
+		return 0;
 
-		/* Set the return value. */
-		if (!pf_set_return_int(val ? 1 : 0))
-			break;
-
-		ret = true;
-	} while (0);
-
-	if (locale != NULL)
-		free(locale);
-
-	return ret;
+	return 1;
 }
 
 /*

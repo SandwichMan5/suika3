@@ -53,6 +53,7 @@
 struct choose_button {
 	bool is_enabled;
 	const char *text;
+	const char *value;
 	int x;
 	int y;
 	int w;
@@ -122,6 +123,8 @@ static const char *result_var_name;
 
 static bool init(void);
 static bool main_process(void);
+static bool get_text_arg(int index, const char **text, const char **value);
+static const char *get_locale_larger(const char *locale);
 static void draw_text(int index, bool is_idle);
 static void process_main_input(void);
 static int get_pointed_index(void);
@@ -191,13 +194,9 @@ init(void)
 	/* Collect the option infromation. */
 	actual_option_count = 0;
 	for (i = 0; i < S3_CHOOSEBOX_COUNT; i++) {
-		char text[128];
-
-		snprintf(text, sizeof(text), "text%d", i + 1);
 
 		/* Get the N-th options. */
-		button[i].text = s3_get_tag_arg_string(text, true, NULL);
-		if (button[i].text == NULL) {
+		if (!get_text_arg(i, &button[i].text, &button[i].value)) {
 			button[i].is_enabled = false;
 			s3_show_choosebox(i, false, false);
 			continue;
@@ -264,6 +263,9 @@ init(void)
 		s3_show_skipmode_banner(false);
 	}
 
+	/* Show the sysbtn. */
+	s3_enable_sysbtn(true);
+
 	/* Initialize the timer. */
 	if (s3_check_tag_arg("time")) {
 		is_timed = true;
@@ -277,6 +279,70 @@ init(void)
 	s3_set_continuous_swipe_enabled(false);
 
 	return true;
+}
+
+/* Get the option text. */
+static bool
+get_text_arg(
+	int index,
+	const char **text,
+	const char **value)
+{
+	char name[128];
+	const char *locale;
+
+	locale = s3_get_locale();
+	assert(locale != NULL);
+
+	/*
+	 * Try a localized text.
+	 */
+
+	/* Try a full locale such as "en-US". */
+	snprintf(name, sizeof(name), "text%d-%s", index + 1, locale);
+	*text = s3_get_tag_arg_string(name, true, NULL);
+	if (*text == NULL) {
+		/* Fallback to a larger locale such as "en". */
+		locale = get_locale_larger(locale);
+		if (locale != NULL) {
+			snprintf(name, sizeof(name), "text%d-%s", index + 1, locale);
+			*text = s3_get_tag_arg_string(name, true, NULL);
+		}
+
+		/* Fallback. */
+		if (*text == NULL) {
+			snprintf(name, sizeof(name), "text%d", index + 1);
+			*text = s3_get_tag_arg_string(name, true, NULL);
+			if (*text == NULL) {
+				/* No option found for the index. */
+				return false;
+			}
+		}
+	}
+
+	/* Get the value for use as the result. */
+	snprintf(name, sizeof(name), "value%d", index + 1);
+	*value = s3_get_tag_arg_string(name, true, NULL);
+	if (*value == NULL) {
+		/* If not specified, use the same text and the value */
+		*value = *text;
+	}
+			
+	/* Option found for the index. */
+	return true;
+}
+
+static const char *
+get_locale_larger(
+	const char *locale)
+{
+	if (strncmp(locale, "en-", 3) == 0)
+		return "en";
+	if (strncmp(locale, "fr-", 3) == 0)
+		return "fr";
+	if (strncmp(locale, "es-", 3) == 0)
+		return "es";
+	return NULL;
 }
 
 /* Draw an option text to a choose box layer. */
@@ -640,8 +706,10 @@ cleanup(void)
 		run_anime(i, -1);
 
 	/* Hide the choose boxes. */
-	for (i = 0; i < S3_CHOOSEBOX_COUNT; i++)
-		s3_show_choosebox(i, false, false);
+	if (!need_sysmenu_mode) {
+		for (i = 0; i < S3_CHOOSEBOX_COUNT; i++)
+			s3_show_choosebox(i, false, false);
+	}
 
 	/* If we need to transition to a system GUI. */
 	if (need_sysmenu_mode) {
@@ -652,19 +720,13 @@ cleanup(void)
 		return true;
 	}
 
-	/* If the timer bombed. */
-	if (is_timer_fired) {
-		/* Set the result empty. */
-		s3_set_variable_string(result_var_name, "");
-
-		/* Move to the next tag. */
-		if (!s3_move_to_next_tag())
-			return false;
-		return true;
-	}
-
 	/* Set the result. */
-	s3_set_variable_string(result_var_name, button[pointed_index].text);
+	if (!is_timer_fired) {
+		s3_set_variable_string(result_var_name, button[pointed_index].value);
+	} else {
+		/* If the timer bombed, set the result empty. */
+		s3_set_variable_string(result_var_name, "");
+	}
 
 	/*
 	 * Now an option is chosen.

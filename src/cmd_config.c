@@ -59,7 +59,11 @@ s3i_tag_config(
 
 	/* Get the arguments. */
 	key = s3_get_tag_arg_string("name", false, NULL);
+	if (key == NULL)
+		return false;
 	val = s3_get_tag_arg_string("value", false, NULL);
+	if (val == NULL)
+		return false;
 
 	/* Update the config. */
 	if (!s3_set_config(key, val)) {

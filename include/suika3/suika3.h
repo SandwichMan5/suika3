@@ -527,11 +527,10 @@ s3_get_config_as_string(
 	const char *key);
 
 /*
- * Check if the specified locale is same as the current locale.
+ * Get the locale.
  */
-bool
-s3_compare_locale(
-	const char *s);
+const char *
+s3_get_locale(void);
 
 
 /*

@@ -339,30 +339,115 @@ It stores the text of the chosen item in a variable.
 ```
 # Store selection in a variable
 [choose
-    name="user_choice"
     text1="Red Pill"
-    text2="Blue Pill"]
+    text2="Green Pill"
+    text3="Blue Pill"
+    name="user_choice"
+    value1="red"
+    value2="green"
+    value3="blue"
+]
 ```
 
 ### Arguments
 
-| Argument | Omissible | Description                                 | Notes                                              |
-|----------|-----------|---------------------------------------------|--------------------------------------------------- |
-| `name`   | No        | The variable name to store the result.      | Stores the text of the selected option.            |
-| `text1`  | Yes       | The text displayed on each button.          | At least one option are typically required.        |
-| `text2`  | Yes       | The text displayed on each button.          | At least one option are typically required.        |
-| `text3`  | Yes       | The text displayed on each button.          | At least one option are typically required.        |
-| `text4`  | Yes       | The text displayed on each button.          | At least one option are typically required.        |
-| `text5`  | Yes       | The text displayed on each button.          | At least one option are typically required.        |
-| `text6`  | Yes       | The text displayed on each button.          | At least one option are typically required.        |
-| `text7`  | Yes       | The text displayed on each button.          | At least one option are typically required.        |
-| `text8`  | Yes       | The text displayed on each button.          | At least one option are typically required.        |
-| `time`   | Yes (`0`) | Timer in seconds.                           | If `0`, no timer is enabled.                       |
+| Argument         | Omissible | Description                                    | Notes                                              |
+|------------------|-----------|------------------------------------------------|--------------------------------------------------- |
+| `text1`          | Yes       | The text displayed on each button.             | At least one option are typically required.        |
+| `text2`          | Yes       | The text displayed on each button.             | At least one option are typically required.        |
+| `text3`          | Yes       | The text displayed on each button.             | At least one option are typically required.        |
+| `text4`          | Yes       | The text displayed on each button.             | At least one option are typically required.        |
+| `text5`          | Yes       | The text displayed on each button.             | At least one option are typically required.        |
+| `text6`          | Yes       | The text displayed on each button.             | At least one option are typically required.        |
+| `text7`          | Yes       | The text displayed on each button.             | At least one option are typically required.        |
+| `text8`          | Yes       | The text displayed on each button.             | At least one option are typically required.        |
+| `text<N>-locale` | Yes       | The text displayed on each button. (localized) | At least one option are typically required.        |
+| `name`           | No        | The variable name to store the result.         | Stores the text of the selected option.            |
+| `value1`         | Yes       | The value assigned to the result variable.     | At least one option are typically required.        |
+| `value2`         | Yes       | The value assigned to the result variable.     | At least one option are typically required.        |
+| `value3`         | Yes       | The value assigned to the result variable.     | At least one option are typically required.        |
+| `value4`         | Yes       | The value assigned to the result variable.     | At least one option are typically required.        |
+| `value5`         | Yes       | The value assigned to the result variable.     | At least one option are typically required.        |
+| `value6`         | Yes       | The value assigned to the result variable.     | At least one option are typically required.        |
+| `value7`         | Yes       | The value assigned to the result variable.     | At least one option are typically required.        |
+| `value8`         | Yes       | The value assigned to the result variable.     | At least one option are typically required.        |
+| `time`           | Yes (`0`) | Timer in seconds.                              | If `0`, no timer is enabled.                       |
+
+### Localization
+
+For example, if the user OS environment is set to Japanese, `text1-ja` is preferred instead of `text1`.
+
+| Suffix      | Language                                 |
+|-------------|------------------------------------------|
+| -en         | English (Fallback)                       |
+| -en-us      | English (America)                        |
+| -en-gb      | English (British)                        |
+| -en-au      | English (Austraria)                      |
+| -en-nz      | English (New Zealand)                    |
+| -fr         | French (Fallback)                        |
+| -fr-fr      | French (France)                          |
+| -fr-ca      | French (Canada)                          |
+| -es         | Spanish (Spain, Fallback)                |
+| -es-la      | Spanish (Latin America)                  |
+| -de         | German                                   |
+| -it         | Italian                                  |
+| -ru         | Russian                                  |
+| -el         | Greek                                    |
+| -zh         | Chinese (Simplified)                     |
+| -zh-tw      | Chinese (Traditional, Taiwan)            |
+| -ja         | Japanese                                 |
+| (no suffix) | Fallback (developer decides)             |
+
+For English OS locales including all regions, `-en` is used as the
+default fallback.  If a more specific variant such as `-en-gb` is
+specified in a tag and best matches with the user region, it will be
+preferred. The same mechanism is applied to Spanish and French. Note
+that there is no fallback from Traditional Chinese to Simplified
+Chinese.
+
+For example, if the user locale is `en-AU`, the following priority is applied:
+* 1. text1-en-au
+* 2. text1-en
+* 3. text1
+
+The following are currently not supported but planned to be supported.
+
+| Suffix      | Language                                 |
+|-------------|------------------------------------------|
+| -ko         | Korean                                   |
+| -vi         | Vietnamese                               |
+| -id         | Indonesia                                |
+| -zh-hk      | Traditional Chinese (Hong Kong)          |
+| -pt         | Portuguese (Fallback)                    |
+| -pt-br      | Portuguese (Brazil)                      |
+| -pl         | Polish                                   |
+| -tr         | Turkish                                  |
+| -ta         | Tamil                                    |
+| -te         | Telugu                                   |
+| -kn         | Kannada                                  |
+| -si         | Sinhala                                  |
+| -ar         | Arabic (RTL)                             |
+| -fa         | Persian (RTL)                            |
 
 ### Tips
 
 **Branching Logic**:
 * You can use the `[if]` tag to check the stored value and create complex branches.
+
+```
+[choose
+  name="var1"
+  text1="Go to school"
+  text2="Go to hospital"
+  value1="1"
+  value2="2"]
+
+[if lhs="${var1}" op="=" rhs="1"]
+  # School.
+[else]
+  # Hospital.
+[endif]
+```
 
 **Variable Persistence**:
 * Since everything is a string, remember that even numbers like "100" are stored as text.
@@ -632,10 +717,68 @@ It can show the main dialogue or narration, and optionally display a character's
 
 ### Arguments
 
-| Argument   | Omissible | Description                                      | Notes                                            |
-|------------|-----------|--------------------------------------------------|--------------------------------------------------|
-| `text`     | No        | The message content to be displayed.             |                                                  |
-| `name`     | Yes       | The character's name to display in the name box. | If omitted, the name box will usually be hidden. |
+| Argument         | Omissible | Description                                      | Notes                                            |
+|------------------|-----------|--------------------------------------------------|--------------------------------------------------|
+| `text`           | No        | The message content to be displayed.             |                                                  |
+| `text-<locale>`  | Yes       | The message content to be displayed. (localized) |                                                  |
+| `name`           | Yes       | The character's name to display in the name box. | If omitted, the name box will usually be hidden. |
+
+### Localization
+
+For example, if the user OS environment is set to Japanese, `text1-ja` is preferred instead of `text1`.
+
+| Suffix      | Language                                 |
+|-------------|------------------------------------------|
+| -en         | English (Fallback)                       |
+| -en-us      | English (America)                        |
+| -en-gb      | English (British)                        |
+| -en-au      | English (Austraria)                      |
+| -en-nz      | English (New Zealand)                    |
+| -fr         | French (Fallback)                        |
+| -fr-fr      | French (France)                          |
+| -fr-ca      | French (Canada)                          |
+| -es         | Spanish (Spain, Fallback)                |
+| -es-es      | Spanish (Spain, Fallback)                |
+| -es-la      | Spanish (Latin America)                  |
+| -de         | German                                   |
+| -it         | Italian                                  |
+| -ru         | Russian                                  |
+| -el         | Greek                                    |
+| -zh-cn      | Chinese (Simplified)                     |
+| -zh-tw      | Chinese (Traditional, Taiwan)            |
+| -ja         | Japanese                                 |
+| (no suffix) | Fallback (developer decides)             |
+
+For English OS locales including all regions, `-en` is used as the
+default fallback.  If a more specific variant such as `-en-gb` is
+specified in a tag and best matches with the user region, it will be
+preferred. The same mechanism is applied to Spanish and French. Note
+that there is no fallback from Traditional Chinese to Simplified
+Chinese.
+
+For example, if the user locale is `en-AU`, the following priority is applied:
+* 1. text-en-au
+* 2. text-en
+* 3. text
+
+The following are currently not supported but planned to be supported.
+
+| Suffix      | Language                                 |
+|-------------|------------------------------------------|
+| -ko         | Korean                                   |
+| -vi         | Vietnamese                               |
+| -id         | Indonesia                                |
+| -zh-hk      | Traditional Chinese (Hong Kong)          |
+| -pt         | Portuguese (Fallback)                    |
+| -pt-br      | Portuguese (Brazil)                      |
+| -pl         | Polish                                   |
+| -tr         | Turkish                                  |
+| -ta         | Tamil                                    |
+| -te         | Telugu                                   |
+| -kn         | Kannada                                  |
+| -si         | Sinhala                                  |
+| -ar         | Arabic (RTL)                             |
+| -fa         | Persian (RTL)                            |
 
 ### Tips
 

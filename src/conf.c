@@ -1357,24 +1357,19 @@ s3_get_config_as_string(
 }
 
 /*
- * Check if the specified locale is same as the current locale.
+ * Get the locale.
  */
-bool
-s3_compare_locale(const char *s)
+const char *
+s3_get_locale(void)
 {
 	const char *loc;
-
-	assert(s != NULL);
 
 	if (conf_game_locale != NULL)
 		loc = conf_game_locale;
 	else
 		loc = pf_get_system_language();
 
-	if (strcmp(loc, s) == 0)
-		return true;
-
-	return false;
+	return loc;
 }
 
 /* Read the config file. */
