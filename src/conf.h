@@ -68,6 +68,10 @@ extern char *conf_font_ttf[4];
 /* Image file */
 extern char *conf_msgbox_image;
 
+/* Animation */
+extern char *conf_msgbox_anime_hide;
+extern char *conf_msgbox_anime_show;
+
 /* Position */
 extern int conf_msgbox_x;
 extern int conf_msgbox_y;
@@ -120,9 +124,6 @@ extern int conf_msgbox_seen_outline_g;
 extern int conf_msgbox_seen_outline_b;
 
 /* Misc. */
-extern bool conf_msgbox_show_on_ch;
-extern bool conf_msgbox_show_on_bg;
-extern bool conf_msgbox_show_on_choose;
 extern bool conf_msgbox_skip_unseen;
 
 /*
@@ -134,6 +135,10 @@ extern bool conf_namebox_enable;
 
 /* Image file. */
 extern char *conf_namebox_image;
+
+/* Anime. */
+extern char *conf_namebox_anime_hide;
+extern char *conf_namebox_anime_show;
 
 /* Position. */
 extern int conf_namebox_x;

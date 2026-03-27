@@ -80,6 +80,10 @@ char *conf_font_ttf[4];
 /* Image file */
 char *conf_msgbox_image;
 
+/* Animation */
+char *conf_msgbox_anime_hide;
+char *conf_msgbox_anime_show;
+
 /* Position */
 int conf_msgbox_x;
 int conf_msgbox_y;
@@ -132,9 +136,6 @@ int conf_msgbox_seen_outline_g;
 int conf_msgbox_seen_outline_b;
 
 /* Misc. */
-bool conf_msgbox_show_on_ch;
-bool conf_msgbox_show_on_bg;
-bool conf_msgbox_show_on_choose;
 bool conf_msgbox_skip_unseen;
 
 /*
@@ -146,6 +147,10 @@ bool conf_namebox_enable;
 
 /* Image file. */
 char *conf_namebox_image;
+
+/* Anime. */
+char *conf_namebox_anime_hide;
+char *conf_namebox_anime_show;
 
 /* Position. */
 int conf_namebox_x;
@@ -528,6 +533,8 @@ static struct rule {
 
 	/* Message Box */
 	{'s',	"msgbox.image",			&conf_msgbox_image,			MUST,	SAVE,	LOCAL},
+	{'s',	"msgbox.anime.hide",		&conf_msgbox_anime_hide,		MUST,	SAVE,	LOCAL},
+	{'s',	"msgbox.anime.show",		&conf_msgbox_anime_show,		MUST,	SAVE,	LOCAL},
 	{'i',	"msgbox.x",			&conf_msgbox_x,				MUST,	SAVE,	LOCAL},
 	{'i',	"msgbox.y",			&conf_msgbox_y,				MUST,	SAVE,	LOCAL},
 	{'i',	"msgbox.margin.left",		&conf_msgbox_margin_left,		MUST,	SAVE,	LOCAL},
@@ -567,14 +574,13 @@ static struct rule {
 	{'i',	"msgbox.seen.outline.r",	&conf_msgbox_seen_outline_r,		MUST,	SAVE,	LOCAL},
 	{'i',	"msgbox.seen.outline.g",	&conf_msgbox_seen_outline_g,		MUST,	SAVE,	LOCAL},
 	{'i',	"msgbox.seen.outline.b",	&conf_msgbox_seen_outline_b,		MUST,	SAVE,	LOCAL},
-	{'b',	"msgbox.show_on_ch",		&conf_msgbox_show_on_ch,		MUST,	SAVE,	LOCAL},
-	{'b',	"msgbox.show_on_bg",		&conf_msgbox_show_on_bg,		MUST,	SAVE,	LOCAL},
-	{'b',	"msgbox.show_on_choose",	&conf_msgbox_show_on_choose,		MUST,	SAVE,	LOCAL},
 	{'b',	"msgbox.skip_unseen",		&conf_msgbox_skip_unseen,		MUST,	SAVE,	LOCAL},
 
 	/* Name Box */
 	{'b',	"namebox.enable",		&conf_namebox_enable,			MUST,	SAVE,	LOCAL},
 	{'s',	"namebox.image",		&conf_namebox_image,			MUST,	SAVE,	LOCAL},
+	{'s',	"namebox.anime.hide",		&conf_namebox_anime_hide,		MUST,	SAVE,	LOCAL},
+	{'s',	"namebox.anime.show",		&conf_namebox_anime_show,		MUST,	SAVE,	LOCAL},
 	{'i',	"namebox.x",			&conf_namebox_x,			MUST,	SAVE,	LOCAL},
 	{'i',	"namebox.y", 			&conf_namebox_y,			MUST,	SAVE,	LOCAL},
 	{'i',	"namebox.margin.top",		&conf_namebox_margin_top,		MUST,	SAVE,	LOCAL},

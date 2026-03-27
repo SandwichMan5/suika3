@@ -243,11 +243,6 @@ init(void)
 	/* Start a multi-frame execution. */
 	s3_start_command_repetition();
 
-	/* Hide the name and message boxes. */
-	if (!conf_msgbox_show_on_choose) {
-		s3_show_namebox(false);
-		s3_show_msgbox(true);
-	}
 	s3_show_click(false);
 
 	/* Stop the auto mode. */

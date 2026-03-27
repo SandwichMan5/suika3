@@ -580,11 +580,6 @@ init(void)
 	/* Start the time measurement. */
 	s3_reset_lap_timer(&sw);
 
-	/* Hide the message box. */
-	if (!conf_msgbox_show_on_ch) {
-		s3_show_namebox(false);
-		s3_show_msgbox(false);
-	}
 	s3_show_click(false);
 
 	/* Hide the sysbtn. */

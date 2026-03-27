@@ -325,6 +325,7 @@ static void blit_dimming(void);
 /* Others */
 static void play_se(const char *file);
 static bool is_skippable(void);
+static void start_anime(const char *file);
 
 /* Termination processing */
 static void stop(void);
@@ -1060,6 +1061,7 @@ init_msgbox(void)
 
 	/* Make the message layer visible */
 	s3_show_msgbox(true);
+	start_anime(conf_msgbox_anime_show);
 
 	/* Create a context for message drawing */
 	msgbox_context = s3_create_drawmsg(
@@ -1120,9 +1122,8 @@ init_serif(void)
 		/* No voice */
 		have_voice = false;
 
-		/* Do not show the name box (do not change the display state if it is a continuation line) */
-		if (!is_continue_mode)
-			s3_show_namebox(false);
+		s3_show_namebox(false);
+		start_anime(conf_msgbox_anime_hide);
 
 		return true;
 	}
@@ -1144,6 +1145,7 @@ init_serif(void)
 
 	/* Show the name box */
 	s3_show_namebox(true);
+	start_anime(conf_msgbox_anime_show);
 
 	/* Set the focus */
 	focus_character();
@@ -1497,19 +1499,32 @@ action_toggle_hide(void)
 	if (!is_hidden) {
 		/* Hide the message box */
 		is_hidden = true;
-		if (name_top == NULL)
+		if (name_top == NULL) {
 			s3_show_namebox(false);
+			start_anime(conf_namebox_anime_hide);
+		}
+
 		s3_show_msgbox(false);
+		start_anime(conf_msgbox_anime_hide);
+
+
 		s3_show_click(false);
+
 		// FIXME
 		//play_se(conf_msgbox_btn_hide_enter_se);
 	} else {
 		/* Show the message box */
 		is_hidden = false;
-		if (name_top == NULL)
+		if (name_top == NULL) {
 			s3_show_namebox(true);
+			start_anime(conf_namebox_anime_show);
+		}
+
 		s3_show_msgbox(true);
+		start_anime(conf_msgbox_anime_show);
+
 		s3_show_click(is_click_visible);
+
 		// FIXME
 		//play_se(conf_msgbox_btn_hide_leave_se);
 	}
@@ -2257,6 +2272,16 @@ cleanup_lip_sync(void)
 		return;
 
 	s3_stop_lip_anime(chpos);
+}
+
+/* Start an anime. */
+static void
+start_anime(
+	const char *file)
+{
+	UNUSED_PARAMETER(file);
+
+	/* TODO */
 }
 
 /*

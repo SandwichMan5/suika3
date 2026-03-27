@@ -160,12 +160,6 @@ init(void)
 	if (!s3_start_fade(desc, fade_method, span, rule_img))
 		return false;
 
-	/* Hide the message box on fading. */
-	if (!conf_msgbox_show_on_bg) {
-		s3_show_namebox(false);
-		s3_show_msgbox(false);
-	}
-
 	/* Start repetition. */
 	s3_start_command_repetition();
 
