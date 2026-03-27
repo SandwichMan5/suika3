@@ -1271,10 +1271,10 @@ read_u32(
 	if (stream_buf_pos + 4 > stream_buf_alloc_size)
 		return false;
 
-	*ret = (stream_buf[stream_buf_pos + 0] |
-		(stream_buf[stream_buf_pos + 1] << 8) |
-		(stream_buf[stream_buf_pos + 2] << 16) |
-		(stream_buf[stream_buf_pos + 3] << 24));
+	*ret = ((uint32_t)stream_buf[stream_buf_pos + 0] |
+		((uint32_t)stream_buf[stream_buf_pos + 1] << 8) |
+		((uint32_t)stream_buf[stream_buf_pos + 2] << 16) |
+		((uint32_t)stream_buf[stream_buf_pos + 3] << 24));
 
 	stream_buf_pos += 4;
 
