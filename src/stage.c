@@ -1909,6 +1909,40 @@ s3_draw_stage_to_thumb(void)
 		if (i== S3_LAYER_NAMEBOX && (!is_namebox_visible || !conf_namebox_enable))
 			continue;
 
+		/* Do not draw the choose boxes if not visible. */
+		if (i == S3_LAYER_CHOOSE1_IDLE && !is_choosebox_idle_visible[0])
+			continue;
+		if (i == S3_LAYER_CHOOSE1_HOVER && !is_choosebox_hover_visible[0])
+			continue;
+		if (i == S3_LAYER_CHOOSE2_IDLE && !is_choosebox_idle_visible[1])
+			continue;
+		if (i == S3_LAYER_CHOOSE2_HOVER && !is_choosebox_hover_visible[1])
+			continue;
+		if (i == S3_LAYER_CHOOSE3_IDLE && !is_choosebox_idle_visible[2])
+			continue;
+		if (i == S3_LAYER_CHOOSE3_HOVER && !is_choosebox_hover_visible[2])
+			continue;
+		if (i == S3_LAYER_CHOOSE4_IDLE && !is_choosebox_idle_visible[3])
+			continue;
+		if (i == S3_LAYER_CHOOSE4_HOVER && !is_choosebox_hover_visible[3])
+			continue;
+		if (i == S3_LAYER_CHOOSE5_IDLE && !is_choosebox_idle_visible[4])
+			continue;
+		if (i == S3_LAYER_CHOOSE5_HOVER && !is_choosebox_hover_visible[4])
+			continue;
+		if (i == S3_LAYER_CHOOSE6_IDLE && !is_choosebox_idle_visible[5])
+			continue;
+		if (i == S3_LAYER_CHOOSE6_HOVER && !is_choosebox_hover_visible[5])
+			continue;
+		if (i == S3_LAYER_CHOOSE7_IDLE && !is_choosebox_idle_visible[6])
+			continue;
+		if (i == S3_LAYER_CHOOSE7_HOVER && !is_choosebox_hover_visible[6])
+			continue;
+		if (i == S3_LAYER_CHOOSE8_IDLE && !is_choosebox_idle_visible[7])
+			continue;
+		if (i == S3_LAYER_CHOOSE8_HOVER && !is_choosebox_hover_visible[7])
+			continue;
+
 		x1 = 0;
 		y1 = 0;
 		x2 = (float)layer_image[i]->width * root_scale_x;

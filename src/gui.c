@@ -4503,10 +4503,21 @@ start_button_anime(
 	int index,
 	const char *anime_file)
 {
+	int layer;
+
 	if (anime_file == NULL)
 		return true;
+	if (button[index].bid == -1)
+		return true;
 
-	/* Set "gui%d" to "$0".  */
+	/* Reset the position. */
+	layer = S3_LAYER_GUI_BTN1 + button[index].bid - 1;
+	s3_set_layer_position(layer, button[index].x, button[index].y);
+	s3_set_layer_scale(layer, 1.0f, 1.0f);
+	s3_set_layer_center(layer, 0, 0);
+	s3_set_layer_rotate(layer, 0);
+
+	/* Set the call argument for the anime. ($0 = "gui%d") */
 	set_gui_call_arg(button[index].bid);
 
 	/* Load an anime. */
