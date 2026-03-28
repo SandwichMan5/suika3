@@ -1,11 +1,13 @@
 [chapter name="Chapter 1"]
 
-[click]
+#[load file="test.novel"]
 
 [volume track="bgm" vol="0.5"]
 [bgm file="bgm/afternoon2.ogg"]
 
 [bg file="bg/school.png" time="0.5"]
+
+[text text="After classes..."]
 
 [ch left="ch/xiaoling/xiaoling-smile.png" time="1.0" fade="normal"]
 

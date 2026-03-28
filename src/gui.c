@@ -202,8 +202,10 @@ struct gui_button {
 	int new_y;
 
 	/* TYPE_HISTORY */
-	int history_x;
-	int history_y;
+	int name_x;
+	int name_y;
+	int text_x;
+	int text_y;
 
 	/*
 	 * Runtime information.
@@ -410,15 +412,16 @@ static void process_button_render_page(int index);
 static bool init_save_buttons(void);
 static void update_save_buttons(void);
 static void draw_save_button(int button_index);
-static int draw_save_text_item(struct s3_image *target, int button_index, int x, int y, const char *text, int save_text_type);
-static void process_save(int button_index);
+static int draw_save_text_item(struct s3_image *target, int index, int x, int y, const char *text, int save_text_type);
+static void process_save(int b_index);
 static void process_load(int button_index);
 static void process_auto_mode(void);
 static void process_skip_mode(void);
 static bool init_history_buttons(void);
 static void draw_history_buttons(void);
 static void draw_history_button(struct s3_image *target, struct s3_image *source, int index);
-static void draw_history_text_item(struct s3_image *target, int button_index);
+static void draw_history_name_item(struct s3_image *target, int index, const char *name);
+static void draw_history_text_item(struct s3_image *target, int index, const char *text, bool has_name);
 static void process_button_render_history(int button_index);
 static void process_history_scroll_up(void);
 static void process_history_scroll_down(void);
@@ -1324,6 +1327,10 @@ move_to_other_gui(void)
 
 	/* Start the GUI. */
 	s3_start_gui();
+
+	/* Process fade-in. */
+	if (is_fading_in)
+		cur_alpha = 0;
 
 	return true;
 }
@@ -2620,12 +2627,12 @@ draw_history_buttons(void)
 	for (i = 0; i < S3_BUTTON_LAYERS; i++) {
 		if (button[i].type != TYPE_HISTORY)
 			continue;
-		if (button[i].rt.img_canvas_idle == NULL) {
+		if (button[i].rt.img_canvas_idle != NULL) {
 			draw_history_button(button[i].rt.img_canvas_idle,
 					    button[i].rt.img_idle,
 					    i);
 		}
-		if (button[i].rt.img_canvas_hover == NULL) {
+		if (button[i].rt.img_canvas_hover != NULL) {
 			draw_history_button(button[i].rt.img_canvas_hover,
 					    button[i].rt.img_hover,
 					    i);
@@ -2645,7 +2652,7 @@ draw_history_button(
 
 	b = &button[index];
 
-#if defined(OPENNOVEL_TARGET_WASM)
+#if defined(PF_TARGET_WASM)
 	/* To fill the sound buffer in case font rendering takes time */
 	void fill_sound_buffer(void);
 	fill_sound_buffer();
@@ -2685,58 +2692,62 @@ draw_history_button(
 		      255,
 		      S3_BLEND_COPY);
 
-	/* Render the message. */
-	if (b->rt.history_offset != -1)
-		draw_history_text_item(target, index);
+	/* Draw the message. */
+	if (b->rt.history_offset != -1) {
+		const char *name = s3_get_history_name(b->rt.history_offset);
+		const char *text = s3_get_history_text(b->rt.history_offset);
+		if (name != NULL)
+			draw_history_name_item(target, index, name);
+		if (text != NULL)
+			draw_history_text_item(target, index, text, name != NULL);
+	}
 
 	s3_notify_image_update(target);
 }
 
-/* Render the history text. */
+/* Draw the history text. */
 static void
-draw_history_text_item(
+draw_history_name_item(
 	struct s3_image *target,
-	int button_index)
+	int index,
+	const char *name)
 {
 	struct s3_drawmsg *context;
 	struct gui_button *b;
-	const char *text;
 	s3_pixel_t color, outline_color;
-	int total_chars, pen_x, pen_y;
+	int total_chars;
+	int pen_x, pen_y;
 
-	b = &button[button_index];
-
-	/* Get the message. */
-	text = s3_get_history_message(b->rt.history_offset);
-
-	/* Determine the color. */
-	color = s3_make_pixel(0xff,
-			      (uint32_t)conf_gui_history_font_r,
-			      (uint32_t)conf_gui_history_font_g,
-			      (uint32_t)conf_gui_history_font_b);
-	outline_color = s3_make_pixel(0xff,
-				      (uint32_t)conf_gui_history_font_outline_r,
-				      (uint32_t)conf_gui_history_font_outline_g,
-				      (uint32_t)conf_gui_history_font_outline_b);
+	b = &button[index];
 
 	/* Calculate the pen position. */
-	if (!conf_gui_history_font_tategaki) {
-		pen_x = b->history_x;
-		pen_y = b->history_y;
+	if (!conf_gui_history_name_font_tategaki) {
+		pen_x = b->name_x;
+		pen_y = b->name_y;
 	} else {
-		pen_x = b->history_x - conf_gui_history_font_size;
-		pen_y = b->history_y;
+		pen_x = b->name_x - conf_gui_history_name_font_size;
+		pen_y = b->name_y;
 	}
+
+	/* Determine the color */
+	color = s3_make_pixel(0xff,
+			      (uint32_t)conf_gui_history_name_font_r,
+			      (uint32_t)conf_gui_history_name_font_g,
+			      (uint32_t)conf_gui_history_name_font_b);
+	outline_color = s3_make_pixel(0xff,
+				      (uint32_t)conf_gui_history_name_font_outline_r,
+				      (uint32_t)conf_gui_history_name_font_outline_g,
+				      (uint32_t)conf_gui_history_name_font_outline_b);
 
 	/* Render. */
 	context = s3_create_drawmsg(
 		target,
-		text,
-		conf_gui_history_font_select,
-		conf_gui_history_font_size,
-		conf_gui_history_font_size,
-		conf_gui_history_font_ruby,
-		conf_gui_history_font_outline_width,
+		name,
+		conf_gui_history_name_font_select,
+		conf_gui_history_name_font_size,
+		conf_gui_history_name_font_size,
+		conf_gui_history_name_font_ruby,
+		conf_gui_history_name_font_outline_width,
 		pen_x,
 		pen_y,
 		b->width,	/* area_width */
@@ -2745,8 +2756,8 @@ draw_history_text_item(
 		0,		/* right_margin */
 		0,		/* top_margin */
 		0,		/* bottom_margin */
-		conf_gui_history_margin_line,
-		conf_msgbox_margin_char,
+		0,		/* line margin */
+		conf_gui_history_name_margin_char,
 		color,
 		outline_color,
 		0,		/* bg_color */
@@ -2761,7 +2772,93 @@ draw_history_text_item(
 		false,		/* ignore_ruby */
 		true,		/* ignore_wait */
 		NULL,		/* inline_wait_hook */
-		conf_gui_history_font_tategaki);
+		conf_gui_history_name_font_tategaki);
+	if (context == NULL)
+		return;
+	total_chars = s3_count_drawmsg_chars(context, NULL);
+	s3_draw_message(context, total_chars);
+	s3_destroy_drawmsg(context);
+}
+
+/* Draw the history text. */
+static void
+draw_history_text_item(
+	struct s3_image *target,
+	int index,
+	const char *text,
+	bool has_name)
+{
+	struct s3_drawmsg *context;
+	struct gui_button *b;
+	s3_pixel_t color, outline_color;
+	int total_chars;
+	int pen_x, pen_y;
+
+	b = &button[index];
+
+	/* Calculate the pen position. */
+	if (!conf_gui_history_name_font_tategaki) {
+		if (has_name) {
+			pen_x = b->text_x;
+			pen_y = b->text_y;
+		} else {
+			pen_x = b->msg_x;
+			pen_y = b->msg_y;
+		}
+	} else {
+		if (has_name) {
+			pen_x = b->text_x - conf_gui_history_text_font_size;
+			pen_y = b->text_y;
+		} else {
+			pen_x = b->msg_x - conf_gui_history_text_font_size;
+			pen_y = b->msg_y;
+		}
+	}
+
+	/* Determine the color */
+	color = s3_make_pixel(0xff,
+			      (uint32_t)conf_gui_history_text_font_r,
+			      (uint32_t)conf_gui_history_text_font_g,
+			      (uint32_t)conf_gui_history_text_font_b);
+	outline_color = s3_make_pixel(0xff,
+				      (uint32_t)conf_gui_history_text_font_outline_r,
+				      (uint32_t)conf_gui_history_text_font_outline_g,
+				      (uint32_t)conf_gui_history_text_font_outline_b);
+
+	/* Render. */
+	context = s3_create_drawmsg(
+		target,
+		text,
+		conf_gui_history_text_font_select,
+		conf_gui_history_text_font_size,
+		conf_gui_history_text_font_size,
+		conf_gui_history_text_font_ruby,
+		conf_gui_history_text_font_outline_width,
+		pen_x,
+		pen_y,
+		b->width,	/* area_width */
+		b->height,	/* area_height */
+		0,		/* left_margin */
+		0,		/* right_margin */
+		0,		/* top_margin */
+		0,		/* bottom_margin */
+		conf_gui_history_text_margin_line,
+		conf_gui_history_text_margin_char,
+		color,
+		outline_color,
+		0,		/* bg_color */
+		false,		/* fill_bg */
+		false,		/* is_dimming */
+		false,		/* ignore_linefeed */
+		false,		/* ignore_font */
+		false,		/* ignore_outline */
+		false,		/* ignore_color */
+		true,		/* ignore_size */
+		true,		/* ignore_position */
+		false,		/* ignore_ruby */
+		true,		/* ignore_wait */
+		NULL,		/* inline_wait_hook */
+		conf_gui_history_text_font_tategaki);
 	if (context == NULL)
 		return;
 	total_chars = s3_count_drawmsg_chars(context, NULL);
@@ -2877,7 +2974,7 @@ static void process_history_voice(int button_index)
 	if (voice != NULL)
 		play_se(voice);
 	else if (conf_tts_enable)
-		speak(s3_get_history_message(button[button_index].rt.history_offset));
+		speak(s3_get_history_text(button[button_index].rt.history_offset));
 }
 
 /*
@@ -4294,70 +4391,60 @@ set_button_key_value(
 	/* index-x */
 	if (strcmp("index-x", key) == 0) {
 		b->index_x = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* index-y */
 	if (strcmp("index-y", key) == 0) {
 		b->index_y = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* date-x */
 	if (strcmp("date-x", key) == 0) {
 		b->date_x = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* date-y */
 	if (strcmp("date-y", key) == 0) {
 		b->date_y = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* thumb-x */
 	if (strcmp("thumb-x", key) == 0) {
 		b->thumb_x = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* thumb-y */
 	if (strcmp("thumb-y", key) == 0) {
 		b->thumb_y = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* chapter-x */
 	if (strcmp("chapter-x", key) == 0) {
 		b->chapter_x = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* chapter-y */
 	if (strcmp("chapter-y", key) == 0) {
 		b->chapter_y = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* msg-x */
 	if (strcmp("msg-x", key) == 0) {
 		b->msg_x = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
 	/* msg-y */
 	if (strcmp("msg-y", key) == 0) {
 		b->msg_y = atoi(val);
-		b->rt.is_new_enabled = true;
 		return true;
 	}
 
@@ -4375,6 +4462,29 @@ set_button_key_value(
 		return true;
 	}
 
+	/* name-x */
+	if (strcmp("name-x", key) == 0) {
+		b->name_x = atoi(val);
+		return true;
+	}
+
+	/* name-y */
+	if (strcmp("name-y", key) == 0) {
+		b->name_y = atoi(val);
+		return true;
+	}
+
+	/* text-x */
+	if (strcmp("text-x", key) == 0) {
+		b->text_x = atoi(val);
+		return true;
+	}
+
+	/* text-y */
+	if (strcmp("text-y", key) == 0) {
+		b->text_y = atoi(val);
+		return true;
+	}
 
 	/* anime-idle */
 	if (strcmp("anime-idle", key) == 0) {

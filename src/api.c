@@ -8621,7 +8621,7 @@ Suika_getHistoryMessage(
 		if (!pf_get_call_arg_int("index", &index))
 			break;
 
-		message = s3_get_history_message(index);
+		message = s3_get_history_text(index);
 		if (message == NULL)
 			message = "";
 

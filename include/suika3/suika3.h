@@ -2529,7 +2529,7 @@ s3_clear_history(void);
 bool
 s3_add_history(
 	const char *name,
-	const char *msg,
+	const char *text,
 	const char *voice,
 	s3_pixel_t body_color,
 	s3_pixel_t body_outline_color,
@@ -2546,19 +2546,33 @@ s3_get_history_count(void);
  * Get the name at the history index.
  */
 const char *
-s3_get_history_name(int index);
+s3_get_history_name(
+	int offset);
 
 /*
  * Get the message at the history index.
  */
 const char *
-s3_get_history_message(int index);
+s3_get_history_text(
+	int offset);
 
 /*
- * Get the message at the history index.
+ * Get the voice file at the history index.
  */
 const char *
-s3_get_history_voice(int index);
+s3_get_history_voice(
+	int offset);
+
+/*
+ * Get the colors at the history index.
+ */
+bool
+s3_get_history_color(
+	int offset,
+	s3_pixel_t *name_color,
+	s3_pixel_t *name_outline_color,
+	s3_pixel_t *body_color,
+	s3_pixel_t *body_outline_color);
 
 
 /*

@@ -366,21 +366,35 @@ int conf_gui_save_msg_margin_line;
 int conf_gui_save_msg_margin_char;
 bool conf_gui_save_msg_multiline;
 
-/* History margin */
-int conf_gui_history_margin_line;
+/* History Name Font */
+int conf_gui_history_name_font_select;
+int conf_gui_history_name_font_size;
+int conf_gui_history_name_font_r;
+int conf_gui_history_name_font_g;
+int conf_gui_history_name_font_b;
+int conf_gui_history_name_font_outline_width;
+int conf_gui_history_name_font_outline_r;
+int conf_gui_history_name_font_outline_g;
+int conf_gui_history_name_font_outline_b;
+int conf_gui_history_name_font_ruby;
+bool conf_gui_history_name_font_tategaki;
+int conf_gui_history_name_margin_line;
+int conf_gui_history_name_margin_char;
 
-/* History Font */
-int conf_gui_history_font_select;
-int conf_gui_history_font_size;
-int conf_gui_history_font_r;
-int conf_gui_history_font_g;
-int conf_gui_history_font_b;
-int conf_gui_history_font_outline_width;
-int conf_gui_history_font_outline_r;
-int conf_gui_history_font_outline_g;
-int conf_gui_history_font_outline_b;
-int conf_gui_history_font_ruby;
-bool conf_gui_history_font_tategaki;
+/* History Text Font */
+int conf_gui_history_text_font_select;
+int conf_gui_history_text_font_size;
+int conf_gui_history_text_font_r;
+int conf_gui_history_text_font_g;
+int conf_gui_history_text_font_b;
+int conf_gui_history_text_font_outline_width;
+int conf_gui_history_text_font_outline_r;
+int conf_gui_history_text_font_outline_g;
+int conf_gui_history_text_font_outline_b;
+int conf_gui_history_text_font_ruby;
+bool conf_gui_history_text_font_tategaki;
+int conf_gui_history_text_margin_line;
+int conf_gui_history_text_margin_char;
 
 /* Misc. */
 char *conf_gui_history_quote_name_separator;
@@ -785,33 +799,47 @@ static struct rule {
 	{'i',	"gui.save.msg.margin.line",		&conf_gui_save_msg_margin_line,			MUST,	SAVE,	LOCAL},
 	{'i',	"gui.save.msg.margin.char",		&conf_gui_save_msg_margin_char,			MUST,	SAVE,	LOCAL},
 	{'b',	"gui.save.msg.multiline",		&conf_gui_save_msg_multiline,			MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.margin.line",	&conf_gui_history_margin_line,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.select",	&conf_gui_history_font_select,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.size",	&conf_gui_history_font_size,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.r",		&conf_gui_history_font_r,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.g",		&conf_gui_history_font_g,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.b",		&conf_gui_history_font_b,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.outline.width", &conf_gui_history_font_outline_width,	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.outline.r",	&conf_gui_history_font_outline_r,	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.outline.g",	&conf_gui_history_font_outline_g,	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.outline.b",	&conf_gui_history_font_outline_b,	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.history.font.ruby",	&conf_gui_history_font_ruby,		MUST,	SAVE,	LOCAL},
-	{'b',	"gui.history.font.tategaki",	&conf_gui_history_font_tategaki,	MUST,	SAVE,	LOCAL},
-	{'s',	"gui.history.quote.name_separator", &conf_gui_history_quote_name_separator, MUST, SAVE,	LOCAL},
-	{'s',	"gui.history.quote.start",	&conf_gui_history_quote_start, 		MUST,	SAVE,	LOCAL},
-	{'s',	"gui.history.quote.end",	&conf_gui_history_quote_end, 		MUST,	SAVE,	LOCAL},
-	{'b',	"gui.history.hide_last",	&conf_gui_history_hide_last,	 	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.select",	&conf_gui_preview_font_select,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.size",	&conf_gui_preview_font_size,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.r",		&conf_gui_preview_font_r,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.g",		&conf_gui_preview_font_g,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.b",		&conf_gui_preview_font_b,		MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.outline.width", &conf_gui_preview_font_outline_width,	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.outline.r",	&conf_gui_preview_font_outline_r,	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.outline.g",	&conf_gui_preview_font_outline_g,	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.outline.b",	&conf_gui_preview_font_outline_b,	MUST,	SAVE,	LOCAL},
-	{'i',	"gui.preview.font.ruby",	&conf_gui_preview_font_ruby,		MUST,	SAVE,	LOCAL},
-	{'b',	"gui.preview.font.tategaki",	&conf_gui_preview_font_tategaki,	MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.select",		&conf_gui_history_name_font_select,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.size",		&conf_gui_history_name_font_size,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.r",		&conf_gui_history_name_font_r,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.g",		&conf_gui_history_name_font_g,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.b",		&conf_gui_history_name_font_b,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.outline.width",	&conf_gui_history_name_font_outline_width,	MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.outline.r",	&conf_gui_history_name_font_outline_r,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.outline.g",	&conf_gui_history_name_font_outline_g,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.outline.b",	&conf_gui_history_name_font_outline_b,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.font.ruby",		&conf_gui_history_name_font_ruby,		MUST,	SAVE,	LOCAL},
+	{'b',	"gui.history.name.font.tategaki",	&conf_gui_history_name_font_tategaki,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.margin.line",		&conf_gui_history_text_margin_line,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.name.margin.char",		&conf_gui_history_text_margin_char,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.select",		&conf_gui_history_text_font_select,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.size",		&conf_gui_history_text_font_size,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.r",		&conf_gui_history_text_font_r,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.g",		&conf_gui_history_text_font_g,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.b",		&conf_gui_history_text_font_b,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.outline.width",	&conf_gui_history_text_font_outline_width,	MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.outline.r",	&conf_gui_history_text_font_outline_r,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.outline.g",	&conf_gui_history_text_font_outline_g,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.outline.b",	&conf_gui_history_text_font_outline_b,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.font.ruby",		&conf_gui_history_text_font_ruby,		MUST,	SAVE,	LOCAL},
+	{'b',	"gui.history.text.font.tategaki",	&conf_gui_history_text_font_tategaki,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.margin.line",		&conf_gui_history_text_margin_line,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.history.text.margin.char",		&conf_gui_history_text_margin_char,		MUST,	SAVE,	LOCAL},
+	{'s',	"gui.history.quote.name_separator",	&conf_gui_history_quote_name_separator,		MUST,	SAVE,	LOCAL},
+	{'s',	"gui.history.quote.start",		&conf_gui_history_quote_start, 			MUST,	SAVE,	LOCAL},
+	{'s',	"gui.history.quote.end",		&conf_gui_history_quote_end, 			MUST,	SAVE,	LOCAL},
+	{'b',	"gui.history.hide_last",		&conf_gui_history_hide_last,	 		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.select",		&conf_gui_preview_font_select,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.size",		&conf_gui_preview_font_size,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.r",			&conf_gui_preview_font_r,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.g",			&conf_gui_preview_font_g,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.b",			&conf_gui_preview_font_b,			MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.outline.width",	&conf_gui_preview_font_outline_width,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.outline.r",		&conf_gui_preview_font_outline_r,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.outline.g",		&conf_gui_preview_font_outline_g,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.outline.b",		&conf_gui_preview_font_outline_b,		MUST,	SAVE,	LOCAL},
+	{'i',	"gui.preview.font.ruby",		&conf_gui_preview_font_ruby,			MUST,	SAVE,	LOCAL},
+	{'b',	"gui.preview.font.tategaki",		&conf_gui_preview_font_tategaki,		MUST,	SAVE,	LOCAL},
 
 	/* Initial Volumes (no need to save) */
 	{'f',	"sound.vol.bgm",		&conf_sound_vol_bgm,			MUST,	NOSAVE,	GLOBAL},

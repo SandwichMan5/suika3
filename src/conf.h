@@ -354,21 +354,35 @@ extern int conf_gui_save_msg_margin_line;
 extern int conf_gui_save_msg_margin_char;
 extern bool conf_gui_save_msg_multiline;
 
-/* History margin */
-extern int conf_gui_history_margin_line;
+/* History Name Font */
+extern int conf_gui_history_name_font_select;
+extern int conf_gui_history_name_font_size;
+extern int conf_gui_history_name_font_r;
+extern int conf_gui_history_name_font_g;
+extern int conf_gui_history_name_font_b;
+extern int conf_gui_history_name_font_outline_width;
+extern int conf_gui_history_name_font_outline_r;
+extern int conf_gui_history_name_font_outline_g;
+extern int conf_gui_history_name_font_outline_b;
+extern int conf_gui_history_name_font_ruby;
+extern bool conf_gui_history_name_font_tategaki;
+extern int conf_gui_history_name_margin_line;
+extern int conf_gui_history_name_margin_char;
 
-/* History Font */
-extern int conf_gui_history_font_select;
-extern int conf_gui_history_font_size;
-extern int conf_gui_history_font_r;
-extern int conf_gui_history_font_g;
-extern int conf_gui_history_font_b;
-extern int conf_gui_history_font_outline_width;
-extern int conf_gui_history_font_outline_r;
-extern int conf_gui_history_font_outline_g;
-extern int conf_gui_history_font_outline_b;
-extern int conf_gui_history_font_ruby;
-extern bool conf_gui_history_font_tategaki;
+/* History Text Font */
+extern int conf_gui_history_text_font_select;
+extern int conf_gui_history_text_font_size;
+extern int conf_gui_history_text_font_r;
+extern int conf_gui_history_text_font_g;
+extern int conf_gui_history_text_font_b;
+extern int conf_gui_history_text_font_outline_width;
+extern int conf_gui_history_text_font_outline_r;
+extern int conf_gui_history_text_font_outline_g;
+extern int conf_gui_history_text_font_outline_b;
+extern int conf_gui_history_text_font_ruby;
+extern bool conf_gui_history_text_font_tategaki;
+extern int conf_gui_history_text_margin_line;
+extern int conf_gui_history_text_margin_char;
 
 /* Misc. */
 extern char *conf_gui_history_quote_name_separator;

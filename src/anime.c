@@ -1318,7 +1318,7 @@ s3_run_lip_anime(
 
 		if (wc == ',' ||
 		    wc == U32C('、', 0x3001)) {
-			ofs_time += base_time * 10;
+			ofs_time += base_time * 5;
 			word_count = WORD_COUNT;
 			continue;
 		}
@@ -1332,7 +1332,7 @@ s3_run_lip_anime(
 		    wc == U32C('・', 0x30fb) ||
 		    wc == U32C('…', 0x2026) ||
 		    wc == U32C('―', 0x2015)) {
-			ofs_time += base_time * 20;
+			ofs_time += base_time * 10;
 			word_count = WORD_COUNT;
 			continue;
 		}
