@@ -2592,7 +2592,38 @@ void
 s3_show_msgbox(
 	bool show)
 {
+	const char *file;
+	int i;
+
+	/* Decide an anime to run. */
+	file = NULL;
+	if (!is_msgbox_visible && show)
+		file = conf_msgbox_anime_show;
+	else if (is_msgbox_visible && !show)
+		file = conf_msgbox_anime_hide;
+
+	/* Set the flag. */
 	is_msgbox_visible = show;
+
+	/* Run an anime. */
+	if (file != NULL) {
+		/* Stop the anime. */
+		s3_clear_layer_anime_sequence(S3_LAYER_MSGBOX);
+
+		/* Reset the position. */
+		s3_set_layer_position(S3_LAYER_MSGBOX, conf_msgbox_x, conf_msgbox_y);
+		s3_set_layer_scale(S3_LAYER_MSGBOX, 1.0f, 1.0f);
+		s3_set_layer_center(S3_LAYER_MSGBOX, 0, 0);
+		s3_set_layer_rotate(S3_LAYER_MSGBOX, 0);
+
+		/* Set the argument. ($0 = "msgbox") */
+		s3_set_call_argument(0, "msgbox");
+		for (i = 1; i < S3_CALL_ARGS; i++)
+			s3_set_call_argument(i, NULL);
+
+		/* Start the anime. */
+		s3_load_anime_from_file(file, NULL, NULL);
+	}
 }
 
 /*
