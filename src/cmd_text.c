@@ -904,7 +904,6 @@ init_voice_file(void)
 	if (voice_file != NULL) {
 		free(voice_file);
 		voice_file = NULL;
-		return true;
 	}
 
 	/* Get the voice file name */
@@ -2322,9 +2321,9 @@ get_localized_voice(void)
 
 	if (major_locale != NULL) {
 		/* Try the argument. */
-		snprintf(file, sizeof(file), "voice-%s", major_locale);
+		snprintf(name, sizeof(name), "voice-%s", major_locale);
 		voice = s3_get_tag_arg_string(name, true, NULL);
-		if (s3_check_file_exists(file))
+		if (voice != NULL)
 			return voice;
 
 		/* Try the file. */
