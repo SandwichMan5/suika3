@@ -1257,22 +1257,13 @@ s3_clear_stage(void)
 
 	for (i = 0; i < S3_STAGE_LAYERS; i++) {
 		switch (i) {
-		case S3_LAYER_BG:
-			destroy_layer(i);
-			s3_set_layer_position(i, 0, 0);
-			s3_set_layer_alpha(i, 255);
-			break;
-		case S3_LAYER_MSGBOX:
-			s3_set_layer_position(i, conf_msgbox_x, conf_msgbox_y);
-			s3_set_layer_alpha(i, 255);
-			s3_show_msgbox(false);
-			break;
-		case S3_LAYER_NAMEBOX:
-			s3_set_layer_position(i, conf_namebox_x, conf_namebox_y);
-			s3_set_layer_alpha(i, 255);
-			s3_show_namebox(false);
-			break;
+		case S3_LAYER_BG:	/* fall-thru */
+		case S3_LAYER_BG_FO:	/* fall-thru */
 		case S3_LAYER_BG2:	/* fall-thru */
+		case S3_LAYER_EFB1:	/* fall-thru */
+		case S3_LAYER_EFB2:	/* fall-thru */
+		case S3_LAYER_EFB3:	/* fall-thru */
+		case S3_LAYER_EFB4:	/* fall-thru */
 		case S3_LAYER_CHB:	/* fall-thru */
 		case S3_LAYER_CHB_EYE:	/* fall-thru */
 		case S3_LAYER_CHB_LIP:	/* fall-thru */
@@ -1301,33 +1292,10 @@ s3_clear_stage(void)
 		case S3_LAYER_CHF_EYE:	/* fall-thru */
 		case S3_LAYER_CHF_LIP:	/* fall-thru */
 		case S3_LAYER_CHF_FO:	/* fall-thru */
-		case S3_LAYER_EFB1:	/* fall-thru */
-		case S3_LAYER_EFB2:	/* fall-thru */
-		case S3_LAYER_EFB3:	/* fall-thru */
-		case S3_LAYER_EFB4:	/* fall-thru */
 		case S3_LAYER_EFF1:	/* fall-thru */
 		case S3_LAYER_EFF2:	/* fall-thru */
 		case S3_LAYER_EFF3:	/* fall-thru */
 		case S3_LAYER_EFF4:	/* fall-thru */
-			destroy_layer(i);
-			s3_set_layer_position(i, 0, 0);
-			s3_set_layer_alpha(i, 255);
-			break;
-		case S3_LAYER_CLICK:
-			s3_set_layer_position(i, conf_click_x, conf_click_y);
-			s3_set_layer_alpha(i, 255);
-			s3_show_click(false);
-			break;
-		case S3_LAYER_AUTO:
-			s3_set_layer_position(i, conf_automode_x, conf_automode_y);
-			s3_set_layer_alpha(i, 255);
-			s3_show_automode_banner(false);
-			break;
-		case S3_LAYER_SKIP:
-			s3_set_layer_position(i, conf_skipmode_x, conf_skipmode_y);
-			s3_set_layer_alpha(i, 255);
-			s3_show_skipmode_banner(false);
-			break;
 		case S3_LAYER_TEXT1:	/* fall-thru */
 		case S3_LAYER_TEXT2:	/* fall-thru */
 		case S3_LAYER_TEXT3:	/* fall-thru */
@@ -1338,7 +1306,130 @@ s3_clear_stage(void)
 		case S3_LAYER_TEXT8:
 			destroy_layer(i);
 			s3_set_layer_position(i, 0, 0);
+			s3_set_layer_alpha(i, 0);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			break;
+		case S3_LAYER_MSGBOX:
+			s3_set_layer_position(i, conf_msgbox_x, conf_msgbox_y);
+			s3_set_layer_alpha(i, 0);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			s3_show_msgbox(false);
+			break;
+		case S3_LAYER_NAMEBOX:
+			s3_set_layer_position(i, conf_namebox_x, conf_namebox_y);
+			s3_set_layer_alpha(i, 0);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			s3_show_namebox(false);
+			break;
+		case S3_LAYER_CLICK:
+			s3_set_layer_position(i, conf_click_x, conf_click_y);
 			s3_set_layer_alpha(i, 255);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			s3_show_click(false);
+			break;
+		case S3_LAYER_AUTO:
+			s3_set_layer_position(i, conf_automode_x, conf_automode_y);
+			s3_set_layer_alpha(i, 255);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			s3_show_automode_banner(false);
+			break;
+		case S3_LAYER_SKIP:
+			s3_set_layer_position(i, conf_skipmode_x, conf_skipmode_y);
+			s3_set_layer_alpha(i, 255);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			s3_show_skipmode_banner(false);
+			break;
+		case S3_LAYER_CHOOSE1_IDLE:
+		case S3_LAYER_CHOOSE2_IDLE:
+		case S3_LAYER_CHOOSE3_IDLE:
+		case S3_LAYER_CHOOSE4_IDLE:
+		case S3_LAYER_CHOOSE5_IDLE:
+		case S3_LAYER_CHOOSE6_IDLE:
+		case S3_LAYER_CHOOSE7_IDLE:
+		case S3_LAYER_CHOOSE8_IDLE:
+			s3_set_layer_position(i,
+					      conf_choose_x[(i - S3_LAYER_CHOOSE1_IDLE) / 2],
+					      conf_choose_y[(i - S3_LAYER_CHOOSE1_IDLE) / 2]);
+			s3_set_layer_alpha(i, 0);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			s3_show_msgbox(false);
+			break;
+		case S3_LAYER_CHOOSE1_HOVER:
+		case S3_LAYER_CHOOSE2_HOVER:
+		case S3_LAYER_CHOOSE3_HOVER:
+		case S3_LAYER_CHOOSE4_HOVER:
+		case S3_LAYER_CHOOSE5_HOVER:
+		case S3_LAYER_CHOOSE6_HOVER:
+		case S3_LAYER_CHOOSE7_HOVER:
+		case S3_LAYER_CHOOSE8_HOVER:
+			s3_set_layer_position(i,
+					      conf_choose_x[(i - S3_LAYER_CHOOSE1_HOVER) / 2],
+					      conf_choose_y[(i - S3_LAYER_CHOOSE1_HOVER) / 2]);
+			s3_set_layer_alpha(i, 0);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			s3_show_msgbox(false);
+			break;
+		case S3_LAYER_GUI_BTN1:
+		case S3_LAYER_GUI_BTN2:
+		case S3_LAYER_GUI_BTN3:
+		case S3_LAYER_GUI_BTN4:
+		case S3_LAYER_GUI_BTN5:
+		case S3_LAYER_GUI_BTN6:
+		case S3_LAYER_GUI_BTN7:
+		case S3_LAYER_GUI_BTN8:
+		case S3_LAYER_GUI_BTN9:
+		case S3_LAYER_GUI_BTN10:
+		case S3_LAYER_GUI_BTN11:
+		case S3_LAYER_GUI_BTN12:
+		case S3_LAYER_GUI_BTN13:
+		case S3_LAYER_GUI_BTN14:
+		case S3_LAYER_GUI_BTN15:
+		case S3_LAYER_GUI_BTN16:
+		case S3_LAYER_GUI_BTN17:
+		case S3_LAYER_GUI_BTN18:
+		case S3_LAYER_GUI_BTN19:
+		case S3_LAYER_GUI_BTN20:
+		case S3_LAYER_GUI_BTN21:
+		case S3_LAYER_GUI_BTN22:
+		case S3_LAYER_GUI_BTN23:
+		case S3_LAYER_GUI_BTN24:
+		case S3_LAYER_GUI_BTN25:
+		case S3_LAYER_GUI_BTN26:
+		case S3_LAYER_GUI_BTN27:
+		case S3_LAYER_GUI_BTN28:
+		case S3_LAYER_GUI_BTN29:
+		case S3_LAYER_GUI_BTN30:
+		case S3_LAYER_GUI_BTN31:
+		case S3_LAYER_GUI_BTN32:
+			s3_set_layer_position(i, 0, 0);
+			s3_set_layer_alpha(i, 255);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
+			break;
+		case S3_LAYER_SYSBTN_IDLE:
+		case S3_LAYER_SYSBTN_HOVER:
+			s3_set_layer_position(i, conf_sysbtn_x, conf_sysbtn_y);
+			s3_set_layer_alpha(i, 0);
+			s3_set_layer_scale(i, 1.0f, 1.0f);
+			s3_set_layer_center(i, 0, 0);
+			s3_set_layer_rotate(i, 0.0f);
 			break;
 		default:
 			assert(0);

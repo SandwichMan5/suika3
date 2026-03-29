@@ -360,7 +360,7 @@ s3i_on_game_update(void)
 			return true;
 		}
 
-		if (s3_is_gui_finished()) {
+		if (s3_is_gui_finished() && !s3_check_if_loaded_in_gui()) {
 			if (is_gui_tag) {
 				/*
 				 * If the GUI is triggered by the "gui" tag, do a cleanup.

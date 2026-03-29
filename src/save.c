@@ -765,7 +765,10 @@ s3_execute_load_local(
 
 			if (!read_string(sbuf, sizeof(sbuf)))
 				break;
-			s3_set_mixer_input_file((int)i, sbuf, true);
+			if (strcmp(sbuf, "") != 0)
+				s3_set_mixer_input_file((int)i, sbuf, true);
+			else
+				s3_set_mixer_input_file((int)i, NULL, true);
 		}
 		if (i != S3_MIXER_TRACKS)
 			break;	/* Error. */

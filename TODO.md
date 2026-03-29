@@ -5,8 +5,6 @@ TODO
 
 Implement the following.
 
-- Config GUI
-- Load GUI
 - Auto Mode Anime
 - Skip Mode Anime
 
@@ -225,10 +223,10 @@ Buzz testing on:
 
 ## Anime Tag Testing
 
-- 同期再生
-    - sysbtnが消えること
-- 非同期再生、レジスタ、セーブ、ロード
-- 非同期終了
+- Sync
+- Async
+- Reg, save, load
+- Stop async
 
 ---
 
@@ -309,10 +307,6 @@ Buzz testing on:
 ---
 
 ## Volume Tag Testing
-
-- 各トラックの確認
-    - 音量0で消えることの確認
-    - 異常系、存在しないトラック名
 
 ---
 
