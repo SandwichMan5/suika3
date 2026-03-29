@@ -269,6 +269,10 @@ extern char *conf_sysbtn_click_se;
 /* File name */
 extern char *conf_automode_image;
 
+/* Animation */
+extern char *conf_automode_anime_hide;
+extern char *conf_automode_anime_show;
+
 /* Position */
 extern int conf_automode_x;
 extern int conf_automode_y;
@@ -283,6 +287,10 @@ extern char *conf_automode_leave_se;
 
 /* File name */
 extern char *conf_skipmode_image;
+
+/* Animation */
+extern char *conf_skipmode_anime_hide;
+extern char *conf_skipmode_anime_show;
 
 /* Position */
 extern int conf_skipmode_x;

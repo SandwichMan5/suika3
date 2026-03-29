@@ -41,8 +41,6 @@
 
 static float span;
 static uint64_t sw;
-static bool hide_msgbox;
-static bool hide_namebox;
 
 /*
  * The "click" tag implementation.
@@ -51,6 +49,9 @@ bool
 s3i_tag_wait(
 	void *p)
 {
+	bool hide_msgbox;
+	bool hide_namebox;
+
 	UNUSED_PARAMETER(p);
 
 	/* Perform initialization on the first invocation. */

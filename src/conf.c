@@ -281,6 +281,10 @@ char *conf_sysbtn_click_se;
 /* File name */
 char *conf_automode_image;
 
+/* Animation */
+char *conf_automode_anime_hide;
+char *conf_automode_anime_show;
+
 /* Position */
 int conf_automode_x;
 int conf_automode_y;
@@ -295,6 +299,10 @@ char *conf_automode_leave_se;
 
 /* File name */
 char *conf_skipmode_image;
+
+/* Animation */
+char *conf_skipmode_anime_hide;
+char *conf_skipmode_anime_show;
 
 /* Position */
 int conf_skipmode_x;
@@ -746,6 +754,8 @@ static struct rule {
 
 	/* Auto Mode */
 	{'s',	"automode.image",		&conf_automode_image,			MUST,	SAVE,	LOCAL},
+	{'s',	"automode.anime.hide",		&conf_automode_anime_hide,		MUST,	SAVE,	LOCAL},
+	{'s',	"automode.anime.show",		&conf_automode_anime_show,		MUST,	SAVE,	LOCAL},
 	{'i',	"automode.x",			&conf_automode_x,			MUST,	SAVE,	LOCAL},
 	{'i',	"automode.y",			&conf_automode_y,			MUST,	SAVE,	LOCAL},
 	{'s',	"automode.enter_se",		&conf_automode_enter_se,		OPTIONAL, SAVE,	LOCAL},
@@ -753,6 +763,8 @@ static struct rule {
 
 	/* Skip Mode */
 	{'s',	"skipmode.image",		&conf_skipmode_image,			MUST,	SAVE,	LOCAL},
+	{'s',	"skipmode.anime.hide",		&conf_skipmode_anime_hide,		MUST,	SAVE,	LOCAL},
+	{'s',	"skipmode.anime.show",		&conf_skipmode_anime_show,		MUST,	SAVE,	LOCAL},
 	{'i',	"skipmode.x",			&conf_skipmode_x,			MUST,	SAVE,	LOCAL},
 	{'i',	"skipmode.y",			&conf_skipmode_y,			MUST,	SAVE,	LOCAL},
 	{'s',	"skipmode.enter_se",		&conf_skipmode_enter_se,		OPTIONAL, SAVE,	LOCAL},

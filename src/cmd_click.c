@@ -53,13 +53,22 @@ bool
 s3i_tag_click(
 	void *p)
 {
+	bool hide_msgbox;
+	bool hide_namebox;
+
 	UNUSED_PARAMETER(p);
 
 	/* Perform initialization on the first invocation. */
 	if (!s3_is_in_command_repetition()) {
+		/* Get the arguments. */
+		hide_msgbox = s3_get_tag_arg_bool("hidemsgbox", true, false);
+		hide_namebox = s3_get_tag_arg_bool("hidenamebox", true, false);
+
 		/* Hide the message and name boxes. */
-		s3_show_msgbox(false);
-		s3_show_namebox(false);
+		if (hide_msgbox)
+			s3_show_msgbox(false);
+		if (hide_namebox)
+			s3_show_namebox(false);
 
 		/* Exit skip mode if it is active */
 		if (s3_is_skip_mode()) {

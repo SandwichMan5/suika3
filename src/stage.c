@@ -262,6 +262,8 @@ s3i_init_stage(void)
 
 	layer_alpha[S3_LAYER_MSGBOX] = 0;
 	layer_alpha[S3_LAYER_NAMEBOX] = 0;
+	layer_alpha[S3_LAYER_AUTO] = 0;
+	layer_alpha[S3_LAYER_SKIP] = 0;
 
 	return true;
 }
@@ -1306,7 +1308,7 @@ s3_clear_stage(void)
 		case S3_LAYER_TEXT8:
 			destroy_layer(i);
 			s3_set_layer_position(i, 0, 0);
-			s3_set_layer_alpha(i, 0);
+			s3_set_layer_alpha(i, 255);
 			s3_set_layer_scale(i, 1.0f, 1.0f);
 			s3_set_layer_center(i, 0, 0);
 			s3_set_layer_rotate(i, 0.0f);
@@ -1337,7 +1339,7 @@ s3_clear_stage(void)
 			break;
 		case S3_LAYER_AUTO:
 			s3_set_layer_position(i, conf_automode_x, conf_automode_y);
-			s3_set_layer_alpha(i, 255);
+			s3_set_layer_alpha(i, 0);
 			s3_set_layer_scale(i, 1.0f, 1.0f);
 			s3_set_layer_center(i, 0, 0);
 			s3_set_layer_rotate(i, 0.0f);
@@ -1345,7 +1347,7 @@ s3_clear_stage(void)
 			break;
 		case S3_LAYER_SKIP:
 			s3_set_layer_position(i, conf_skipmode_x, conf_skipmode_y);
-			s3_set_layer_alpha(i, 255);
+			s3_set_layer_alpha(i, 0);
 			s3_set_layer_scale(i, 1.0f, 1.0f);
 			s3_set_layer_center(i, 0, 0);
 			s3_set_layer_rotate(i, 0.0f);
@@ -1362,7 +1364,7 @@ s3_clear_stage(void)
 			s3_set_layer_position(i,
 					      conf_choose_x[(i - S3_LAYER_CHOOSE1_IDLE) / 2],
 					      conf_choose_y[(i - S3_LAYER_CHOOSE1_IDLE) / 2]);
-			s3_set_layer_alpha(i, 0);
+			s3_set_layer_alpha(i, 255);
 			s3_set_layer_scale(i, 1.0f, 1.0f);
 			s3_set_layer_center(i, 0, 0);
 			s3_set_layer_rotate(i, 0.0f);
@@ -1639,10 +1641,8 @@ s3_render_stage(void)
 	render_layer(S3_LAYER_CHF_FO);
 	if (is_click_visible)
 		render_layer(S3_LAYER_CLICK);
-	if (is_auto_visible)
-		render_layer(S3_LAYER_AUTO);
-	if (is_skip_visible)
-		render_layer(S3_LAYER_SKIP);
+	render_layer(S3_LAYER_AUTO);
+	render_layer(S3_LAYER_SKIP);
 	for (i = 0; i < S3_CHOOSEBOX_COUNT; i++) {
 		if (is_choosebox_idle_visible[i])
 			render_layer(S3_LAYER_CHOOSE1_IDLE + (2 * i));
@@ -2895,7 +2895,38 @@ void
 s3_show_automode_banner(
 	bool show)
 {
+	const char *file;
+	int i;
+
+	/* Decide an anime to run. */
+	file = NULL;
+	if (!is_auto_visible && show)
+		file = conf_automode_anime_show;
+	else if (is_auto_visible && !show)
+		file = conf_automode_anime_hide;
+
+	/* Set the flag. */
 	is_auto_visible = show;
+
+	/* Run an anime. */
+	if (file != NULL) {
+		/* Stop the anime. */
+		s3_clear_layer_anime_sequence(S3_LAYER_AUTO);
+
+		/* Reset the position. */
+		s3_set_layer_position(S3_LAYER_AUTO, conf_automode_x, conf_automode_y);
+		s3_set_layer_scale(S3_LAYER_AUTO, 1.0f, 1.0f);
+		s3_set_layer_center(S3_LAYER_AUTO, 0, 0);
+		s3_set_layer_rotate(S3_LAYER_AUTO, 0);
+
+		/* Set the argument. ($0 = "auto") */
+		s3_set_call_argument(0, "auto");
+		for (i = 1; i < S3_CALL_ARGS; i++)
+			s3_set_call_argument(i, NULL);
+
+		/* Start the anime. */
+		s3_load_anime_from_file(file, NULL, NULL);
+	}
 }
 
 /*
@@ -2905,7 +2936,38 @@ void
 s3_show_skipmode_banner(
 	bool show)
 {
+	const char *file;
+	int i;
+
+	/* Decide an anime to run. */
+	file = NULL;
+	if (!is_skip_visible && show)
+		file = conf_skipmode_anime_show;
+	else if (is_skip_visible && !show)
+		file = conf_skipmode_anime_hide;
+
+	/* Set the flag. */
 	is_skip_visible = show;
+
+	/* Run an anime. */
+	if (file != NULL) {
+		/* Stop the anime. */
+		s3_clear_layer_anime_sequence(S3_LAYER_SKIP);
+
+		/* Reset the position. */
+		s3_set_layer_position(S3_LAYER_SKIP, conf_skipmode_x, conf_skipmode_y);
+		s3_set_layer_scale(S3_LAYER_SKIP, 1.0f, 1.0f);
+		s3_set_layer_center(S3_LAYER_SKIP, 0, 0);
+		s3_set_layer_rotate(S3_LAYER_SKIP, 0);
+
+		/* Set the argument. ($0 = "skip") */
+		s3_set_call_argument(0, "skip");
+		for (i = 1; i < S3_CALL_ARGS; i++)
+			s3_set_call_argument(i, NULL);
+
+		/* Start the anime. */
+		s3_load_anime_from_file(file, NULL, NULL);
+	}
 }
 
 /*

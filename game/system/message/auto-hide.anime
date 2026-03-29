@@ -1,5 +1,9 @@
-namebox {
-    layer:    namebox;
+#
+# Hide the auto-mode banner
+#
+
+HIDE_AUTO_MODE_BANNER {
+    layer:    $0;
     start:    0.0;
     end:      0.3;
     from-x:   r0;

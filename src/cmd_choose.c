@@ -307,6 +307,12 @@ get_text_arg(
 		if (*text == NULL) {
 			snprintf(name, sizeof(name), "text%d", index + 1);
 			*text = s3_get_tag_arg_string(name, true, NULL);
+		}
+
+		/* Fallback to the "en" text. */
+		if (*text == NULL) {
+			snprintf(name, sizeof(name), "text%d-en", index + 1);
+			*text = s3_get_tag_arg_string(name, true, NULL);
 			if (*text == NULL) {
 				/* No option found for the index. */
 				return false;

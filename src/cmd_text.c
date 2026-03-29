@@ -2188,6 +2188,10 @@ get_localized_text(void)
 		/* Fallback to a non-localized text. */
 		if (text == NULL)
 			text = s3_get_tag_arg_string("text", true, NULL);
+
+		/* Fallback to a "en" text. */
+		if (text == NULL)
+			text = s3_get_tag_arg_string("text-en", true, NULL);
 	}
 
 	if (text == NULL) {
@@ -2339,6 +2343,13 @@ get_localized_voice(void)
 	 */
 	if (voice_base != NULL)
 		return voice_base;
+
+	/*
+	 * Fallback to the "voice-en" argument.
+	 */
+	voice = s3_get_tag_arg_string("voice-en", true, NULL);
+	if (voice != NULL)
+		return voice;
 
 	/* No voice. */
 	return NULL;
