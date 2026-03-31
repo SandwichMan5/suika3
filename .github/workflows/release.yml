@@ -534,8 +534,12 @@ jobs:
           cp game/start.novel dist/
           cp game/config.ini dist/
           cp -R game/bg dist/
+          cp -R game/bgm dist/
           cp -R game/ch dist/
+          cp -R game/rule dist/
+          cp -R game/se dist/
           cp -R game/system dist/
+          cp -R game/voice dist/
 
       - name: Download mingw artifacts
         uses: actions/download-artifact@v4
@@ -765,6 +769,7 @@ jobs:
         with:
           tag_name: nightly-${{ env.DATE }}-${{ env.SHORT_SHA }}
           name: Suika3-${{ env.DATE }}-${{ env.SHORT_SHA }}
+          prerelease: true
           files: |
             Suika3-${{ env.DATE }}-${{ env.SHORT_SHA }}.zip
             Suika3-${{ env.DATE }}-${{ env.SHORT_SHA }}.7z

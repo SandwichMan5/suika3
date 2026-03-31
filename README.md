@@ -2,7 +2,7 @@
   <b>
     <a href="https://suika3.vn">Suika3</a><br>
   </b>
-  &#x1f31f; The Next-Generation Visual Novel Engine &#x1f31f;<br>
+  The Next-Generation Visual Novel Engine<br>
 </h1>
 
 <div align="center">
@@ -10,7 +10,7 @@
   <p>
     Suika3 is a production-grade visual novel engine designed to run natively across a wide range of platforms
   </p>
-  <a href="https://discord.gg/YZsq9u9Mgr"><img src="https://img.shields.io/badge/Suika3.VN-Discord-orange"></a>
+  <a href="https://discord.gg/YZsq9u9Mgr"><img src="https://img.shields.io/badge/suika3.vn-Discord-orange"></a>
   <img src="https://img.shields.io/github/stars/suika3-community/suika3.svg?style=flat&logo=github&colorB=orange&label=stars">
   <img src="https://img.shields.io/github/forks/suika3-community/suika3.svg">
   <img src="https://img.shields.io/badge/License-ZLib-orange.svg">
@@ -24,12 +24,12 @@
     publish the exact same game across both Steam and App Store,
     eliminating traditional porting headaches!
   </p>
-  <img src="https://img.shields.io/badge/Desktop-Windows%20%2F%20macOS%20%2F%20Linux%20%2F%20Chromebook%20%2F%20Raspberry%20Pi-blue">
-  <img src="https://img.shields.io/badge/Mobile-iOS%20%2F%20Android%20%2F%20HarmonyOS%20NEXT-blue">
-  <img src="https://img.shields.io/badge/Console-Switch%20%2F%20PS5%20%2F%20Xbox-blue">
-  <img src="https://img.shields.io/badge/Web-Emscripten-blue">
-  <img src="https://img.shields.io/badge/UNIX-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011-blue">
-  <img src="https://img.shields.io/badge/Store-App%20Store%20%2F%20Play%20Store%20%2F%20Microsoft%20Store%20%2F%20Steam%20%2F%20itch%2eio-green">
+  <img src="https://img.shields.io/badge/Desktop-Windows%20%2F%20macOS%20%2F%20Linux%20%2F%20Chromebook%20%2F%20Raspberry%20Pi-blue"><br>
+  <img src="https://img.shields.io/badge/Mobile-iOS%20%2F%20Android%20%2F%20HarmonyOS%20NEXT-blue"><br>
+  <img src="https://img.shields.io/badge/Console-Switch%20%2F%20PS5%20%2F%20Xbox-blue"><br>
+  <img src="https://img.shields.io/badge/Web-Emscripten-blue"><br>
+  <img src="https://img.shields.io/badge/UNIX-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011-blue"><br>
+  <img src="https://img.shields.io/badge/Store-App%20Store%20%2F%20Play%20Store%20%2F%20Microsoft%20Store%20%2F%20Steam%20%2F%20itch%2eio-green"><br>
   <br><br>
 </div>
 
@@ -163,10 +163,10 @@ Suika3 is engineered with modern techniques, and delivers:
 
 ## Kanban (Status)
 
+The current version is 26.07 LTS RC1.
+
 We are in the `Quality Stabilization Period` (April 1 - June 30, 2026) for
 the planned release `Suika3 26.07 LTS` (scheduled on July 1 2026).
-
-The current version is 26.07 LTS RC1.
 
 While the quality is improving day by day,
 our System Testing for the first release has only just begun,
@@ -494,7 +494,7 @@ to cover most gaming consoles and smartphones, including:
 
 These architectures are well-supported, we can say at least they all pass [the test suite](external/PlayfieldEngine/external/NoctLang/tests/run-syntax.sh).
 
-However, the following are not supported yet because of the lack of development machines:
+However, the following are not supported yet (interpreter-only) because of the lack of development machines:
 
 - ❌ SH-4 (Dreamcast)
 - ❌ Sun SPARC
@@ -1208,10 +1208,11 @@ do our best to respond or push a fix as soon as possible! ;-)
 
 We are currently looking for contributors in the following areas:
 
-* Documentation writers
-* HarmonyOS NEXT engineer
-* Android engineers
+* Documentation editors
+* Testing engineers
 * iOS engineers
+* Android engineers
+* HarmonyOS NEXT testers
 
 ### Our Commitment to Inclusivity
 
@@ -1249,10 +1250,10 @@ Because of this philosophy, Suika3 does not employ a formal governance
 structure. Instead, the project is guided by its lead maintainers in
 close collaboration with the community.
 
-### Lead Maintainers
+### Maintainers
 
 - Awe Morris (Systems Engineer)
-- Aitsuki (Security Analyst)
+- Aitsuki (Security Engineer)
 
 ---
 
@@ -1261,11 +1262,6 @@ close collaboration with the community.
 We welcome contributions from everyone! Whether you are fixing a bug,
 improving documentation, or proposing new features, your help is what
 drives **Suika3** forward.
-
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) for our contribution
-guidelines and code of conduct.
-
-Please also see [MANIFESTO.md](MANIFESTO.md) for our manifesto.
 
 ---
 
