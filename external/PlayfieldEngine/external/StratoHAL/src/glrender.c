@@ -1334,26 +1334,33 @@ void
 opengl_render_image_cross_3d(
         struct hal_image *src1_image,
         struct hal_image *src2_image,
-        float src1_x1, float src1_y1, // Image1 左上
-        float src1_x2, float src1_y2, // Image1 右上
-        float src1_x3, float src1_y3, // Image1 左下
-        float src1_x4, float src1_y4, // Image1 右下
-        float src2_x1, float src2_y1, // Image2 左上
-        float src2_x2, float src2_y2, // Image2 右上
-        float src2_x3, float src2_y3, // Image2 左下
-        float src2_x4, float src2_y4, // Image2 右下
-        int alpha)
+	float src1_x1,
+	float src1_y1,
+	float src1_x2,
+	float src1_y2,
+	float src1_x3,
+	float src1_y3,
+	float src1_x4,
+	float src1_y4,
+	float src2_x1,
+	float src2_y1,
+	float src2_x2,
+	float src2_y2,
+	float src2_x3,
+	float src2_y3,
+	float src2_x4,
+	float src2_y4,
+	int alpha)
 {
     float s1_tx[4], s1_ty[4];
     float s2_tx[4], s2_ty[4];
     float screen_x[] = { 0.0f, (float)window_width, 0.0f, (float)window_width };
     float screen_y[] = { 0.0f, 0.0f, (float)window_height, (float)window_height };
 
-    // --- Image 1 の仮想テクスチャ座標計算 ---
     {
         float dx1 = src1_x2 - src1_x1;
         float dy1 = src1_y2 - src1_y1;
-        float dx2 = src1_x3 - src1_x1; // 左下を使って基底を作るよ
+        float dx2 = src1_x3 - src1_x1;
         float dy2 = src1_y3 - src1_y1;
         float det = dx1 * dy2 - dy1 * dx2;
 
@@ -1371,7 +1378,6 @@ opengl_render_image_cross_3d(
         }
     }
 
-    // --- Image 2 の仮想テクスチャ座標計算 ---
     {
         float dx1 = src2_x2 - src2_x1;
         float dy1 = src2_y2 - src2_y1;
@@ -1393,17 +1399,16 @@ opengl_render_image_cross_3d(
         }
     }
 
-    // 最後に描画関数をコール！
     draw_elements_3d(0.0f, 0.0f,
 		     (float)window_width, 0.0f,
-                     0.0f, (float)window_height,
+		     0.0f, (float)window_height,
 		     (float)window_width, (float)window_height,
-                     src1_image, src2_image,
-                     s1_tx[0], s1_ty[0], s1_tx[1], s1_ty[1],
-                     s1_tx[2], s1_ty[2], s1_tx[3], s1_ty[3],
-                     s2_tx[0], s2_ty[0], s2_tx[1], s2_ty[1],
-                     s2_tx[2], s2_ty[2], s2_tx[3], s2_ty[3],
-                     alpha, PIPELINE_CROSS);
+		     src1_image, src2_image,
+		     s1_tx[0], s1_ty[0], s1_tx[1], s1_ty[1],
+		     s1_tx[2], s1_ty[2], s1_tx[3], s1_ty[3],
+		     s2_tx[0], s2_ty[0], s2_tx[1], s2_ty[1],
+		     s2_tx[2], s2_ty[2], s2_tx[3], s2_ty[3],
+		     alpha, PIPELINE_CROSS);
 }
 
 /* Render two triangle primitives. */
