@@ -760,9 +760,9 @@ jobs:
 
       - name: Make documents
         run: |
-          mv dist "Suika3-$DATE-$SHORT_SHA"
-          7z a -tzip -mx=9 "Suika3-$DATE-$SHORT_SHA.zip" "Suika3-$DATE-$SHORT_SHA"
-          7z a -t7z -mx=9 "Suika3-$DATE-$SHORT_SHA.7z" "Suika3-$DATE-$SHORT_SHA"
+          mv dist "Suika3-nightly-$DATE-$SHORT_SHA"
+          7z a -tzip -mx=9 "Suika3-nightly-$DATE-$SHORT_SHA.zip" "Suika3-nightly-$DATE-$SHORT_SHA"
+          7z a -t7z -mx=9 "Suika3-nightly-$DATE-$SHORT_SHA.7z" "Suika3-nightly-$DATE-$SHORT_SHA"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -771,10 +771,12 @@ jobs:
           name: Suika3-${{ env.DATE }}-${{ env.SHORT_SHA }}
           prerelease: true
           files: |
-            Suika3-${{ env.DATE }}-${{ env.SHORT_SHA }}.zip
-            Suika3-${{ env.DATE }}-${{ env.SHORT_SHA }}.7z
+            Suika3-nightly-${{ env.DATE }}-${{ env.SHORT_SHA }}.zip
+            Suika3-nightly-${{ env.DATE }}-${{ env.SHORT_SHA }}.7z
           body: |
-            This automated release includes standalone engines for Windows, macOS, and Linux.
-            In addition, export kits for WebAssembly, iOS, Android, and Unity are included.
+            This is an automated build from CI and is not an official release.
+            The ZIP archive contains standalone engines for Windows, macOS, and Linux.
+            It also includes export kits for iOS, Android, HarmonyOS NEXT (OpenHarmony), WebAssembly, and Unity (Win64/Switch/PS5/Xbox Series X|S).
+            The 7z version contains the same files but offers a smaller download size for smaller download size.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
