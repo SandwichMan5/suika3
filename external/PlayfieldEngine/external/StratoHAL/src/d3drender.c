@@ -59,6 +59,7 @@ D3DInitialize(
 		bAvoidD3D12 = TRUE;
 #endif
 
+#if 0
 	/* Try Direct3D 12. */
 	if (!bAvoidD3D12)
 	{
@@ -68,6 +69,7 @@ D3DInitialize(
 			return TRUE;
 		}
 	}
+#endif
 
 	/* Try Direct3D 11. */
 	if (!bAvoidD3D11)
@@ -593,7 +595,7 @@ hal_render_image_3d_cross(
 		D3D12RenderImage3DCross(src1_image, src2_image, src1_x1, src1_y1, src1_x2, src1_y2, src1_x3, src1_y3, src1_x4, src1_y4, src2_x1, src2_y1, src2_x2, src2_y2, src2_x3, src2_y3, src2_x4, src2_y4, alpha);
 		break;
 	case MODE_D3D11:
-//		D3D11RenderImage3DCross(src1_image, src2_image, src1_x1, src1_y1, src1_x2, src1_y2, src1_x3, src1_y3, src1_x4, src1_y4, src2_x1, src2_y1, src2_x2, src2_y2, src2_x3, src2_y3, src2_x4, src2_y4, alpha);
+		D3D11RenderImage3DCross(src1_image, src2_image, src1_x1, src1_y1, src1_x2, src1_y2, src1_x3, src1_y3, src1_x4, src1_y4, src2_x1, src2_y1, src2_x2, src2_y2, src2_x3, src2_y3, src2_x4, src2_y4, alpha);
 		break;
 	case MODE_D3D9:
 //		D3D9RenderImage3DCross(src1_image, src2_image, src1_x1, src1_y1, src1_x2, src1_y2, src1_x3, src1_y3, src1_x4, src1_y4, src2_x1, src2_y1, src2_x2, src2_y2, src2_x3, src2_y3, src2_x4, src2_y4, alpha);
