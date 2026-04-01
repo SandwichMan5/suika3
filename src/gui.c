@@ -122,7 +122,7 @@ enum {
 	TYPE_CANCEL,
 
 	/* Variable view area. */
-	TYPE_NAMEVAR,
+	TYPE_VAR,
 
 	/* Variable input button. */
 	TYPE_CHAR,
@@ -4734,7 +4734,7 @@ get_type_for_name(
 		{"default",			TYPE_DEFAULT},
 		{"title",			TYPE_TITLE},
 		{"cancel",			TYPE_CANCEL},
-		{"namevar",			TYPE_NAMEVAR},
+		{"var",				TYPE_VAR},
 		{"char",			TYPE_CHAR},
 		{"language",			TYPE_LANGUAGE},
 	};

@@ -1139,11 +1139,33 @@ tampering. The obfuscation key can be changed in "key.h".)
 
 `Year.Month.Patch-Level`
 
-- 26.07.0: Initial release of Suika3 (July 2026)
-- 27.01.0: First major update with new features and improvements (January 2027)
-- 27.07.0: Second major update with additional features and optimizations (July 2027)
-- 28.01.0: Third major update with further enhancements and bug fixes (January 2028)
-- ...
+| Version  | Level             | Release Date        | Support Period     |
+|----------|-------------------|---------------------|--------------------|
+| 26.07    | Long Term Support | July 2026           | 10 years (minimum) |
+| 26.08    | Feature Rollup    | August 2026         | -                  |
+| 26.09    | Feature Rollup    | September 2026      | -                  |
+| 26.10    | Feature Rollup    | October 2026        | -                  |
+| 26.11    | Feature Rollup    | November 2026       | -                  |
+| 26.12    | Feature Rollup    | December 2026       | -                  |
+| 27.01    | Feature Rollup    | January 2027        | -                  |
+| 27.02    | Feature Rollup    | February 2027       | -                  |
+| 27.03    | Feature Rollup    | March 2027          | -                  |
+| 27.04    | Feature Rollup    | April 2027          | -                  |
+| 27.05    | Feature Rollup    | May 2027            | -                  |
+| 27.06    | Feature Rollup    | June 2027           | -                  |
+| 27.07    | Long Term Support | July 2027           | 10 years (minimum) |
+| 27.08    | Feature Rollup    | August 2027         | -                  |
+| 27.09    | Feature Rollup    | September 2027      | -                  |
+| 27.10    | Feature Rollup    | October 2027        | -                  |
+| 27.11    | Feature Rollup    | November 2027       | -                  |
+| 27.12    | Feature Rollup    | December 2027       | -                  |
+| 28.01    | Feature Rollup    | January 2028        | -                  |
+| 28.02    | Feature Rollup    | February 2028       | -                  |
+| 28.03    | Feature Rollup    | March 2028          | -                  |
+| 28.04    | Feature Rollup    | April 2028          | -                  |
+| 28.05    | Feature Rollup    | May 2028            | -                  |
+| 28.06    | Feature Rollup    | June 2028           | -                  |
+| 28.07    | Long Term Support | July 2028           | 10 years (minimum) |
 
 ---
 
