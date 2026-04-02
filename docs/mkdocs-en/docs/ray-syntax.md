@@ -1,7 +1,7 @@
-SuikaScript Syntax Reference
-============================
+Ray Syntax Reference
+====================
 
-`SuikaScript 3.0` is actually `Noct` programming language with Suika3 APIs.
+`Ray` is actually `Noct` programming language with Suika3 APIs.
 
 ## Assignments
 

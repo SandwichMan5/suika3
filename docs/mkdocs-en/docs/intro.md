@@ -8,8 +8,8 @@ Welcome to the `Suika3` document center.
 * NovelML Tag
 
 **For advanced users, see:**
-* SuikaScript Syntax Reference
-* SuikaScript API Reference
+* Ray Syntax Reference
+* Ray API Reference
 
 **For developers who create Suika3 plugins, see:**
 * Plugin Development Reference

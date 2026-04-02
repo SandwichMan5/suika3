@@ -6,7 +6,7 @@
 </h1>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/suika3-community/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" width="120" hspace="20">
+  <img src="https://raw.githubusercontent.com/awemorris/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" width="120" hspace="20">
   <p>
     Suika3 is a production-grade visual novel engine designed to run natively across a wide range of platforms
   </p>
@@ -75,17 +75,17 @@ Suika3 is a production-grade visual novel engine specifically
 engineered for commercial mobile app development, developed by Awe
 Morris with the Suika3 Community.
 
-Games made with Suika3 are powered by `NovelML 3.0` and `SuikaScript 3.0`.
+Games made with Suika3 are powered by `NovelML` and the `Ray` language.
 
-- **NovelML 3.0**: A tag-based, human-readable, extensible DSL
-  designed specifically for visual novels. It features concise,
-  declarative tags for seamless dialogue and scene control. Developers
-  can add custom tags by SuikaScript.
+- **NovelML**: A tag-based, human-readable, extensible DSL designed
+  specifically for visual novels. It features concise, declarative
+  tags for seamless dialogue and scene control. Developers can add
+  custom tags using the Ray language.
 
-- **SuikaScript 3.0**: The robust extension language for Suika3. It
-  utilizes a high-speed JIT compiler on desktop platforms and can be
-  compiled into native binaries for production or mobile
-  environments.
+- **Ray**: The robust extension scripting language for Suika3. It
+  utilizes a high-speed JIT compiler on desktop platforms (Sunlight
+  Virtual Machine) and can be compiled into native binaries (Moonlight
+  AOT compiler) for production or mobile environments.
 
 Although Suika3 is designed as a professional tool, you are absolutely
 welcome to use it just for fun — after all, fun is the driving force
@@ -98,9 +98,9 @@ behind every great community.
 With lead developer's 10+ years of R&D experience in computer science,
 Suika3 is engineered with modern techniques, and delivers:
 
-- **High Performance**: Powered by the Suika JIT VM, it delivers
-  2.5-4.5x faster execution speed compared to our interpreter backend
-  in synthetic benchmarks.
+- **High Performance**: Powered by Ray's Sunlight JIT Virtual Machine,
+  it delivers 2.5-4.5x faster execution speed compared to our
+  interpreter backend in synthetic benchmarks.
 
 - **Lightweight**: Engineered to run smoothly at 60 fps even on
   low-spec hardware such as Raspberry Pi in developing regions.
@@ -108,9 +108,9 @@ Suika3 is engineered with modern techniques, and delivers:
 - **True Portability**: Designed with a "port anywhere" strategy,
   ensuring compatibility with almost every modern platform.
 
-- **Extensible**: NovelML can be seamlessly extended using
-  SuikaScript. Developers can implement custom tags simply by writing
-  a SuikaScript function named `Tag_*()`.
+- **Extensible**: NovelML can be seamlessly extended using the Ray
+  language. Developers can implement custom tags simply by writing a
+  Ray function named `Tag_*()`.
 
 - **Reliable**: We do certain `Quality Assurance Process` to deliver
   reliable software.
@@ -119,11 +119,15 @@ Suika3 is engineered with modern techniques, and delivers:
   menu. Desktop-style tiny buttons on message windows are not a
   primary target due to mobile usability and store review risks.
 
-- **Battery-Friendly:** Idle CPU and GPU usages are around 1%, making
-  it perfect for long-play on mobile devices.
+- **Battery-Friendly:** With only 1% CPU usage on Core Ultra 5 228V,
+  8% on Apple M5, and 20% on Apple A15 Bionic during 60 fps gameplay,
+  it's perfect for extended play on the go! It prevents your phone or
+  laptop from overheating—pretty "cool," isn't it?
 
-- **Long-Term Support:** Our codebase is so portable and designed to
-  support future platforms through the 2030s, 2040s, and beyond.
+- **Long-Term Support:** Built with a highly portable codebase, our
+  engine is designed to support future platforms through the 2030s,
+  2040s, and beyond. LTS versions include a minimum of 10 years of
+  bug-fix support.
 
 ---
 
@@ -134,7 +138,7 @@ Suika3 is engineered with modern techniques, and delivers:
 - [Building Locally](#building-locally)
 - [Quick Look](#quick-look)
 - [Examples](#examples)
-- [Why SuikaScript?](#why-suikascript)
+- [Why Ray Language?](#why-ray-language)
 - [Technical Overview](#technical-overview)
 - [Garbage Collection](#garbage-collection)
 - [Compatibility List](#compatibility-list)
@@ -163,16 +167,16 @@ Suika3 is engineered with modern techniques, and delivers:
 
 ## Kanban (Status)
 
-The current version is 26.07 LTS RC1.
+The current version is 26.07 LTS **RC1.**
 
 We are in the `Quality Stabilization Period` (April 1 - June 30, 2026) for
 the planned release `Suika3 26.07 LTS` (scheduled on July 1 2026).
 
-While the quality is improving day by day,
-our System Testing for the first release has only just begun,
-so many bugs still need to be fixed.
-However, we have secured a three-month system testing period,
+While the quality is improving day by day, our `System Testing` for
+the first release has only just begun, so many bugs still need to be
+fixed. However, we have secured a three-month system testing period,
 and we expect that major bugs will be resolved by the time of release.
+
 A detailed list of known issues can be found in [BUGS.md](BUGS.md).
 See [Quality Assurance](#quality-assurance) for the details.
 
@@ -184,7 +188,7 @@ See [Quality Assurance](#quality-assurance) for the details.
 - ✅ Implementing the tag execution engine. (Suika3) (January 2026 - February 2026)
 - ✅ Refactoring all C functions into a stable "C API". (January 2026 - February 2026)
 - ✅ Implementing all tags in C. (January 2026 - February 2026)
-- ✅ Wrapping "C API" for SuikaScript. (February 2026 - March 2026)
+- ✅ Wrapping "C API" for the Ray language. (February 2026 - March 2026)
 - ✅ API Freeze (March 7, 2026)
 - ✅ GUI Animation Implementation (March 10, 2026)
 - ✅ Code Freeze (March 12, 2026)
@@ -249,8 +253,8 @@ func setup() {
 
 ### 4. Under the Hood (Advanced Tips)
 
-The bottom part of your `main.pf` file contains the core engine logic
-in `SuikaScript`. It's best to leave these functions as they are
+The bottom part of your `main.pf` file contains the core game logic in
+the `Ray` language. It's best to leave these functions as they are
 unless you are doing advanced customization:
 
 - `func start()`: This is called once when your game launches.
@@ -339,11 +343,11 @@ A sample game is planned to be built in the end of March 2026.
 See the `game/` directory for:
 - Minimal demo project
 - Sample assets and NovelML snippets
-- SuikaScript usage patterns
+- `Ray` usage patterns
 
 ---
 
-### Why SuikaScript?
+### Why Ray Language?
 
 - **Instant Iteration:** No compile cycles, no waiting. The built-in
   JIT compiler runs your scripts immediately after editing, so you can
@@ -386,19 +390,19 @@ engine.
 Suika3 is based on `PlayField Engine`, a comprehensive 2D game engine.
 This means that Suika3 is fully extensible using the Playfield API.
 
-(Playfield Engine was originally developed specifically for Suika3.
+Playfield Engine was originally developed specifically for Suika3.
 The name "Playfield" was inspired by PlayStation during Awe's time at
-the SIE PlayStation firmware team.)
+the SIE PlayStation firmware team.
 
 ```
 +------------------------------+
 |        NovelML (Tags)        |
 +------------------------------+
-| Plugin Tags (by SuikaScript) | --> SuikaScript can be compiled into a native binary!
+|     Plugin Tags (by Ray)     | --> Ray can be compiled into a native binary!
 +------------------------------+
 |       Base Tags (by C)       |
 +------------------------------+
-|    SuikaScript Wrapper API   |
+|       Ray Wrapper API        |
 +------------------------------+
 |         Suika3 C API         |
 +------------------------------+
@@ -471,7 +475,7 @@ For Xbox series, you can use the native Microsoft GDK port directly, not via Uni
 ### NoctLang
 
 ```
-SuikaScript = NoctLang + Suika3 API
+Ray = NoctLang + Suika3 API
 ```
 
 **NoctLang** is a lightweight scripting language designed for in-app
@@ -496,20 +500,20 @@ These architectures are well-supported, we can say at least they all pass [the t
 
 However, the following are not supported yet (interpreter-only) because of the lack of development machines:
 
-- ❌ SH-4 (Dreamcast)
-- ❌ Sun SPARC
-- ❌ HP PA-RISC
-- ❌ Motorola 68000
-- ❌ Loongson
-- ❌ IBM Z
-- **Challenge:** If you have one, please provide a ssh access to the development environment for 3 days. We can port there.
+- ❌ SH-4 (Dreamcast) (Run on interpreter)
+- ❌ Sun SPARC (Run on interpreter)
+- ❌ HP PA-RISC (Run on interpreter)
+- ❌ Motorola 68000 (Run on interpreter)
+- ❌ Loongson (Run on interpreter)
+- ❌ IBM Z (Run on interpreter)
+- **Challenge:** If you have one, please provide a ssh access to the development environment for 3 days. We can port there ;-)
 
 ### AOT Compilation
 
 For platforms where JIT is restricted (such as mobile or consoles),
-NoctLang can fall back to interpreter mode, and AOT (ahead-of-time)
-compilation using a C source backend — ensuring full compatibility
-even in tightly controlled environments.
+NoctLang can fall back to at least interpreter mode, and modern AOT
+(ahead-of-time) compilation using a C source backend — ensuring full
+compatibility even in tightly controlled environments.
 
 Please see [AOT](docs/mkdocs-en/docs/aot.md) for more details.
 
@@ -555,7 +559,7 @@ The footprint of Suika3 is very small.
 
 ### JIT Pipeline
 
-SuikaScript uses a dual-IR architecture where HIR handles analysis and
+NoctLang uses a dual-IR architecture where HIR handles analysis and
 LIR unifies execution across interpreter, JIT, and AOT backends:
 
 - **HIR (High-level Intermediate Representation)**
@@ -619,11 +623,13 @@ The separation of HIR and LIR enables:
 - **Clarity in architecture**: each stage has a well-defined role, simplifying maintenance.
 - **Portability**: the same LIR can be interpreted directly or lowered into optimized machine code.
 
-As shown above, HIR expresses structure, while LIR expresses execution.
-This split allows SuikaScript to keep the JIT pipeline lightweight without sacrificing optimization opportunities.
+As shown above, HIR expresses structure, while LIR expresses
+execution.  This split allows the Ray language to keep the JIT
+pipeline lightweight without sacrificing optimization opportunities.
 
-Because all JIT backends translate from the same LIR, portability across architectures comes naturally.
-This unified approach is what makes SuikaScript both portable and maintainable.
+Because all JIT backends translate from the same LIR, portability
+across architectures comes naturally.  This unified approach is what
+makes the Ray language both portable and maintainable.
 
 ---
 
@@ -749,20 +755,20 @@ supporting legacy systems through older runtimes.
 
 Suika3 provides the 32-bit classic binary `suika3-95.exe` for early Win32 compatibility.
 
-| OS      | Version | Patch | CPU    | Runtimes                               | 32-bit Binary | Direct3D       |
-|---------|---------|-------|--------|----------------------------------------|---------------|----------------|
-| Windows | 2000    |       | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0            |
-| Windows | 2000    | SP1   | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0            |
-| Windows | 2000    | SP2   | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0            |
-| Windows | 2000    | SP3   | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0            |
-| Windows | 2000    | SP4   | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0            |
-| Windows | Me      |       | x86    |                                        | ✅            | soft rendering |
-| Windows | 98      |       | x86    |                                        | ✅            | soft rendering |
-| Windows | 98      | SE    | x86    |                                        | ✅            | soft rendering |
-| Windows | 95      |       | x86    |                                        | ✅            | soft rendering |
-| Windows | 95      | OSR2  | x86    |                                        | ✅            | soft rendering |
-| Windows | NT 4.0  |       | x86    |                                        | ❌            | soft rendering |
-| Windows | NT 3.51 |       | x86    |                                        | ❌            | soft rendering |
+| OS      | Version | Patch | CPU    | Runtimes                               | 32-bit Binary | Direct3D               |
+|---------|---------|-------|--------|----------------------------------------|---------------|------------------------|
+| Windows | 2000    |       | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0                    |
+| Windows | 2000    | SP1   | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0                    |
+| Windows | 2000    | SP2   | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0                    |
+| Windows | 2000    | SP3   | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0                    |
+| Windows | 2000    | SP4   | x86    | DirectX End-User Runtimes (Dec 2006)   | ✅            | 9.0                    |
+| Windows | Me      |       | x86    |                                        | Not Tested    | soft rendering         |
+| Windows | 98      |       | x86    |                                        | Not Tested    | soft rendering         |
+| Windows | 98      | SE    | x86    |                                        | Not Tested    | soft rendering         |
+| Windows | 95      |       | x86    |                                        | Not Tested    | soft rendering         |
+| Windows | 95      | OSR2  | x86    |                                        | Not Tested    | soft rendering         |
+| Windows | NT 4.0  |       | x86    |                                        | Not Tested    | soft rendering         |
+| Windows | NT 3.51 |       | x86    |                                        | ❌            | Insufficient Win32 API |
 
 ### macOS Compatibility List
 
@@ -860,15 +866,19 @@ and it is synchronized to the latest.
 
 - For Basic Usage:
     - [Getting Started Guide](docs/mkdocs-en/docs/getting-started.md)
-    - [NovelML 3.0 Syntax Reference](docs/mkdocs-en/docs/novelml-syntax.md)
-    - [NovelML 3.0 Tag Reference](docs/mkdocs-en/docs/tags.md)
+    - [NovelML Syntax Reference](docs/mkdocs-en/docs/novelml-syntax.md)
+    - [NovelML Tag Reference](docs/mkdocs-en/docs/novelml-tags.md)
+    - [Animation]((docs/mkdocs-en/docs/anime.md)
+    - [GUI]((docs/mkdocs-en/docs/gui.md)
+    - [Lip Sync]((docs/mkdocs-en/docs/lip-sync.md)
+    - [Eye Blink]((docs/mkdocs-en/docs/eye-bink.md)
 - For Advanced Usage:
-    - [SuikaScript 3.0 Syntax Reference](docs/mkdocs-en/docs/syntax.md)
-    - [SuikaScript 3.0 API Reference](docs/mkdocs-en/docs/api.md)
-    - [Plugin Development](docs/mkdocs-en/docs/plugin.md)
-    - [AOT Instructions](docs/mkdocs-en/docs/aot.md)
+    - [Ray Syntax Reference](docs/mkdocs-en/docs/ray-syntax.md)
+    - [Ray API Reference](docs/mkdocs-en/docs/ray-api.md)
+    - [Ray Plugin Development](docs/mkdocs-en/docs/plugin.md)
+    - [AOT Deployment Instructions](docs/mkdocs-en/docs/aot.md)
 - For Community Developers:
-    - [Build Instruction](docs/mkdocs-en/docs/build.md)
+    - [Build Instructions](docs/mkdocs-en/docs/build.md)
 
 ---
 
@@ -876,23 +886,32 @@ and it is synchronized to the latest.
 
 Suika3 supports the following languages, and the translation is in progress.
 
-| Language               | Locale Code | Translation Type         | Scope of Translation             | Progress      |
+| Language               | Our Code    | Translation Type         | Scope of Translation             | Progress      |
 |------------------------|-------------|--------------------------|----------------------------------|---------------|
-| English                | `en-US`     | Original                 | UI / Docs / Samples              | Baseline      |
-| Spanish                | `es-ES`     | Machine Translation      | UI                               | Done          |
-| French                 | `fr-FR`     | Machine Translation      | UI                               | Done          |
-| Italian                | `it-IT`     | Machine Translation      | UI                               | Done          |
-| German                 | `de-DE`     | Machine Translation      | UI                               | Done          |
-| Greek                  | `el-GR`     | Machine Translation      | UI                               | Done          |
-| Russian                | `ru-RU`     | Machine Translation      | UI                               | Done          |
-| Simplified Chinese     | `zh-CN`     | Machine Translation      | UI                               | Done          |
-| Traditional Chinese    | `zh-TW`     | Machine Translation      | UI                               | Done          |
-| Japanese               | `ja-JP`     | Native Translation       | UI / Docs                        | Done          |
+| English (Fallback)     | `en`        | Original                 | UI / Docs / Samples              | Baseline      |
+| English (America)      | `en-us`     | None                     | UI                               | -             |
+| English (British)      | `en-gb`     | None                     | UI                               | -             |
+| Spanish (Fallback)     | `es`        | Machine Translation      | UI                               | Done          |
+| Spanish (Spain)        | `es-es`     | None                     | UI                               | -             |
+| Spanish (Latin America)| `es-la`     | None                     | UI                               | -             |
+| French (Fallback)      | `fr`        | Machine Translation      | UI                               | Done          |
+| French (France)        | `fr-fr`     | None                     | UI                               | -             |
+| French (Canada)        | `fr-ca`     | None                     | UI                               | -             |
+| Italian                | `it`        | Machine Translation      | UI                               | -             |
+| German                 | `de`        | Machine Translation      | UI                               | Done          |
+| Greek                  | `el`        | Machine Translation      | UI                               | Done          |
+| Russian                | `ru`        | Machine Translation      | UI                               | Done          |
+| Simplified Chinese     | `zh-cn`     | Machine Translation      | UI                               | Done          |
+| Traditional Chinese    | `zh-tw`     | Machine Translation      | UI                               | Done          |
+| Japanese               | `ja`        | Native Translation       | UI                               | Done          |
 
 ### How to switch languages
 
-Playfield Engine uses the system locale.  To switch languages, set
-your system locale.
+Suika3 uses the system locale. To switch languages, set your system
+locale.
+
+In addition, the sample game has language switching buttons in the
+config screen.
 
 ### Contributing Translations
 
@@ -915,7 +934,7 @@ If you want to help us reach more developers, here is how you can contribute:
 
 ---
 
-## Third-party Libraries
+## Third-Party Libraries
 
 Our engine is built upon several free/libre software libraries. To
 ensure build reproducibility and long-term maintainability, all
@@ -970,18 +989,21 @@ configurations.
 |windows-vs2026-arm64-release   |Windows               |MSVC       |out/build/windows-vs2026-arm64-release |suika3.exe    |Executable     |
 |windows-vs2026-gdk-desktop     |Windows               |MSVC       |out/build/windows-vs2026-gdk-desktop   |suika3.exe    |Executable     |
 |windows-vs2026-gdk-xbox-xs     |Windows               |MSVC       |out/build/windows-vs2026-gdk-xbox-xs   |suika3.exe    |Executable     |
-|windows-mingw-x86              |Windows               |MinGW      |build-mingw-x86                        |suika3.exe    |Executable     |
-|windows-mingw-x86_64           |Windows               |MinGW      |build-mingw-x86_64                     |suika3.exe    |Executable     |
+|windows-mingw-x86              |Windows               |MinGW-GCC  |build-mingw-x86                        |suika3.exe    |Executable     |
+|windows-mingw-x86_64           |Windows               |MinGW-GCC  |build-mingw-x86_64                     |suika3.exe    |Executable     |
 |windows-mingw-arm64            |Windows               |MinGW-LLVM |build-mingw-arm64                      |suika3.exe    |Executable     |
 |macos                          |macOS                 |Clang      |build-macos                            |Suika3.app    |App Bundle     |
-|linux-x11                      |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
-|linux-wayland                  |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
-|linux-gdm                      |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
-|linux-gdm-rot90                |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
+|linux                          |Linux (X11)           |GCC        |build-linux                            |suika3        |Executable     |
+|linux-wayland                  |Linux (Wayland)       |GCC        |build-linux                            |suika3        |Executable     |
+|linux-gdm                      |Linux (GBM)           |GCC        |build-linux                            |suika3        |Executable     |
+|linux-gdm-rot90                |Linux (GBM)           |GCC        |build-linux                            |suika3        |Executable     |
+|linux-fbdev                    |Linux (fbdev)         |GCC        |build-linux                            |suika3        |Executable     |
+|linux-x11soft                  |Linux                 |GCC        |build-linux                            |suika3        |Executable     |
 |freebsd                        |FreeBSD               |Clang      |build-freebsd                          |suika3        |Executable     |
 |netbsd                         |NetBSD                |GCC        |build-netbsd                           |suika3        |Executable     |
 |openbsd                        |OpenBSD               |Clang      |build-openbsd                          |suika3        |Executable     |
 |solaris11                      |Solaris11             |SunCC      |build-solaris11                        |suika3        |Executable     |
+|haiku                          |Haiku OS              |GCC        |build-haiku                            |suika3        |Executable     |
 |wasm                           |WebAssembly           |Emscripten |build-wasm                             |index.html    |HTML + Wasm    |
 |wasm-local                     |Chromebook            |Emscripten |build-wasm-local                       |index.html    |HTML + Wasm    |
 |ios-device                     |iOS Device            |Clang      |build-ios-device                       |libsuika3.a   |Static Library |
@@ -1008,12 +1030,12 @@ This is not a weekend project but a mature codebase evolved over 25+ years.
 - **Proven Stability:** Includes core modules refined since 2001.
 
 - **Modern Architecture:** Features a clean HAL (Hardware Abstraction
- Layer) separated in 2016 and high-performance GPU rendering
- implemented in 2022.
+  Layer) separated in 2016 and high-performance GPU rendering
+  implemented in 2022.
 
 - **Native Multi-Platform:** Built mostly with C, and the platform
- native languages, including C++ (DirectX), Swift (macOS/iOS),
- Objective-C (macOS/iOS), C# (Unity) and Shaders (HLSL/GLSL/Metal).
+  native languages, including C++ (DirectX), Swift (macOS/iOS),
+  Objective-C (macOS/iOS), C# (Unity) and Shaders (HLSL/GLSL/Metal).
 
 ---
 
@@ -1117,21 +1139,40 @@ tampering. The obfuscation key can be changed in "key.h".)
 
 ## Engine Feature List
 
-- Message display
-- Option selection
-- Background and character images
-- Image transition
+Out-of-box Support:
+- Message Display
+- Option Selection
+- Background and Character Display / Transition
+- Sound Playback
+- Movie Playback
+- Layered Raster Image Animation (Shift, Scale, Rotate)
+- UI/UX Construction
 - Save / Load
-- Skip mode
-- Auto mode
-- Backlog
+- Skip Mode
+- Auto Mode
+- Skip Seen Messages
+- Message History Display and Voice Replay
 - CG Gallery
 - Localization
-- UI construction
+- Simulation Parameter Display
+
+The following are for future work:
+- 3D Character Model
+- 2D RPG Map Walk
+- Network Play
 
 ---
 
 ## Screenshots
+
+<div align="center">
+  <p>Windows 11</p><br>
+  <img src="https://raw.githubusercontent.com/awemorris/suika3/refs/heads/main/docs/img/screenshot-win11.png" alt="Suika3 on Windows 11" width="320" hspace="20">
+  <p>iOS</p><br>
+  <img src="https://raw.githubusercontent.com/awemorris/suika3/refs/heads/main/docs/img/screenshot-ios.png" alt="Suika3 on iOS" width="320" hspace="20">
+  <p>Android</p><br>
+  <img src="https://raw.githubusercontent.com/awemorris/suika3/refs/heads/main/docs/img/screenshot-android.png" alt="Suika3 on Android" width="320" hspace="20">
+</div>
 
 ---
 
@@ -1204,8 +1245,8 @@ stories to life.
 
 ### Professional & Enterprise Support
 
-While the **Suika3 Community** provides active support through GitHub
-and Discord, we understand that commercial productions often require
+While the **community** provides active support through GitHub and
+Discord, we understand that commercial productions often require
 dedicated support or guaranteed response times.
 
 For studios and developers requiring **formal maintenance contracts,
@@ -1213,7 +1254,7 @@ priority bug fixes, or private consultations**, please contact us
 directly via email. We are committed to helping ensure your project's
 success in a high-stakes production environment.
 
-- **Contact**: Awe Morris <awe@noctvm.io>
+- **Contact**: Awe Morris <awe@suika3.vn>
 
 **Not looking for a formal contract? No problem.** If you are an indie
 developer or hobbyist and prefer to keep things casual, just ping us
@@ -1292,7 +1333,7 @@ drives **Suika3** forward.
 Suika3 represents the culmination of over two decades of relentless innovation and development:
 
 - **Suika Studio (2001–2004)**: The origin of our codebase, featuring
-  our first GUI-based editors.
+  our first GUI-based editors. [Archive](https://github.com/awemorris/suika-studio-2002)
 
 - **Unfruitiful (2005–2015)**: A decade of R&D focused on establishing
   a robust portability layer for cross-platform support.
@@ -1300,13 +1341,13 @@ Suika3 represents the culmination of over two decades of relentless innovation a
 - **Suika2 (2016–2024)**: The cornerstone of our current architecture
   and the fruit of a decade of dedicated R&D. It delivers a full
   visual novel experience with extensive platform compatibility.
-  Several games with Suika3 were sold on App Store.
+  Several games with Suika3 were sold on App Store. [Archive](https://github.com/awemorris/suika2)
 
 - **Playfield Engine (2025–)**: A versatile 2D engine derived from the
-  core portability layer of the Suika series.
+  core portability layer of the Suika series. [Repo](https://github.com/awemorris/PlayfieldEngine)
 
 - **Suika3 (2026–)**: By synthesizing these legacies and introducing
-  `NovelML` and `SuikaScript`, Suika3 delivers the stability of its
+  `NovelML` and `Ray`, Suika3 delivers the stability of its
   predecessors alongside the flexibility of modern technology.
 
 ---

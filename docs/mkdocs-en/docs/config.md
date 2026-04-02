@@ -1,35 +1,27 @@
-###
-### Configration File
-###
+WIP
 
-############################################################
 ## Game Settings
 
-#
-# Game title
-#
+| Name                       | Type       | Description                                                   |
+|----------------------------|------------|---------------------------------------------------------------|
+| game.title.en              | String     | Game title in English.                                        |
+| game.novel                 | Boolean    | Enable novel mode.                                            |
+| game.locale                | String     | Force the language over the system locale setting.            |
 
-game.title.en=Little Sample
-game.title.ja=Little Sample
+### game.title.en
 
-#
-# Enable novel mode
-#  - false: Adventure mode
-#  - true:  Novel mode
-#
+### game.novel
 
-game.novel=false
+### game.local
 
-#
-# Language setting
-#  - "":   Use the system setting
-#  - "ja": Fix to Japanese
-#  - "en": Fix to English
-#
+Language setting.
 
-game.locale=ja
+- "":   Use the system setting
+- "ja": Fix to Japanese
+- "en": Fix to English
 
-############################################################
+--
+
 ## Font File Settings
 
 # Font 1

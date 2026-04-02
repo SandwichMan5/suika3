@@ -8,8 +8,8 @@ Suika3 ドキュメンテーション
 * NovelML Tag
 
 **上級ユーザ向け:**
-* SuikaScript Syntax Reference
-* SuikaScript API Reference
+* Ray Syntax Reference
+* Ray API Reference
 
 **プライグイン開発者向け:**
 * Plugin Development Reference

@@ -8,8 +8,8 @@ Welcome to the `Suika3` document center.
 * [NovelML Tag Reference](tag.md)
 
 **For advanced users:**
-* [SuikaScript Syntax Reference(suikascript-syntax.md)]
-* [SuikaScript API Reference](api.md)
+* [Ray Syntax Reference(ray-syntax.md)]
+* [Ray API Reference](api.md)
 
 **For developers who create Suika3 plugins:**
 * [Plugin Development Reference](plugin.md)

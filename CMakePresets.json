@@ -923,7 +923,7 @@
                 "CMAKE_C_COMPILER":            "cc",
                 "CMAKE_CXX_COMPILER":          "CC",
                 "SUIKA_TARGET_SOLARIS11":      "ON",
-                "SUIKA_ENABLE_JIT":            "ON",
+                "SUIKA_ENABLE_JIT":            "OFF",
                 "SUIKA_ENABLE_PACK":           "ON",
                 "SUIKA_ENABLE_BYTECOMP":       "ON",
                 "SUIKA_ENABLE_AOTCOMP":        "ON"
