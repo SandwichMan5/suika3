@@ -1166,12 +1166,12 @@ The following are for future work:
 ## Screenshots
 
 <div align="center">
-  <p>Windows 11</p><br>
   <img src="https://raw.githubusercontent.com/awemorris/suika3/refs/heads/main/docs/img/screenshot-win11.webp" alt="Suika3 on Windows 11" width="320" hspace="20">
-  <p>iOS</p><br>
+  <p>Windows 11</p><br
   <img src="https://raw.githubusercontent.com/awemorris/suika3/refs/heads/main/docs/img/screenshot-ios.webp" alt="Suika3 on iOS" width="320" hspace="20">
-  <p>Android</p><br>
+  <p>iOS</p><br>
   <img src="https://raw.githubusercontent.com/awemorris/suika3/refs/heads/main/docs/img/screenshot-android.webp" alt="Suika3 on Android" width="320" hspace="20">
+  <p>Android</p><br>
 </div>
 
 ---
