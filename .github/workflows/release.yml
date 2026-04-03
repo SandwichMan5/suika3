@@ -283,6 +283,7 @@ jobs:
           xcodebuild archive -scheme ios -archivePath app.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
           #xcodebuild -exportArchive -archivePath app.xcarchive -exportPath ./output -exportOptionsPlist ../resources/ios/ExportOptions.plist CODE_SIGNING_ALLOWED=NO
           mkdir Payload
+          tree
           cp -r app.xarchive/Products/Applications/*.app Payload/
           zip -r suika3-ios-build-check.ipa Payload
           tree output
@@ -413,7 +414,7 @@ jobs:
         with:
           name: android-apk
           path: |
-            suika3-android-build-check
+            suika3-android-build-check.apk
           if-no-files-found: error
           retention-days: 7
 
