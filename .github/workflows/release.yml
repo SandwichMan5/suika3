@@ -566,7 +566,7 @@ jobs:
           cp windows/build/windows-vs2022-x86/Release/suika3-pack.exe dist/misc/windows/
           cp windows/build/windows-vs2022-x86/Release/suika3-web.exe dist/misc/wasm/
           cp windows/build/windows-vs2022-arm64/Release/suika3.exe dist/misc/windows/suika3-arm64.exe
-          cp game/main.pf dist/
+          cp game/main.ray dist/
           cp game/start.novel dist/
           cp game/config.ini dist/
           cp -R game/bg dist/
@@ -761,7 +761,7 @@ jobs:
         run: |
           mkdir dist/misc/unity/Assets
           mkdir dist/misc/unity/Assets/StreamingAssets
-          cp game/main.pf dist/misc/unity/Assets/StreamingAssets/
+          cp game/main.ray dist/misc/unity/Assets/StreamingAssets/
           mkdir dist/misc/unity/Assets/Resources
           cp external/PlayfieldEngine/external/StratoHAL/src/PlayfieldScript.cs dist/misc/unity/Assets/
           cp external/PlayfieldEngine/external/StratoHAL/src/NormalShader.shader dist/misc/unity/Assets/Resources/
