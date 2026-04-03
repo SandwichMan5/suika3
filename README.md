@@ -2,43 +2,47 @@
   <b>
     <a href="https://suika3.vn">Suika3</a><br>
   </b>
-  Modern Yet Old-Fashioned Visual Novel Engine<br>
+  A Modern Full-Stack Visual Novel and 2D Game Engine
 </h1>
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/awemorris/suika3/refs/heads/main/docs/img/logo-small.png" alt="Suika3 Logo" width="120" hspace="20">
   <p>
-    <b>&#x1f496; Welcome Home, Master! &#x1f496;</b>
+    <b>&#x1f496;&#x1f370; Welcome Home, Master! &#x2615;&#x1f496;</b>
   </p>
   <p>
-    Suika3 is a production-grade visual novel engine<br>
-    designed to deliver a high-performance native experience<br>
-    across a diverse range of platforms.
-  </p>
-  <p>
-    <i>"Port it to the iPhone, Moé-Moé Kyun!"</i> &#x1f370;&#x2615;&#x1f497;
+    We've brought Suika3 to life<br>
+    with a whole lot of love for mobile devices!<br>
+    <br>
+    It's a powerful, production-ready engine<br>
+    for Visual Novels and all kinds of 2D games,<br>
+    running beautifully on any platform you choose.
   </p>
   <a href="https://discord.gg/YZsq9u9Mgr"><img src="https://img.shields.io/badge/suika3.vn-Discord-orange"></a>
+  <img src="https://img.shields.io/badge/License-ZLib-orange.svg">
   <img src="https://img.shields.io/github/stars/suika3-community/suika3.svg?style=flat&logo=github&colorB=orange&label=stars">
   <img src="https://img.shields.io/github/forks/suika3-community/suika3.svg">
-  <img src="https://img.shields.io/badge/License-ZLib-orange.svg">
 </div>
 
 ---
 
 <div align="center">
   <p>
-    Our custom JIT-VM / AOT-fallback scripting infrastructure lets you
-    publish the exact same game across both Steam and App Store,
+    Our custom JIT/AOT scripting infrastructure<br>
+    lets you publish the exact same game<br>
+    across both Steam and App Store,<br>
     eliminating traditional porting headaches!
   </p>
   <img src="https://img.shields.io/badge/Desktop-Windows%20%2F%20macOS%20%2F%20Linux%20%2F%20Chromebook%20%2F%20Raspberry%20Pi-blue"><br>
   <img src="https://img.shields.io/badge/Mobile-iOS%20%2F%20Android%20%2F%20HarmonyOS%20NEXT-blue"><br>
   <img src="https://img.shields.io/badge/Console-Switch%20%2F%20PS5%20%2F%20Xbox-blue"><br>
   <img src="https://img.shields.io/badge/Web-Emscripten-blue"><br>
-  <img src="https://img.shields.io/badge/UNIX-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011-blue"><br>
-  <img src="https://img.shields.io/badge/Store-App%20Store%20%2F%20Play%20Store%20%2F%20Microsoft%20Store%20%2F%20Steam%20%2F%20itch%2eio-green"><br>
-  <br><br>
+  <img src="https://img.shields.io/badge/Exotic-FreeBSD%20%2F%20NetBSD%20%2F%20OpenBSD%20%2F%20Solaris%2011%20%2F%20Haiku-blue"><br>
+  <img src="https://img.shields.io/badge/Store-App%20Store%20%2F%20Play%20Store%20%2F%20Microsoft%20Store%20%2F%20Steam%20%2F%20itch%2eio%20%2F%20App%20Gallery-green"><br>
+  <br>
+  <p>
+    With our love for mobile devices!
+  </p>
 </div>
 
 ---
