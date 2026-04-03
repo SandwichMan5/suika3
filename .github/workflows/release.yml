@@ -280,7 +280,7 @@ jobs:
           cp resources/projects/ios/ios/LaunchScreen.storyboard ios/ios/
 
           cd ios
-          xcodebuild archive -scheme ios -archivePath app.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+          xcodebuild archive -scheme ios -archivePath app.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
           xcodebuild -exportArchive -archivePath app.xcarchive -exportPath ./output -exportOptionsPlist ../resources/ios/ExportOptions.plist CODE_SIGNING_ALLOWED=NO
           tree output
           cd ..
