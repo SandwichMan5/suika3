@@ -281,7 +281,10 @@ jobs:
 
           cd ios
           xcodebuild archive -scheme ios -archivePath app.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
-          xcodebuild -exportArchive -archivePath app.xcarchive -exportPath ./output -exportOptionsPlist ../resources/ios/ExportOptions.plist CODE_SIGNING_ALLOWED=NO
+          #xcodebuild -exportArchive -archivePath app.xcarchive -exportPath ./output -exportOptionsPlist ../resources/ios/ExportOptions.plist CODE_SIGNING_ALLOWED=NO
+          mkdir Payload
+          cp -r app.xarchive/Products/Applications/*.app Payload/
+          zip -r suika3-ios-build-check.ipa Payload
           tree output
           cd ..
 
@@ -291,6 +294,15 @@ jobs:
           name: ios
           path: |
             Suika3.xcframework.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload iOS
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-engine
+          path: |
+            suika3-ios-build-check.ipa
           if-no-files-found: error
           retention-days: 7
 
@@ -349,6 +361,7 @@ jobs:
           cd android
           ./gradlew assembleDebug
           cd ..
+          cp android/app/build/outputs/apk/debug/app-debug.apk suika3-android-build-check.apk
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -400,7 +413,7 @@ jobs:
         with:
           name: android-apk
           path: |
-            android/app/build/outputs/apk/debug/app-debug.apk
+            suika3-android-build-check
           if-no-files-found: error
           retention-days: 7
 
@@ -658,6 +671,12 @@ jobs:
           name: ios
           path: ios
 
+      - name: Download iOS ipa artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-engine
+          path: ios-engine
+
       - name: Copy for iOS.
         run: |
           mkdir dist/misc/ios/Resources/
@@ -835,7 +854,8 @@ jobs:
           files: |
             Suika3-nightly-${{ env.DATE }}-${{ env.SHORT_SHA }}.zip
             Suika3-nightly-${{ env.DATE }}-${{ env.SHORT_SHA }}.7z
-            android-apk/app-debug.apk
+            android-apk/suika3-android-build-check.apk
+            ios-engine/suika3-ios-build-check.ipa
           body: |
             This is an automated build from CI and is not an official release.
             The ZIP archive contains standalone engines for Windows, macOS, and Linux.
