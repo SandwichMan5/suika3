@@ -834,28 +834,30 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+        run: echo "DATE=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
 
       - name: Short SHA
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Make documents
         run: |
-          mv dist "Suika3-nightly-$DATE-$SHORT_SHA"
-          7z a -tzip -mx=9 "Suika3-nightly-$DATE-$SHORT_SHA.zip" "Suika3-nightly-$DATE-$SHORT_SHA"
-          7z a -t7z -mx=9 "Suika3-nightly-$DATE-$SHORT_SHA.7z" "Suika3-nightly-$DATE-$SHORT_SHA"
+          mv dist "Suika3-CI-$DATE-$SHORT_SHA"
+          7z a -tzip -mx=9 "Suika3-CI-$DATE-$SHORT_SHA.zip" "Suika3-CI-$DATE-$SHORT_SHA"
+          7z a -t7z -mx=9 "Suika3-CI-$DATE-$SHORT_SHA.7z" "Suika3-CI-$DATE-$SHORT_SHA"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: nightly-${{ env.DATE }}-${{ env.SHORT_SHA }}
-          name: Suika3-${{ env.DATE }}-${{ env.SHORT_SHA }}
+          tag_name: CI-${{ env.DATE }}-${{ env.SHORT_SHA }}
+          name: Suika3-CI-${{ env.DATE }}-${{ env.SHORT_SHA }}
           prerelease: true
           files: |
-            Suika3-nightly-${{ env.DATE }}-${{ env.SHORT_SHA }}.zip
-            Suika3-nightly-${{ env.DATE }}-${{ env.SHORT_SHA }}.7z
+            Suika3-CI-${{ env.DATE }}-${{ env.SHORT_SHA }}.zip
+            Suika3-CI-${{ env.DATE }}-${{ env.SHORT_SHA }}.7z
             android-apk/suika3-android-build-check.apk
             ios-engine/suika3-ios-build-check.ipa
+            windows/build/windows-vs2022-x64/Release/suika3.exe
+            macos/build-macos/Suika3.dmg
           body: |
             This is an automated build from CI and is not an official release.
             The ZIP archive contains standalone engines for Windows, macOS, and Linux.
