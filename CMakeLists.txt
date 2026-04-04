@@ -432,6 +432,7 @@ set(SUIKA_BASE_SOURCES
   src/cmd_layer.c
   src/cmd_load.c
   src/cmd_move.c
+  src/cmd_pencil.c
   src/cmd_returnmacro.c
   src/cmd_se.c
   src/cmd_set.c

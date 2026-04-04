@@ -26,6 +26,7 @@ Suika3 Tag Reference
 | [layer](#layer)             | Loads/unloads images or sets parameters for specific layers.       |
 | [load](#load)               | Loads a NovelML file and can jump to a specific label.             |
 | [move](#move)               | Animates character layers over a specified time.                   |
+| [pencil](#pencil)           | Draw a text on a layer.                                            |
 | [returnmacro](#returnmacro) | Returns from a macro execution.                                    |
 | [se](#se)                   | Plays a sound effect file (Ogg Vorbis format).                     |
 | [set](#set)                 | Sets a variable value (all variables are treated as text).         |
@@ -1402,6 +1403,68 @@ It is perfect for creating sliding effects, zooming in on characters, or rotatin
 
 **Visual Polish**:
 * Combine `scale-x` and `scale-y` with `move` to create "zoom-in" effects on a character's face for dramatic close-ups!
+
+---
+
+## `pencil`
+
+Pencil
+
+Draw a text on a layer.
+
+### Basic Usage
+
+```
+[pencil layer="bg" font-size="30" text="Hello, World!"]
+```
+
+### Arguments
+
+| Argument      | Omissible        | Description              |
+|---------------|------------------|--------------------------|
+| text          | No               | Text to draw.            |
+| layer         | Yes (`text1`)    | Layer name.              |
+| font-type     | Yes (`0`)        | Font selection. (0-3)    |
+| font-size     | Yes (`16`)       | Font size.               |
+| color         | Yes (`#000000`)  | Font color.              |
+| outline-width | Yes (`0`)        | Font outline width.      |
+| outline-color | Yes (`#ffffff`)  | Font outline color.      |
+| line-margin   | Yes              | Line margin.             |
+| char-margin   | Yes (`0`)        | Character margin.        |
+| x             | Yes (`0`)        | Drawing area X position. |
+| y             | Yes (`0`)        | Drawing area Y position. |
+| width         | Yes              | Drawing area width.      |
+| height        | Yes              | Drawing area height.     |
+
+## Supported Layer Name
+
+|Layer Name       |Description                              |
+|-----------------|-----------------------------------------|
+|bg               |Background Image                         |
+|bg2              |Background Image 2                       |
+|efb1             |Back Effect 1                            |
+|efb2             |Back Effect 2                            |
+|efb3             |Back Effect 3                            |
+|efb4             |Back Effect 4                            |
+|chb              |Center-Back Character                    |
+|chl              |Left Character                           |
+|chlc             |Left-Center Character                    |
+|chr              |Right Character                          |
+|chrc             |Right-Center Character                   |
+|chc              |Center Character                         |
+|eff1             |Front Effect 1                           |
+|eff2             |Front Effect 2                           |
+|eff3             |Front Effect 3                           |
+|eff4             |Front Effect 4                           |
+|chf              |Face Character                           |
+|text1            |Text Layer 1                             |
+|text2            |Text Layer 2                             |
+|text3            |Text Layer 3                             |
+|text4            |Text Layer 4                             |
+|text5            |Text Layer 5                             |
+|text6            |Text Layer 6                             |
+|text7            |Text Layer 7                             |
+|text8            |Text Layer 8                             |
 
 ---
 

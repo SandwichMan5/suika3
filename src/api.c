@@ -6042,7 +6042,6 @@ Suika_drawTextOnLayer(
 		if (!pf_get_call_arg_string("text", &text))
 			break;
 
-		
 		layer_image = s3_get_layer_image(layer);
 		if (layer_image == NULL)
 			break;
