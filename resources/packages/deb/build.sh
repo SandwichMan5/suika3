@@ -15,7 +15,7 @@ echo 'Enter a minor version:'
 read MINOR
 
 # Update the changelog
-echo "suika3 ($VERSION-$MINOR) UNRELEASED; urgency=medium" > meta/debian/changelog;
+echo "suika3 ($VERSION-$MINOR) noble; urgency=medium" > meta/debian/changelog;
 echo '' >> meta/debian/changelog;
 echo '  * Sync upstream' >> meta/debian/changelog;
 echo '' >> meta/debian/changelog;
@@ -40,7 +40,8 @@ cd suika3-$VERSION
 tar xzf ../suika3_$VERSION.orig.tar.gz
 
 # Build a source package.
-debuild
+#debuild
+sbuild
 cd ../../
 cp work/*.deb ./
 

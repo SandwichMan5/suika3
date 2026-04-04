@@ -184,7 +184,7 @@ Suika3 is engineered with modern techniques, and delivers:
 
 ## Kanban (Status)
 
-The current version is 26.07 LTS **RC1.**
+The current version is `26.04.1-openbeta` (=26.07 LTS RC1).**
 
 We are in the `Quality Stabilization Period` (April 1 - June 30, 2026) for
 the planned release `Suika3 26.07 LTS` (scheduled on July 1 2026).
@@ -209,11 +209,11 @@ See [Quality Assurance](#quality-assurance) for the details.
 - ✅ API Freeze (March 7, 2026)
 - ✅ GUI Animation Implementation (March 10, 2026)
 - ✅ Code Freeze (March 12, 2026)
-- ✅ Milestone: `Suika3 26.07 RC1` (April 1, 2026)
-- Milestone: `Suika3 26.07 LTS RC2` (April 30, 2026)
-- Milestone: `Suika3 26.07 LTS RC3` (May 31, 2026)
-- Milestone: `Suika3 26.07 LTS RC4/GM` (June 30, 2026)
-- Goal: `Suika3 26.07 LTS` Release (July 1, 2026)
+- ✅ Milestone: `Suika3 26.04 (aka 26.07 RC1)` (April 1, 2026)
+- Milestone: `Suika3 26.05 (aka 26.07 RC2)` (May 1, 2026)
+- Milestone: `Suika3 26.06 (aka 26.07 RC3)` (June 1, 2026)
+- Milestone: `Suika3 26.07 LTS GM` (June 25, 2026)
+- Goal: `Suika3 26.07 LTS` Public Release (July 1, 2026)
 
 **Remaining Tasks:**
 - Website Update
@@ -1221,6 +1221,9 @@ tampering. The obfuscation key can be changed in "key.h".)
 
 | Version  | Level             | Release Date        | Support Period     |
 |----------|-------------------|---------------------|--------------------|
+| 26.04    | LTS RC1           | April 2026          | -                  |
+| 26.05    | LTS RC2           | May 2026            | -                  |
+| 26.06    | LTS RC3           | June 2026           | -                  |
 | 26.07    | Long Term Support | July 2026           | 10 years (minimum) |
 | 26.08    | Feature Rollup    | August 2026         | -                  |
 | 26.09    | Feature Rollup    | September 2026      | -                  |
@@ -1230,9 +1233,9 @@ tampering. The obfuscation key can be changed in "key.h".)
 | 27.01    | Feature Rollup    | January 2027        | -                  |
 | 27.02    | Feature Rollup    | February 2027       | -                  |
 | 27.03    | Feature Rollup    | March 2027          | -                  |
-| 27.04    | Feature Rollup    | April 2027          | -                  |
-| 27.05    | Feature Rollup    | May 2027            | -                  |
-| 27.06    | Feature Rollup    | June 2027           | -                  |
+| 27.04    | LTS RC1           | April 2027          | -                  |
+| 27.05    | LTS RC2           | May 2027            | -                  |
+| 27.06    | LTS RC3           | June 2027           | -                  |
 | 27.07    | Long Term Support | July 2027           | 10 years (minimum) |
 | 27.08    | Feature Rollup    | August 2027         | -                  |
 | 27.09    | Feature Rollup    | September 2027      | -                  |
@@ -1242,9 +1245,9 @@ tampering. The obfuscation key can be changed in "key.h".)
 | 28.01    | Feature Rollup    | January 2028        | -                  |
 | 28.02    | Feature Rollup    | February 2028       | -                  |
 | 28.03    | Feature Rollup    | March 2028          | -                  |
-| 28.04    | Feature Rollup    | April 2028          | -                  |
-| 28.05    | Feature Rollup    | May 2028            | -                  |
-| 28.06    | Feature Rollup    | June 2028           | -                  |
+| 28.04    | LTS RC1           | April 2028          | -                  |
+| 28.05    | LTS RC2           | May 2028            | -                  |
+| 28.06    | LTS RC3           | June 2028           | -                  |
 | 28.07    | Long Term Support | July 2028           | 10 years (minimum) |
 
 ---
