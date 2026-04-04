@@ -87,17 +87,17 @@ developed by the Suika3 Project, led by Awe Morris.
 Games made with Suika3 are powered by `NovelML` and the `Ray`
 scripting platform.
 
-- **NovelML** ("演戯標記"): A tag-based, human-readable, extensible
+- **NovelML** ("演戲標記"): A tag-based, human-readable, extensible
   DSL designed specifically for visual novels. It features concise,
   declarative tags for seamless dialogue and scene control. Developers
   can add custom tags using `Ray`.
 
-- **Ray** ("光陰脚本"): The robust scripting language for Suika3. It
+- **Ray** ("光陰腳本"): The robust scripting language for Suika3. It
   utilizes a high-speed JIT compiler on desktop platforms (Sun-Ray JIT
-  VM; codename:"諏訪武叡") and can be compiled into native binaries
-  (Lunar-Ray AOT Compiler; codename:"少彦智叡") for production or
+  VM; codename "諏訪武叡") and can be compiled into native binaries
+  (Lunar-Ray AOT Compiler; codename "少彥智叡") for production or
   mobile environments, alongside the interpreter (Ubi-Ray; codename
-  "天満梅貴"). Ray enables you to make not only VN but also generic 2D
+  "天滿梅貴"). Ray enables you to make not only VN but also generic 2D
   games.
 
 Although Suika3 is designed as a professional tool, you are absolutely
