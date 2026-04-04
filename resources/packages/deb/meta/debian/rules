@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 override_dh_auto_configure:
-	./configure --prefix=$(CURDIR)/debian/suika3/usr --host=linux
+	./configure --prefix=$(CURDIR)/debian/suika3/usr --cflags='-g-dwarf4'
 
 override_dh_auto_install:
 	$(MAKE) install

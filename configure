@@ -4,6 +4,7 @@ PREFIX="/usr/local"
 HOST=""
 JIT="OFF"
 DIST=ON
+CFLAGS=
 
 # Parse options.
 for OPT in "${@}"; do
@@ -39,6 +40,8 @@ for OPT in "${@}"; do
             ;;
         --without-shared)
             DIST=OFF
+        --cflags=*)
+            CFLAGS=${1#--cflags=}
             ;;
     esac
 done
@@ -84,6 +87,7 @@ fi
 cmake . \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX=$PREFIX \
+      -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
       -DPLAYFIELD_ENABLE_JIT=$JIT \
       -DSUIKA_ENABLE_PACK=ON \
       -DSUIKA_ENABLE_I18N=ON \
