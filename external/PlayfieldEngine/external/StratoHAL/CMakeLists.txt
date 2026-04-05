@@ -648,17 +648,21 @@ if(STRATO_TARGET_MACOS)
 endif()
 
 # FreeBSD
-if(STRATO_TARGET_FREEBSD)
+if(   STRATO_TARGET_FREEBSD
+   OR STRATO_TARGET_FREEBSD_WAYLAND
+   OR STRATO_TARGET_FREEBSD_X11SOFT)
   target_include_directories(strato PUBLIC /usr/local/include)
 endif()
 
 # NetBSD
-if(STRATO_TARGET_NETBSD)
+if(   STRATO_TARGET_NETBSD
+   OR STRATO_TARGET_NETBSD_X11SOFT)
   target_include_directories(strato PUBLIC /usr/local/include /usr/X11R7/include)
 endif()
 
 # OpenBSD
-if(STRATO_TARGET_OPENBSD)
+if(   STRATO_TARGET_OPENBSD
+   OR STRATO_TARGET_OPENBSD_X11SOFT)
   target_include_directories(strato PUBLIC /usr/pkg/include /usr/X11R6/include)
 endif()
 
