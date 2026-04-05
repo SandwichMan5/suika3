@@ -1225,7 +1225,7 @@ tampering. The obfuscation key can be changed in "key.h".)
 | 26.04    | LTS RC1           | April 2026          | -                  |
 | 26.05    | LTS RC2           | May 2026            | -                  |
 | 26.06    | LTS RC3           | June 2026           | -                  |
-| 26.07    | Long Term Support | July 2026           | 10 years (minimum) |
+| 26.07    | Long Term Support | July 2026           | 10 years (minimum), codename "北辰天歸" |
 | 26.08    | Feature Rollup    | August 2026         | -                  |
 | 26.09    | Feature Rollup    | September 2026      | -                  |
 | 26.10    | Feature Rollup    | October 2026        | -                  |
