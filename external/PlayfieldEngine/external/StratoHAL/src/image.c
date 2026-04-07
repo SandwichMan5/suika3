@@ -139,6 +139,13 @@ hal_create_image(
 		free(*img);
 		return false;
 	}
+#if defined(HAL_TARGET_SOLARIS10)
+	pixels = memalign(64, (size_t)w * (size_t)h * sizeof(hal_pixel_t));
+	if (pixels == NULL) {
+		hal_log_out_of_memory();
+		free(*img);
+		return false;
+	}
 #elif !defined(HAL_TARGET_UNITY)
 	if (posix_memalign((void **)&pixels, 64, (size_t)w * (size_t)h * sizeof(hal_pixel_t)) != 0) {
 		hal_log_out_of_memory();

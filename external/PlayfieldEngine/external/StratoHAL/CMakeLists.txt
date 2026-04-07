@@ -937,6 +937,7 @@ if(   STRATO_TARGET_LINUX
    OR STRATO_TARGET_OPENBSD
    OR STRATO_TARGET_OPENBSD_X11SOFT
    OR STRATO_TARGET_SOLARIS11
+   OR STRATO_TARGET_SOLARIS10
    OR STRATO_TARGET_GENERICUNIX)
   target_link_libraries(strato PUBLIC m pthread Xpm X11)
 endif()
@@ -1049,8 +1050,9 @@ if(STRATO_TARGET_SOLARIS11)
 endif()
 
 # Solaris10
-if(STRATO_TARGET_SOLARIS11)
+if(STRATO_TARGET_SOLARIS10)
   target_link_directories(strato PUBLIC /usr/local/lib /usr/X11R6/lib)
+  target_link_libraries(strato PUBLIC rt)
 endif()
 
 # Generic Unknown UNIX

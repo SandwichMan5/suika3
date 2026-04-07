@@ -179,7 +179,8 @@ extern "C" {
  * |HAL_TARGET_FREEBSD  |FreeBSD               |Excluding Gaming Consoles   |
  * |HAL_TARGET_NETBSD   |NetBSD                |                            |
  * |HAL_TARGET_OPENBSD  |OpenBSD               |                            |
- * |HAL_TARGET_SOLARIS  |Solaris               |                            |
+ * |HAL_TARGET_SOLARIS11|Solaris 11            |                            |
+ * |HAL_TARGET_SOLARIS10|Solaris 10            |                            |
  * |HAL_TARGET_BEOS     |BeOS and Haiku        |                            |
  *
  * |Macro               |Description                     |
@@ -242,9 +243,17 @@ extern "C" {
 #endif
 #endif
 
-/* Solaris */
-#if defined(__sun)
-#define HAL_TARGET_SOLARIS
+/* Solaris 11 */
+#if defined(__SunOS_5_11)
+#define HAL_TARGET_SOLARIS11
+#ifndef HAL_TARGET_POSIX
+#define HAL_TARGET_POSIX
+#endif
+#endif
+
+/* Solaris 10 */
+#if defined(__sun) && !defined(defined(__SunOS_5_11)
+#define HAL_TARGET_SOLARIS10
 #ifndef HAL_TARGET_POSIX
 #define HAL_TARGET_POSIX
 #endif
