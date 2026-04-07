@@ -34,6 +34,9 @@ case "`uname -m`" in
   mips*)
     JIT=ON
     ;;
+  i86pc*)
+    JIT=ON
+    ;;
   *)
     ;;
 esac
@@ -48,7 +51,7 @@ for OPT in "${@}"; do
     case "$OPT" in
         -h | --help)
             echo "Help:"
-            echo "  configure --prefix=[/usr/local] [--without-shared]"
+            echo "  configure --prefix=[/usr/local] [--disable-shared] [--disable-jit]"
             echo ""
             echo "[Dear Package Maintainers!]"
             echo "Thank you for your hardworking."
@@ -64,14 +67,20 @@ for OPT in "${@}"; do
         --prefix=*)
             PREFIX=${OPT#--prefix=}
             ;;
-        --without-shared)
+        --cflags=*)
+            CFLAGS=${OPT#--cflags=}
+            ;;
+        --disable-shared)
+            DIST=OFF
+            ;;
+        --enable-static)
+            DIST=OFF
+            ;;
+        --static)
             DIST=OFF
             ;;
         --disable-jit)
             JIT=OFF
-            ;;
-        --cflags=*)
-            CFLAGS=${OPT#--cflags=}
             ;;
     esac
 done
@@ -94,7 +103,7 @@ case "`uname`" in
 esac
 
 # Run CMake.
-if [ -e CMakeLists.txt ]; then
+if [ -f CMakeLists.txt ]; then
     CMAKELISTS=.
 else
     CMAKELISTS=..
