@@ -281,7 +281,8 @@ extern "C" {
     !defined(HAL_TARGET_FREEBSD) &&              \
     !defined(HAL_TARGET_NETBSD) &&               \
     !defined(HAL_TARGET_OPENBSD) &&              \
-    !defined(HAL_TARGET_SOLARIS) &&              \
+    !defined(HAL_TARGET_SOLARIS11) &&            \
+    !defined(HAL_TARGET_SOLARIS10) &&            \
     !defined(HAL_TARGET_PIOSIX) &&               \
     !defined(HAL_TARGET_IOS) &&                  \
     !defined(HAL_TARGET_ANDROID) &&              \
