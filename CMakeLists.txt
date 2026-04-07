@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(suika3 LANGUAGES C)
+project(suika3 LANGUAGES C CXX)
 
 #
 # Configuration
