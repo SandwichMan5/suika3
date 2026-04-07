@@ -68,7 +68,9 @@
 #define DEVICE		"/dev/audio0"
 #elif defined(__OpenBSD__)
 #define DEVICE		"/dev/audio0"
-#elif defined(__SunOS_5_11)
+#elif defined(USE_SUN_OSS)
+#define DEVICE		"/dev/dsp"
+#elif defined(USE_SUN_AUDIO)
 #define DEVICE		"/dev/dsp"
 #endif
 
