@@ -39,13 +39,13 @@
 #include "evgamepad.h"			/* Gamepad */
 
 /* Xlib */
+#define XK_MISCELANY
+#define XK_LATIN1
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/xpm.h>
 #include <X11/Xatom.h>
 #include <X11/Xlocale.h>
-#define XK_MISCELANY
-#define XK_LATIN1
 #include <X11/keysymdef.h>
 
 /* POSIX */
