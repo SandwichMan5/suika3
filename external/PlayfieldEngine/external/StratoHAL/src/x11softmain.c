@@ -300,9 +300,15 @@ bool init_x11_graphics(void)
 		/* 32-bpp, 24-bit depth, 8-bit ignored padding. */
 		bpp = 32;
 
+#ifndef HAL_TARGET_SOLARIS10
 		/* Allocate an image buffer which may be freed by XDestroyImage(). */
 		if (posix_memalign((void **)&pixels, 64, (size_t)(screen_width * screen_height * 4)) != 0)
 			return false;
+#else
+		pixels = memalign(64, (size_t)(screen_width * screen_height * 4));
+		if (pixels == NULL)				  
+			return false;
+#endif
 
 		/* Create a back image. */
 		if (!hal_create_image_with_pixels(screen_width, screen_height, pixels, &back_image)) {
@@ -337,9 +343,15 @@ bool init_x11_graphics(void)
 		/* 24-bpp, 24-bit depth, no padding. */
 		bpp = 24;
 
+#ifndef HAL_TARGET_SOLARIS10
 		/* Allocate an image buffer which may be freed by XDestroyImage(). */
 		if (posix_memalign((void **)&pixels, 64, (size_t)(screen_width * screen_height * 4)) != 0)
 			return false;
+#else
+		pixels = memalign(64, (size_t)(screen_width * screen_height * 4));
+		if (pixels == NULL)				  
+			return false;
+#endif
 
 		/* Create a back image. */
 		if (!hal_create_image_with_pixels(screen_width, screen_height, pixels, &back_image)) {
@@ -382,9 +394,15 @@ bool init_x11_graphics(void)
 			return false;
 		}
 
+#ifndef HAL_TARGET_SOLARIS10
 		/* Allocate an image buffer which may be freed by XDestroyImage(). */
-		if (posix_memalign((void **)&low_bpp_pixels, 64, (size_t)(screen_width * screen_height * 2)) != 0)
+		if (posix_memalign((void **)&pixels, 64, (size_t)(screen_width * screen_height * 2)) != 0)
 			return false;
+#else
+		pixels = memalign(64, (size_t)(screen_width * screen_height * 2));
+		if (pixels == NULL)				  
+			return false;
+#endif
 
 		/* Create an image. */
 		ximage = XCreateImage(display,
@@ -414,9 +432,15 @@ bool init_x11_graphics(void)
 			return false;
 		}
 
+#ifndef HAL_TARGET_SOLARIS10
 		/* Allocate an image buffer which may be freed by XDestroyImage(). */
-		if (posix_memalign((void **)&low_bpp_pixels, 64, (size_t)(screen_width * screen_height * 1)) != 0)
+		if (posix_memalign((void **)&pixels, 64, (size_t)(screen_width * screen_height * 1)) != 0)
 			return false;
+#else
+		pixels = memalign(64, (size_t)(screen_width * screen_height * 1));
+		if (pixels == NULL)				  
+			return false;
+#endif
 
 		/* Create an image. */
 		ximage = XCreateImage(display,
@@ -474,9 +498,15 @@ bool init_x11_graphics(void)
 		stride = ((screen_width + bitmap_pad - 1) / bitmap_pad) * (bitmap_pad / 8);
 		size = (size_t)stride * (uint32_t)screen_height;
 
+#ifndef HAL_TARGET_SOLARIS10
 		/* Allocate an image buffer which may be freed by XDestroyImage(). */
-		if (posix_memalign((void **)&low_bpp_pixels, 64, size) != 0)
+		if (posix_memalign((void **)&pixels, 64, size) != 0)
 			return false;
+#else
+		pixels = memalign(64, size);
+		if (pixels == NULL)				  
+			return false;
+#endif
 
 		/* Create an image. */
 		ximage = XCreateImage(display,
