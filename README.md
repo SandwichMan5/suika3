@@ -726,9 +726,9 @@ experience for the player.
 | **Mobile**  | iOS                | ✅ Supported | 3 April 2026 | iOS 18                           |
 |             | Android            | ✅ Supported | 3 April 2026 | Android 15                       |
 |             | HarmonyOS NEXT     | ✅ Supported | -            | API 10+                          |
-| **BSD**     | FreeBSD            | ✅ Supported | -            | 14.0-RELEASE amd64               |
-|             | NetBSD             | ✅ Supported | -            | 10.0 amd64, aarch64, armv7       |
-|             | OpenBSD            | ✅ Supported | -            | 10.0 amd64, aarch64, armv7       |
+| **BSD**     | FreeBSD            | ✅ Supported | 5 April 2026 | 15.0-RELEASE amd64               |
+|             | NetBSD             | ✅ Supported | 5 April 2026 | 10.0 amd64, aarch64, armv7       |
+|             | OpenBSD            | ✅ Supported | 5 April 2026 | 7.8 amd64, aarch64, armv7        |
 | **Web**     | WebAssembly (Wasm) | ✅ Supported | 3 April 2026 | Chrome, Edge, Safari             |
 |             | Chromebook         | ✅ Supported | -            | Chrome Browser / Linux Container |
 | **Other**   | Unity Integration  | ✅ Supported | -            | Unity 6.2 (Windows x86_64)       |
