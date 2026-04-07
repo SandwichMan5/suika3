@@ -317,9 +317,13 @@ endif()
 # Main Target
 #
 
+set(CMAKE_CXX_ARCHIVE_CREATE "<CMAKE_AR> cr <TARGET> <LINK_FLAGS> <OBJECTS>" CACHE STRING "Force create" FORCE)
+set(CMAKE_CXX_ARCHIVE_INDEX  "<CMAKE_RANLIB> <TARGET>" CACHE STRING "Force index" FORCE)
+set(CMAKE_CXX_ARCHIVE_FINISH "" CACHE STRING "Force finish" FORCE)
+    
 # Windows
-if(   STRATO_TARGET_WINDOWS
-   OR STRATO_TARGET_WINDOWS95)
+if(STRATO_TARGET_WINDOWS)
+  enable_language(CXX)
   set(CMAKE_CXX_STANDARD 11)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(STRATO_SOURCES
@@ -341,6 +345,7 @@ if(   STRATO_TARGET_WINDOWS
   )
 endif()
 if(STRATO_TARGET_WINDOWS95)
+  enable_language(CXX)
   set(CMAKE_CXX_STANDARD 11)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(STRATO_SOURCES
@@ -515,6 +520,7 @@ endif()
 
 # HarmonyOS NEXT / OpenHarmony
 if(STRATO_TARGET_OPENHARMONY)
+  enable_language(CXX)
   set(STRATO_SOURCES
     src/image.c
     src/glyph.c
@@ -539,6 +545,7 @@ endif()
 # GDK
 if(   STRATO_TARGET_GDK_WINDOWS
    OR STRATO_TARGET_GDK_XBOX_XS)
+  enable_language(CXX)
   set(STRATO_SOURCES
     src/image.c
     src/glyph.c
@@ -553,6 +560,7 @@ endif()
 
 # Haiku
 if(STRATO_TARGET_HAIKU)
+  enable_language(CXX)
   set(STRATO_SOURCES
     src/image.c
     src/glyph.c
@@ -564,6 +572,7 @@ endif()
 
 # UWP
 if(STRATO_TARGET_UWP)
+  enable_language(CXX)
   set(STRATO_SOURCES
     src/image.c
     src/glyph.c
