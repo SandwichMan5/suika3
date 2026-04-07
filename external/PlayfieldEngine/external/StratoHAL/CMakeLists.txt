@@ -719,7 +719,10 @@ endif()
 
 # Solaris 10
 if(STRATO_TARGET_SOLARIS10)
-  target_include_directories(strato PUBLIC /usr/local/include /usr/X11R6/include)
+  target_include_directories(
+    strato
+    PUBLIC
+    /usr/openwin/share/include)
 endif()
 
 # Generic Unknown UNIX
